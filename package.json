@@ -1,0 +1,87 @@
+{
+  "name": "scc-oms-components",
+  "version": "0.0.1",
+  "description": "Antd components for SCC",
+  "license": "MIT",
+  "main": "dist/lib/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "father build",
+    "build:watch": "father dev",
+    "cm": "git-cz",
+    "dev": "dumi dev",
+    "docs:build": "dumi build",
+    "doctor": "father doctor",
+    "lint": "npm run lint:es && npm run lint:css",
+    "lint:css": "stylelint \"{src,test}/**/*.{css,less}\"",
+    "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
+    "prepare": "husky install && dumi setup",
+    "prepublishOnly": "father doctor && npm run build",
+    "start": "npm run dev"
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write --no-error-on-unmatched-pattern"
+    ],
+    "*.{css,less}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^4.8.0",
+    "@commitlint/cli": "^18.2.0",
+    "@commitlint/config-conventional": "^18.1.0",
+    "@types/lodash-es": "^4.17.10",
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.7",
+    "@umijs/lint": "^4.0.87",
+    "antd": "~4.22.0",
+    "commitizen": "^4.3.0",
+    "cz-customizable": "^7.0.0",
+    "dumi": "^2.2.14",
+    "eslint": "^8.52.0",
+    "father": "^4.3.6",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
+    "lodash-es": "^4.17.21",
+    "moment": "^2.29.4",
+    "prettier": "^3.0.3",
+    "prettier-plugin-organize-imports": "^3.2.3",
+    "prettier-plugin-packagejson": "^2.4.6",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "stylelint": "^14.4.0"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "^4.8.0",
+    "antd": "^4.22.0",
+    "lodash-es": "^4.17.21",
+    "moment": "^2.29.4",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "authors": [
+    "lancernix@gmail.com"
+  ]
+}
