@@ -1,28 +1,57 @@
 {
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true,
-    "source.fixAll": true
-  },
+  "eslint.experimental.useFlatConfig": true,
+  "prettier.enable": false,
+  "vsicons.projectDetection.autoReload": true,
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": false,
+    "source.fixAll.eslint": true
+  },
+  "eslint.rules.customizations": [
+    { "rule": "style/*", "severity": "error" },
+    { "rule": "*-indent", "severity": "error" },
+    { "rule": "*-spacing", "severity": "error" },
+    { "rule": "*-spaces", "severity": "error" },
+    { "rule": "*-order", "severity": "error" },
+    { "rule": "*-dangle", "severity": "error" },
+    { "rule": "*-newline", "severity": "error" },
+    { "rule": "*quotes", "severity": "error" },
+    { "rule": "*semi", "severity": "error" }
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "json",
+    "jsonc",
+    "yaml"
+  ],
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  // 是否启用格式化
+  "markdownFormatter.enable": true,
+  // 将配置里的全角符号转化为半角符号, 例如 `，：；！“”‘’（）？。`
+  // 当设置为 '_' 或者 '' 的时候, 不转换符号
+  // 当设置为 'auto' 的时候, 自动根据上下文转换符号
+  "markdownFormatter.fullWidthTurnHalfWidth": "",
+  // 格式化无序列表的符号
+  "markdownFormatter.formatULSymbol": true,
+  // * > + > -
+  // 各种符号后是否需要空格
+  "markdownFormatter.spaceAfterFullWidthOrHalfWidth": "half",
+  // 是否格式化表格
+  "markdownFormatter.formatTable": true,
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // 快速补全
+    "editor.defaultFormatter": "mervin.markdown-formatter",
+    "editor.renderWhitespace": "all",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": true,
+      "strings": true
+    }
   }
 }

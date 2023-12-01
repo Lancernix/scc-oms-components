@@ -21,10 +21,10 @@ Antd 中日期、时间相关的组件在进行数据赋值和获取的时候都
 ### API
 
 | 属性        | 说明                 | 类型                                                             | 默认值                  |
-| ----------- | -------------------- | ---------------------------------------------------------------- | ----------------------- |
-| `value`     | 组件值               | `string` \| `number` \| `Moment`                                 | -                       |
-| `valueType` | 从组件获取的值类型   | `'string'` \| `'secondTimestamp'` \| `'timestamp'` \| `'moment'` | `'string'`              |
-| `format`    | 日期字符串格式化模版 | `string`                                                         | `'YYYY-MM-DD HH:mm:ss'` |
+| ----------- | -------------------- | ------------------------------------------------------ | ----------------------- |
+|`value`| 组件值               |`string`\|`number`\|`Moment`| -                       |
+|`valueType`| 从组件获取的值类型   |`'string'`\|`'secondTimestamp'`\|`'timestamp'`\|`'moment'`|`'string'`|
+|`format`| 日期字符串格式化模版 |`string`|`'YYYY-MM-DD HH:mm:ss'`|
 
 ## TimePicker
 
@@ -38,6 +38,6 @@ Antd 中日期、时间相关的组件在进行数据赋值和获取的时候都
 
 | 属性        | 说明                 | 类型                     | 默认值       |
 | ----------- | -------------------- | ------------------------ | ------------ |
-| `value`     | 组件值               | `string` \| `Moment`     | -            |
-| `valueType` | 从组件获取的值类型   | `'string'` \| `'moment'` | `'string'`   |
-| `format`    | 日期字符串格式化模版 | `string`                 | `'HH:mm:ss'` |
+|`value`| 组件值               |`string`\|`Moment`| -            |
+|`valueType`| 从组件获取的值类型   |`'string'`\|`'moment'`|`'string'`|
+|`format`| 日期字符串格式化模版 |`string`|`'HH:mm:ss'`|

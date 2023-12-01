@@ -6,9 +6,11 @@ export {
   type FormDatePickerProps,
   type FormTimePickerProps,
 } from 'components/FormRangePicker';
+export { default as FormTable, type FormTableColumnType, type FormTableProps } from 'components/FormTable';
 
 /** hook */
-export { useValidatedFormValues } from 'hooks/useValidatedFormValues';
+export { default as useValidatedFormValues } from 'hooks/useValidatedFormValues';
+export { default as useAdaptiveHeight } from 'hooks/useAdaptiveHeight';
 
 /** 工具函数 */
 export {
@@ -21,4 +23,4 @@ export {
   stringToMoment,
   valueToMoment,
 } from 'utils/momentTransform';
-export { removeSomeProperty } from 'utils/removeSomeProperty';
+export { default as removeSomeProperty } from 'utils/removeSomeProperty';

@@ -1,3 +1,1 @@
-{
-  "extends": "@umijs/lint/dist/config/stylelint"
-}
+{ "extends": ["stylelint-config-standard"] }

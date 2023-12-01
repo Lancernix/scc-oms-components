@@ -1,12 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-02-01 11:43:09
- * @LastEditTime: 2021-03-01 13:39:21
- * @LastEditors: 董方旭
- * @Description: In User Settings Edit
- * @FilePath: /janus/.cz-config.js
- */
-
 module.exports = {
   types: [
     { value: 'feat', name: 'feat: 新功能' },
@@ -16,9 +7,6 @@ module.exports = {
     { value: 'chore', name: 'chore: 项目配置、辅助工具和库的更改或升级' },
     { value: 'revert', name: 'revert: 回滚到某一个版本 (带上版本号)' },
     { value: 'docs', name: 'docs: 修改文档' },
-    // { value: 'perf', name: 'perf: 提升性能' },
-    // { value: 'ui', name: 'UI: 修改页面布局' },
-    // { value: 'test', name: 'test: 增加或修改测试用例' },
   ],
   scopes: ['hooks', 'components', 'dependencies', 'utils', 'configs', 'docs'],
   // skipQuestions: ['body', 'breaking', 'footer'],

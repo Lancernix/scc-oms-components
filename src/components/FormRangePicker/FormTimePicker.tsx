@@ -1,7 +1,8 @@
-import { Form, FormInstance, FormItemProps, Input, TimePicker } from 'antd';
-import { TimeRangePickerProps } from 'antd/es/time-picker';
-import { Moment } from 'moment';
 import React from 'react';
+import type { FormInstance, FormItemProps } from 'antd';
+import { Form, Input, TimePicker } from 'antd';
+import type { TimeRangePickerProps } from 'antd/es/time-picker';
+import type { Moment } from 'moment';
 import useRangePicker from './hooks';
 
 const { RangePicker } = TimePicker;
@@ -31,8 +32,8 @@ interface Props {
     wrapperCol: FormItemProps['wrapperCol'];
   };
   otherRangePickerProps?: Omit<
-    TimeRangePickerProps,
-    'empty' | 'value' | 'defaultValue' | 'onChange' | 'format' | 'allowClear'
+  TimeRangePickerProps,
+  'empty' | 'value' | 'defaultValue' | 'onChange' | 'format' | 'allowClear'
   >;
   /** formItem的其他属性，常用的属性都已经提升到顶层了，有需要可以在这里添加 */
   otherFormItemProps?: Omit<FormItemProps, 'labelCol' | 'wrapperCol' | 'label' | 'initialValue' | 'name' | 'rules'>;
@@ -56,7 +57,7 @@ const formDefaultProps = {
  * 一个方便的时间范围选择组件，不再需要手动进行数据类型转换和字段赋值，组件已经替你做了～
  * @description 需要注意的一点是：组件会导致form的数据中多出一个额外的字段，所以需要你在提交的时候去剔除这个字段
  */
-const FormTimePicker = (props: Props) => {
+function FormTimePicker(props: Props) {
   const {
     label,
     fields,
@@ -99,7 +100,7 @@ const FormTimePicker = (props: Props) => {
       </Form.Item>
     </>
   );
-};
+}
 
 export default FormTimePicker;
 export type FormTimePickerProps = Props;

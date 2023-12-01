@@ -1,5 +1,5 @@
-import { FormInstance } from 'antd';
-import { Moment } from 'moment';
+import type { FormInstance } from 'antd';
+import type { Moment } from 'moment';
 import { useEffect, useState } from 'react';
 import { momentToValue, valueToMoment } from 'utils/momentTransform';
 
@@ -37,14 +37,14 @@ function useRangePicker(initialValue: [Moment, Moment] | [string, string] | [num
       return;
     }
     if (momentValue[0]) {
-      result[0] =
-        !showTime && useStartAndEndOfDay
+      result[0]
+        = !showTime && useStartAndEndOfDay
           ? momentToValue(momentValue[0].startOf('day'), valueType, format)
           : momentToValue(momentValue[0], valueType, format);
     }
     if (momentValue[1]) {
-      result[1] =
-        !showTime && useStartAndEndOfDay
+      result[1]
+        = !showTime && useStartAndEndOfDay
           ? momentToValue(momentValue[1].endOf('day'), valueType, format)
           : momentToValue(momentValue[1], valueType, format);
     }

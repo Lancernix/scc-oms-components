@@ -1,4 +1,5 @@
-import moment, { Moment } from 'moment';
+import type { Moment } from 'moment';
+import moment from 'moment';
 
 /**
  * moment对象转换成秒级时间戳
@@ -41,16 +42,16 @@ export function momentToValue(
   format = 'YYYY-MM-DD HH:mm:ss',
 ) {
   switch (valueType) {
-    case 'string':
-      return momentToString(params, format);
-    case 'secondTimestamp':
-      return momentToSecond(params);
-    case 'timestamp':
-      return momentToMillisecond(params);
-    case 'moment':
-      return moment.isMoment(params) ? params : void 0;
-    default:
-      return momentToString(params, format);
+  case 'string':
+    return momentToString(params, format);
+  case 'secondTimestamp':
+    return momentToSecond(params);
+  case 'timestamp':
+    return momentToMillisecond(params);
+  case 'moment':
+    return moment.isMoment(params) ? params : void 0;
+  default:
+    return momentToString(params, format);
   }
 }
 

@@ -6,7 +6,7 @@ import { Button, Form } from 'antd';
 import React, { useState } from 'react';
 import { FormDatePicker } from 'scc-oms-components';
 
-export default () => {
+export default function Index() {
   const [value, setValue] = useState<Record<string, unknown>>();
   const [form] = Form.useForm();
 
@@ -31,7 +31,10 @@ export default () => {
       <Button type="primary" onClick={() => handleSubmit()}>
         提交
       </Button>
-      <span style={{ marginLeft: '40px' }}>Form获取的值为：{JSON.stringify(value)}</span>
+      <span style={{ marginLeft: '40px' }}>
+        Form获取的值为：
+        {JSON.stringify(value)}
+      </span>
     </>
   );
 };

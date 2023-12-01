@@ -4,10 +4,10 @@
  */
 import moment from 'moment';
 import React, { useState } from 'react';
-import { DatePicker, DatePickerProps } from 'scc-oms-components';
+import { DatePicker, type DatePickerProps } from 'scc-oms-components';
 import { momentToSecond } from 'utils/momentTransform';
 
-export default () => {
+export default function Index() {
   const [value, setValue] = useState<number>(momentToSecond(moment()));
 
   const handleChange: DatePickerProps['onChange'] = val => {
@@ -17,7 +17,10 @@ export default () => {
   return (
     <>
       <DatePicker valueType="secondTimestamp" value={value} onChange={handleChange} format="YYYY-MM-DD" />
-      <span style={{ marginLeft: '40px' }}>组件值为：{value}</span>
+      <span style={{ marginLeft: '40px' }}>
+        组件值为：
+        {value}
+      </span>
     </>
   );
-};
+}

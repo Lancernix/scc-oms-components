@@ -1,16 +1,15 @@
-import {
-  DatePicker as AntdDatePicker,
-  DatePickerProps as AntdDatePickerProps,
-  TimePicker as AntdTimePicker,
-  TimePickerProps as AntdTimePickerProps,
-} from 'antd';
-import { Moment } from 'moment';
 import React, { useMemo } from 'react';
+import { DatePicker as AntdDatePicker, TimePicker as AntdTimePicker } from 'antd';
+import type { DatePickerProps as AntdDatePickerProps, TimePickerProps as AntdTimePickerProps } from 'antd';
+import type { Moment } from 'moment';
 import { momentToValue, valueToMoment } from 'utils/momentTransform';
 
 export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: string | Moment | number;
-  /** @property value类型，如选择string则form收集到的值为string类型，默认为string */
+  /**
+   * value类型，如选择string则form收集到的值为string类型
+   * @default 'string';
+   */
   valueType?: 'string' | 'secondTimestamp' | 'timestamp' | 'moment';
   onChange?: (value: string | number | Moment) => void;
   /**
@@ -21,11 +20,11 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
 };
 
 /** 日期组件 */
-export const DatePicker = (props: DatePickerProps) => {
+export function DatePicker(props: DatePickerProps) {
   const { value, onChange, valueType = 'string', format = 'YYYY-MM-DD HH:mm:ss', picker, ...rest } = props;
 
   // 转换成antd需要的moment对象
-  const momentValue = useMemo(() => valueToMoment(value, format), [value]);
+  const momentValue = useMemo(() => valueToMoment(value, format), [format, value]);
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {
     const newVal = momentToValue(val, valueType, format);
@@ -33,14 +32,14 @@ export const DatePicker = (props: DatePickerProps) => {
   };
 
   return <AntdDatePicker value={momentValue} onChange={handleChange} format={format} picker={picker} {...rest} />;
-};
+}
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: string | Moment | number;
-  /** @property value类型，如选择string则form收集到的值为string类型，默认为string */
+  /** value类型，如选择string则form收集到的值为string类型，默认为string */
   valueType?: 'string' | 'moment';
   onChange?: (value: string | Moment) => void;
-  /** @property 时间字符串格式化模版，默认为HH:mm:ss */
+  /** 时间字符串格式化模版，默认为HH:mm:ss */
   format?: string;
 };
 
@@ -48,7 +47,7 @@ export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | '
 export function TimePicker(props: TimePickerProps) {
   const { value, onChange, valueType = 'string', format = 'HH:mm:ss', ...rest } = props;
 
-  const momentValue = useMemo(() => valueToMoment(value, format), [value]);
+  const momentValue = useMemo(() => valueToMoment(value, format), [format, value]);
 
   const handleChange: AntdTimePickerProps['onChange'] = val => {
     const newVal = momentToValue(val, valueType, format);

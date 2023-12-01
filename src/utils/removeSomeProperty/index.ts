@@ -4,7 +4,7 @@
  * @param name key
  * @description 注意：这个方法并不是一个纯函数，会改变入参
  */
-export function removeSomeProperty(_obj: Record<string, unknown>, name: string) {
+export default function removeSomeProperty(_obj: Record<string, unknown>, name: string) {
   Object.keys(_obj).forEach(key => {
     if (key === name) {
       delete _obj[key];

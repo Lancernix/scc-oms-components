@@ -1,14 +1,17 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'dumi';
-import path from 'path';
 
+/** dumi文档相关的配置，详细配置参见：https://d.umijs.org/config */
 export default defineConfig({
-  outputPath: 'docs-dist',
-  /** 配置路径别名 */
+  // 文档demo需要的路径别名，和编译时是一样的
   alias: {
-    components: path.resolve(__dirname, 'src/components'),
-    utils: path.resolve(__dirname, 'src/utils'),
-    hooks: path.resolve(__dirname, 'src/hooks'),
+    components: resolve(__dirname, 'src/components'),
+    utils: resolve(__dirname, 'src/utils'),
+    hooks: resolve(__dirname, 'src/hooks'),
   },
+  // 文档输出目录
+  outputPath: 'docs-dist',
+  // md文件解析配置
   resolve: {
     atomDirs: [
       { type: 'components', dir: './src/components' },
@@ -16,6 +19,7 @@ export default defineConfig({
       { type: 'hooks', dir: './src/hooks' },
     ],
   },
+  // 主题配置项，文档相关的配置
   themeConfig: {
     name: 'scc-oms-components',
     nav: [
@@ -24,7 +28,10 @@ export default defineConfig({
       { title: 'Hook', link: '/hooks/use-validated-form-values' },
     ],
     prefersColor: { default: 'auto' },
+    showLineNum: true,
+    nprogress: true,
   },
+  // 全局的一些样式设置
   styles: [
     `.dumi-default-header-left {
       width: 360px !important

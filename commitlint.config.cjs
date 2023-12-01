@@ -1,4 +1,4 @@
-const { types } = require('./.cz-config.js');
+const { types } = require('./cz-config.cjs');
 
 const ruleTypes = types.map(item => item.value);
 
