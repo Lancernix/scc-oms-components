@@ -63,7 +63,7 @@ pnpm start
 
 ## 推荐插件
 
-项目需要使用必要的插件来完成lint和格式化工作，强烈建议安装推荐的插件。详见[这里](./.vscode/extensions.json)。
+项目需要使用必要的插件来完成 lint 和格式化工作，强烈建议安装推荐的插件。具体可查看仓库中的 `.vscode/extensions.json` 文件。如果你用的不是 vscode，也最好配置一下 eslint 插件。
 
 ## LICENSE
 
