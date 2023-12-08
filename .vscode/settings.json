@@ -9,15 +9,42 @@
     "source.fixAll.eslint": true
   },
   "eslint.rules.customizations": [
-    { "rule": "style/*", "severity": "error" },
-    { "rule": "*-indent", "severity": "error" },
-    { "rule": "*-spacing", "severity": "error" },
-    { "rule": "*-spaces", "severity": "error" },
-    { "rule": "*-order", "severity": "error" },
-    { "rule": "*-dangle", "severity": "error" },
-    { "rule": "*-newline", "severity": "error" },
-    { "rule": "*quotes", "severity": "error" },
-    { "rule": "*semi", "severity": "error" }
+    {
+      "rule": "style/*",
+      "severity": "error"
+    },
+    {
+      "rule": "*-indent",
+      "severity": "error"
+    },
+    {
+      "rule": "*-spacing",
+      "severity": "error"
+    },
+    {
+      "rule": "*-spaces",
+      "severity": "error"
+    },
+    {
+      "rule": "*-order",
+      "severity": "error"
+    },
+    {
+      "rule": "*-dangle",
+      "severity": "error"
+    },
+    {
+      "rule": "*-newline",
+      "severity": "error"
+    },
+    {
+      "rule": "*quotes",
+      "severity": "error"
+    },
+    {
+      "rule": "*semi",
+      "severity": "error"
+    }
   ],
   "eslint.validate": [
     "javascript",
@@ -32,7 +59,7 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   // 是否启用格式化
-  "markdownFormatter.enable": true,
+  "markdownFormatter.enable": false,
   // 将配置里的全角符号转化为半角符号, 例如 `，：；！“”‘’（）？。`
   // 当设置为 '_' 或者 '' 的时候, 不转换符号
   // 当设置为 'auto' 的时候, 自动根据上下文转换符号

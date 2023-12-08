@@ -34,6 +34,7 @@ export default await antfu(
       'curly': ['error', 'all'], // 不能省略大括号
       'style/brace-style': ['error', '1tbs'], // 使用常规的大括号样式
       'style/indent': ['error', 2, { offsetTernaryExpressions: false }], // 三元运算不缩进
+      'style/eol-last': 'off',
     },
     ignores: ['pnpm-lock.yaml'],
   },
