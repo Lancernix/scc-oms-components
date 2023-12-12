@@ -59,7 +59,7 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   // 是否启用格式化
-  "markdownFormatter.enable": false,
+  "markdownFormatter.enable": true,
   // 将配置里的全角符号转化为半角符号, 例如 `，：；！“”‘’（）？。`
   // 当设置为 '_' 或者 '' 的时候, 不转换符号
   // 当设置为 'auto' 的时候, 自动根据上下文转换符号
