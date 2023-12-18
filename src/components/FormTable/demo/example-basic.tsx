@@ -2,8 +2,8 @@
  * title: 基础用法
  * description: Table 中的每个 cell 都支持编辑，可以通过 `editable` 属性来设置
  */
-import React from 'react';
-import { Form, Input, InputNumber, Select, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Button, Form, Input, InputNumber, Select, Typography } from 'antd';
 import { FormTable, type FormTableColumnType } from 'scc-oms-components';
 
 const genderOpts = [
@@ -11,14 +11,13 @@ const genderOpts = [
   { label: '女', value: 'female' },
 ];
 
-const initValues = {
-  formTable: [{ name: 'Tim', age: 16, gender: 'male', height: 170, country: '中国' }],
-};
+const initValues = [{ name: 'Tim', age: 16, gender: 'male', height: 170, country: '中国' }];
 
 const { Link } = Typography;
 
 function Index() {
   const [form] = Form.useForm();
+  const [value, setValue] = useState<Record<string, unknown>>();
 
   const columns: FormTableColumnType[] = [
     {
@@ -26,6 +25,9 @@ function Index() {
       dataIndex: 'name',
       editable: true,
       component: <Input />,
+      tooltip: '必填',
+      requiredMark: true,
+      rules: [{ required: true, message: '请填写姓名' }],
     },
     {
       title: '年龄',
@@ -44,6 +46,7 @@ function Index() {
       dataIndex: 'height',
       editable: true,
       component: <InputNumber min={0} precision={0} />,
+      hidden: true,
     },
     {
       title: '国籍',
@@ -55,7 +58,7 @@ function Index() {
       editable: false,
       render: (_, record) => (
         <>
-          <Link onClick={() => add({ country: '中国' })}>
+          <Link onClick={() => add({ country: '中国', height: 175 })}>
             新增
           </Link>
           <Link style={{ marginLeft: '10px' }} onClick={() => remove(record.name)}>
@@ -66,10 +69,28 @@ function Index() {
     }),
   ];
 
+  const handleSubmit = () => {
+    form.validateFields().then((val: any) => {
+      setValue(val);
+    }).catch(e => console.log(e));
+  };
+
   return (
-    <Form form={form} initialValues={initValues}>
-      <FormTable name="formTable" tableColumns={columns} />
-    </Form>
+    <>
+      <Form form={form} initialValues={initValues}>
+        <FormTable name="formTable" tableColumns={columns} initialValue={initValues} />
+      </Form>
+      <div style={{ marginTop: '16px' }}>
+        <Button type="primary" onClick={() => handleSubmit()}>
+          提交
+        </Button>
+        <span style={{ marginLeft: '40px' }}>
+          Form获取的值为：
+          {JSON.stringify(value)}
+        </span>
+      </div>
+
+    </>
   );
 }
 

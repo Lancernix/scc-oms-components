@@ -1,6 +1,34 @@
-import type { FormListFieldData, FormListOperation, TableColumnGroupType, TableColumnType, TableProps } from 'antd';
-import { Form, Table } from 'antd';
-import React from 'react';
+import type {
+  FormItemProps,
+  FormListFieldData,
+  FormListOperation,
+  TableColumnGroupType,
+  TableColumnType,
+  TableProps,
+} from 'antd';
+import { Form, Table, Tooltip } from 'antd';
+import React, { memo } from 'react';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+
+const StyledTable = styled(Table)`
+  .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+    padding: 8px;
+  }
+  .hidden {
+    display: none;
+  }
+  .ant-table-thead > tr > th.ant-table-cell {
+    .required-mark {
+      color: #ff4d4f;
+      margin-right: 4px;
+    }
+    .title-icon {
+      vertical-align: -0.2em;
+      margin-left: 4px;
+    }
+  }
+`;
 
 /** FormTableColumn类型定义 */
 export type FormTableColumnType =
@@ -12,15 +40,34 @@ export type FormTableColumnType =
     editable?: boolean;
     /** 可编辑cell对应的组件，`editable`为true时必须设置 */
     component?: React.ReactNode | ((record: FormListFieldData) => React.ReactNode);
+    /**
+     * 是否隐藏该字段
+     * @default false
+     */
+    hidden?: boolean;
+    /**
+     * 是否展示表头必填标识
+     * @default false
+     */
+    requiredMark?: boolean;
+    /** 字段提示 */
+    tooltip?: React.ReactNode;
+    /** 组件在form中使用的校验规则 */
+    rules?: FormItemProps['rules'] | ((record: FormListFieldData) => FormItemProps['rules']);
+    /** 子列 */
     children?: Array<FormTableColumnType>;
+    /** 初始值 */
+    initialValue?: unknown;
   } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 
 interface Props {
   /** 在form中使用的name */
-  name: string;
-  /** table需要的Columns */
+  name: string | number | Array<string | number>;
+  /** table需要的columns */
   tableColumns: Array<FormTableColumnType>;
+  /** 整个formTable对应的初始值 */
+  initialValue?: Array<Record<string, unknown>>;
   /**
    * 操作按钮（新增、批量删除）的位置
    * @default 'bottom'
@@ -32,13 +79,28 @@ interface Props {
    * table的其他属性
    * @default { bordered: true, pagination: false }
    */
-  tableProps?: Omit<TableProps<FormListFieldData>, 'rowKey' | 'dataSource' | 'columns'>;
+  tableProps?: Omit<TableProps<FormListFieldData>, 'rowKey' | 'dataSource' | 'columns' | 'className'>;
 }
 
 /** 字段展示组件 */
-function Display({ value }: { value?: React.ReactText; onChange?: (val: React.ReactText) => void }) {
-  return <span>{value}</span>;
-}
+const Display = memo(
+  function Display({ value }: { value?: React.ReactText; onChange?: (val: React.ReactText) => void }) {
+    return <span>{value}</span>;
+  },
+);
+
+/** 扩展title展示组件 */
+const Title = memo(function RequiredTitle(
+  { title, requiredMark, tooltip }: { title: React.ReactNode; requiredMark: boolean; tooltip?: React.ReactNode },
+) {
+  return (
+    <>
+      <span className={requiredMark ? 'required-mark' : ''}>*</span>
+      {title}
+      {tooltip ? (<Tooltip title={tooltip}><QuestionCircleOutlined className="title-icon" /></Tooltip>) : null}
+    </>
+  );
+});
 
 /** 生成Antd需要的columns */
 function genFormTableColumns(
@@ -54,31 +116,47 @@ function genFormTableColumns(
       // 其他正常列
       if (originCol.children?.length) {
         // 嵌套表头
-        resCol.title = originCol.title;
+        resCol.title = originCol.requiredMark
+          ? <Title title={originCol.title} tooltip={originCol.tooltip} requiredMark={originCol.requiredMark} />
+          : originCol.title;
         (resCol as TableColumnGroupType<FormListFieldData>).children
           = genFormTableColumns(originCol.children, { remove, add, move });
       } else {
+        const { requiredMark, hidden, editable, component, rules, initialValue, tooltip, ...rest } = originCol;
+        resCol = rest;
         // 正常表头
-        resCol.title = originCol.title;
+        resCol.title = requiredMark
+          ? <Title title={originCol.title} tooltip={tooltip} requiredMark={requiredMark} />
+          : originCol.title;
         resCol.key = originCol.key ?? (originCol.dataIndex as string | number);
         resCol.width = originCol.width;
+        hidden && (resCol.className = 'hidden'); // 隐藏列通过css来控制
         if (originCol.render) {
           // 有render则直接使用（render优先级高）
           resCol.render = originCol.render;
-        } else if (originCol.editable) {
+        } else if (editable) {
           // 没有则根据editbale、component生成对应的render方法
-          if (!originCol.component) {
+          if (!component) {
             console.error('When `editable` is true, `component` cannot be empty.');
           } else {
             resCol.render = (_, record) => (
-              <Form.Item name={[record.name, originCol.dataIndex as string | number]} style={{ margin: 0 }}>
-                {typeof originCol.component === 'function' ? originCol.component(record) : originCol.component}
+              <Form.Item
+                name={[record.name, originCol.dataIndex as string | number]}
+                style={{ margin: 0 }}
+                rules={typeof rules === 'function' ? rules(record) : rules}
+                hidden={originCol.hidden} // 这里控制FormItem是否展示
+              >
+                {typeof component === 'function' ? component(record) : component}
               </Form.Item>
             );
           }
         } else {
           resCol.render = (_, record) => (
-            <Form.Item name={[record.name, originCol.dataIndex as string | number]} style={{ margin: 0 }}>
+            <Form.Item
+              name={[record.name, originCol.dataIndex as string | number]}
+              style={{ margin: 0 }}
+              initialValue={initialValue}
+            >
               <Display />
             </Form.Item>
           );
@@ -96,24 +174,25 @@ export default function FormTable(props: Props) {
     operateBtnsPosition = 'bottom',
     operateBtnsNode,
     tableProps = { bordered: true, pagination: false },
+    initialValue,
   } = props;
 
   return (
-    <Form.List name={name}>
+    <Form.List name={name} initialValue={initialValue}>
       {(fields, { add, remove, move }) => {
         return (
           <div
             style={{ display: 'flex', flexDirection: operateBtnsPosition === 'bottom' ? 'column' : 'column-reverse' }}
           >
-            <Table
+            <StyledTable
               {...tableProps}
-              rowKey={record => record.key}
+              rowKey={record => record.name}
               dataSource={fields}
               columns={genFormTableColumns(tableColumns, { add, remove, move })}
             />
             {operateBtnsNode
               ? (
-                <div>
+                <div className="operate-btns-area">
                   {typeof operateBtnsNode === 'function' ? operateBtnsNode({ add, remove, move }) : operateBtnsNode}
                 </div>
               )

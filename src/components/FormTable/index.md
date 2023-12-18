@@ -20,6 +20,7 @@ order: 3
 在通过 `record` 获取 Form 数据、增加或者删除数据的时候，请使用 `record.name` ，不需要使用 `record.key` ，这个只用于组件内部设置 Table 的 rowKey。
 :::
 <code src='./demo/example-nested-columns.tsx'></code>
+<code src='./demo/example-nested-table.tsx'></code>
 
 ## API
 
@@ -27,10 +28,45 @@ order: 3
 
 | 属性  | 说明  | 类型  | 默认值 |
 |-------|-------|-------|-------|
-| conte | conte | conte |       |
+| `name` | form 所使用的 name | `string` \| `number` \| `Array<string \| number>` | - |
+| `tableColumns` | table 需要的 columns | `Array<FormTableColumnType>` | - |
+| `operateBtnsPosition` | 操作按钮（新增、批量删除）的位置 | `'top'` \| `'bottom'` | `'bottom'` |
+| `operateBtnsNode` | 操作按钮 | `React.ReactNode` \| `(({ add, remove, move }: FormListOperation) => React.ReactNode)` | - |
+| `tableProps` | table 的其他属性 | `Omit<TableProps<FormListFieldData>, 'rowKey' \| 'dataSource' \| 'columns'>` | `{ bordered: true, pagination: false }` |
+| `initialValue` | formTable 的初始值 | `Array<Record<string, unknown>>` | - |
 
 ### FormTableColumnType
 
+这里先给出 `FormTableColumnType` 的完整定义：
+
+```ts
+type FormTableColumnType =
+  | ({
+    editable?: boolean;
+    component?: React.ReactNode | ((record: FormListFieldData) => React.ReactNode);
+    hidden?: boolean;
+    requiredMark?: boolean;
+    tooltip?: React.ReactNode;
+    rules?: FormItemProps['rules'] | ((record: FormListFieldData) => FormItemProps['rules']);
+    children?: Array<FormTableColumnType>;
+    initialValue?: unknown;
+  } & TableColumnType<FormListFieldData>)
+  | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
+```
+
+需要注意的是 ` (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>)` 这个定义，通常是用来设置操作列的，具体用法可参考上面的示例。
+
+:::info{title=TIP}
+从上面可以看出 `FormTableColumnType` 扩展自 Antd Table 的 column 属性，所以 column 能用的这里都支持。为了方便，下面只列出了扩展的属性
+:::
+
 | 属性  | 说明  | 类型  | 默认值 |
 |-------|-------|-------|-------|
-| conte | conte | conte |       |
+| `editable` | 是否可编辑，是则需要增加对应的编辑组件 | `boolean` | `false` |
+| `component` | 可编辑列对应的组件， `editable` 为 true 时必须设置 | `React.ReactNode` \| `((record: FormListFieldData) => React.ReactNode)` | - |
+| `hidden` | 是否隐藏该字段 | `boolean` | `false` |
+| `requiredMark` | 是否展示表头必填标识 | `boolean` | `false` |
+| `tooltip` | 表头字段提示文案 | `React.ReactNode` | - |
+| `rules` | 字段在 form 中使用的校验规则 | `FormItemProps['rules'] \| ((record: FormListFieldData) => FormItemProps['rules'])` | - |
+| `children` | 嵌套表格的子列 | `Array<FormTableColumnType>` | - |
+| `initialValue` | 字段初始值 | `unknown` | - |

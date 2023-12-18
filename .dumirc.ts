@@ -37,13 +37,22 @@ export default defineConfig({
       width: 360px !important
     }`,
     `.dumi-default-doc-layout > main {
-      max-width: 1600px !important
+      max-width: 1800px !important
     }`,
     `.dumi-default-sidebar {
       width: 240px !important;
     }`,
     `.dumi-default-doc-layout-toc-wrapper {
       width: 200px !important;
+    }`,
+    `.dumi-default-table-content > table {
+      word-break: unset !important;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+    }`,
+    `.dumi-default-table-content > table > tbody > tr > td:nth-child(2) {
+      width: 30% !important;
+      min-width: 240px !important;
     }`,
   ],
 });

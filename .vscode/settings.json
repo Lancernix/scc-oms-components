@@ -80,5 +80,9 @@
       "comments": true,
       "strings": true
     }
+  },
+  "[css]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint",
+    "editor.suggest.insertMode": "replace"
   }
 }
