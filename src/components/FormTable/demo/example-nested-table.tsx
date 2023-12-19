@@ -23,6 +23,19 @@ const Wrapper = styled.div`
     display: none;
   }
 
+  .ant-table-cell {
+    width: 10%;
+
+    &.op-col {
+      width: 4%;
+    }
+
+    &.op-col.fixed-right {
+      position: sticky;
+      right: 0px;
+    }
+  }
+
   .ant-table-content {
     width: 1800px;
   }
@@ -47,7 +60,7 @@ const initValues = [{ stuList: [{ stuNo: '1001' }] }];
 const { Link } = Typography;
 
 function subTable(formValues?: any) {
-  const Res: TableProps<FormListFieldData>['expandable']['expandedRowRender'] = parentObj => {
+  const res: TableProps<FormListFieldData>['expandable']['expandedRowRender'] = parentObj => {
     const belongClass = formValues?.[parentObj.name] || [];
 
     const columns: FormTableColumnType[] = [
@@ -93,6 +106,7 @@ function subTable(formValues?: any) {
         dataIndex: 'operate',
         editable: false,
         fixed: 'right',
+        className: 'op-col',
         render: (_, record) => (
           <>
             <Link
@@ -122,7 +136,7 @@ function subTable(formValues?: any) {
     );
   };
 
-  return Res;
+  return res;
 }
 
 const opBtns: FormTableProps['operateBtnsNode'] = ({ add }) => (
@@ -136,47 +150,56 @@ function Index() {
 
   const columns: FormTableColumnType[] = [
     {
-      title: '班级',
-      dataIndex: 'classNo',
-      editable: true,
-      component: record => (
-        <Select
-          options={classOpts}
-          onChange={(_, opt) =>
-            form.setFieldValue(['classList', record.name, 'classTitle'], (opt as (typeof classOpts)[number]).title)}
-        />
-      ),
-      requiredMark: true,
-      rules: [{ required: true, message: '请选择班级' }],
+      title: '基本信息',
+      children: [
+        {
+          title: '班级',
+          dataIndex: 'classNo',
+          editable: true,
+          component: record => (
+            <Select
+              options={classOpts}
+              onChange={(_, opt) =>
+                form.setFieldValue(['classList', record.name, 'classTitle'], (opt as (typeof classOpts)[number]).title)}
+            />
+          ),
+          requiredMark: true,
+          rules: [{ required: true, message: '请选择班级' }],
+        },
+        {
+          title: '班级名称',
+          dataIndex: 'classTitle',
+          editable: true,
+          component: <Input disabled />,
+          hidden: true,
+        },
+        {
+          title: '班主任',
+          dataIndex: 'teacher',
+          editable: true,
+          component: <Input />,
+        },
+        {
+          title: '班级人数',
+          dataIndex: 'studentNum',
+          editable: true,
+          component: <InputNumber min={0} precision={0} style={{ width: '100%' }} />,
+        },
+      ],
     },
     {
-      title: '班级名称',
-      dataIndex: 'classTitle',
-      editable: true,
-      component: <Input disabled />,
-      hidden: true,
+      title: '其他信息',
+      children: Array.from({ length: 6 }).map((_, i) => ({
+        title: `其他属性${i + 1}`,
+        dataIndex: `remark${i + 1}`,
+      })),
     },
-    {
-      title: '班主任',
-      dataIndex: 'teacher',
-      editable: true,
-      component: <Input />,
-    },
-    {
-      title: '班级人数',
-      dataIndex: 'studentNum',
-      editable: true,
-      component: <InputNumber min={0} precision={0} />,
-    },
-    ...Array.from({ length: 6 }).map((_, i) => ({
-      title: `其他属性${i + 1}`,
-      dataIndex: `remark${i + 1}`,
-    })),
     ({ remove }) => ({
       title: '操作',
-      dataIndex: 'operate',
+      key: 'operate',
       editable: false,
       fixed: 'right',
+      className: 'op-col ant-table-cell-fix-right ant-table-cell-fix-right-first fixed-right',
       render: (_, record) => (
         <Link onClick={() => remove(record.name)} type="danger">
           删除

@@ -95,7 +95,7 @@ const Title = memo(function RequiredTitle(
 ) {
   return (
     <>
-      <span className={requiredMark ? 'required-mark' : ''}>*</span>
+      {requiredMark ? <span className="required-mark">*</span> : null}
       {title}
       {tooltip ? (<Tooltip title={tooltip}><QuestionCircleOutlined className="title-icon" /></Tooltip>) : null}
     </>
@@ -125,12 +125,15 @@ function genFormTableColumns(
         const { requiredMark, hidden, editable, component, rules, initialValue, tooltip, ...rest } = originCol;
         resCol = rest;
         // 正常表头
-        resCol.title = requiredMark
+        resCol.title = (requiredMark || tooltip)
           ? <Title title={originCol.title} tooltip={tooltip} requiredMark={requiredMark} />
           : originCol.title;
         resCol.key = originCol.key ?? (originCol.dataIndex as string | number);
         resCol.width = originCol.width;
-        hidden && (resCol.className = 'hidden'); // 隐藏列通过css来控制
+        if (hidden) {
+          resCol.className = 'hidden'; // 通过display来控制列的隐藏
+          resCol.colSpan = 0; // 同时需要设置一下colSpan，不然在表头分组时会出现列错位
+        }
         if (originCol.render) {
           // 有render则直接使用（render优先级高）
           resCol.render = originCol.render;
