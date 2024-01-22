@@ -57,7 +57,7 @@ export type FormTableColumnType =
     /** 子列 */
     children?: Array<FormTableColumnType>;
     /** 初始值 */
-    initialValue?: unknown;
+    initialValue?: unknown | ((record: FormListFieldData) => unknown);
   } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 
@@ -122,7 +122,17 @@ function genFormTableColumns(
         (resCol as TableColumnGroupType<FormListFieldData>).children
           = genFormTableColumns(originCol.children, { remove, add, move });
       } else {
-        const { requiredMark, hidden, editable, component, rules, initialValue, tooltip, ...rest } = originCol;
+        const {
+          requiredMark = false,
+          hidden = false,
+          editable = false,
+          component,
+          rules,
+          initialValue,
+          tooltip,
+          ...rest
+        } = originCol;
+
         resCol = rest;
         // 正常表头
         resCol.title = (requiredMark || tooltip)
@@ -148,6 +158,7 @@ function genFormTableColumns(
                 style={{ margin: 0 }}
                 rules={typeof rules === 'function' ? rules(record) : rules}
                 hidden={originCol.hidden} // 这里控制FormItem是否展示
+                initialValue={typeof initialValue === 'function' ? initialValue(record) : initialValue}
               >
                 {typeof component === 'function' ? component(record) : component}
               </Form.Item>
@@ -158,7 +169,7 @@ function genFormTableColumns(
             <Form.Item
               name={[record.name, originCol.dataIndex as string | number]}
               style={{ margin: 0 }}
-              initialValue={initialValue}
+              initialValue={typeof initialValue === 'function' ? initialValue(record) : initialValue}
             >
               <Display />
             </Form.Item>

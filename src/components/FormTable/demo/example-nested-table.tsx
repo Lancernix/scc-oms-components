@@ -1,6 +1,6 @@
 /**
  * title: 嵌套 FormTable
- * description: FormTable 与 FormTable 的嵌套
+ * description: FormTable 与 FormTable 嵌套的情况。这里给出了一个业务中实际用到的但不常见的示例可以作为参考。
  */
 import React, { useState } from 'react';
 import type { FormListFieldData, TableProps } from 'antd';

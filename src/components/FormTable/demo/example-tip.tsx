@@ -1,6 +1,6 @@
 /**
- * title: 基础用法
- * description: Table 中的每个 cell 都支持编辑，可以通过 `editable` 属性来设置
+ * title: 提示信息与校验规则
+ * description: 表头可以通过简单设置增加必填标识和 tooltip 提示，同时也可以配置字段在 form 中的校验规则
  */
 import React, { useState } from 'react';
 import { Button, Form, Input, InputNumber, Select, Typography } from 'antd';
@@ -11,7 +11,7 @@ const genderOpts = [
   { label: '女', value: 'female' },
 ];
 
-const initValues = [{ name: 'Tim', age: 16, gender: 'male', height: 170, country: '中国' }];
+const initValues = [{ name: 'Tim', age: 16, gender: 'male', height: 170, country: '中国', isAdult: 2 }];
 
 const { Link } = Typography;
 
@@ -25,24 +25,38 @@ function Index() {
       dataIndex: 'name',
       editable: true,
       component: <Input />,
+      requiredMark: true,
+      rules: [{ required: true, message: '请填写姓名' }],
     },
     {
       title: '年龄',
       dataIndex: 'age',
       editable: true,
-      component: <InputNumber min={0} precision={0} style={{ width: '100%' }} />,
+      requiredMark: true,
+      component: ({ name }) => (
+        <InputNumber
+          min={0}
+          precision={0}
+          style={{ width: '100%' }}
+          onBlur={e => {
+            form.setFieldValue(['formTable', name, 'isAdult'], +e.target.value >= 18 ? 1 : 2);
+          }}
+        />
+      ),
     },
     {
       title: '性别',
       dataIndex: 'gender',
       editable: true,
+      requiredMark: true,
       component: <Select options={genderOpts} />,
     },
     {
-      title: '身高（cm）',
+      title: '身高',
       dataIndex: 'height',
       editable: true,
       component: <InputNumber min={0} precision={0} style={{ width: '100%' }} />,
+      tooltip: '单位为厘米',
     },
     {
       title: '国籍',
@@ -85,7 +99,6 @@ function Index() {
           {JSON.stringify(value)}
         </span>
       </div>
-
     </>
   );
 }

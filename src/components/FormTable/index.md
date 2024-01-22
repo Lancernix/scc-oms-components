@@ -1,7 +1,7 @@
 ---
 toc: content
 title: 表格表单组件
-order: 3
+order: 5
 ---
 
 # 表格表单组件
@@ -15,6 +15,11 @@ order: 3
 ## 示例
 
 <code src='./demo/example-basic.tsx'></code>
+<code src='./demo/example-tip.tsx'></code>
+:::info{title=必填标识与必填校验}
+这里的必填标识 `requiredMark` 只是增加了样式，并不会同步增加必填校验规则，这也是基于业务场景的考量。所以必填规则需要你自己添加。
+:::
+<code src='./demo/example-hidden-column.tsx'></code>
 <code src='./demo/example-field-control.tsx'></code>
 :::warning{title=record.name}
 在通过 `record` 获取 Form 数据、增加或者删除数据的时候，请使用 `record.name` ，不需要使用 `record.key` ，这个只用于组件内部设置 Table 的 rowKey。
@@ -49,12 +54,12 @@ type FormTableColumnType =
     tooltip?: React.ReactNode;
     rules?: FormItemProps['rules'] | ((record: FormListFieldData) => FormItemProps['rules']);
     children?: Array<FormTableColumnType>;
-    initialValue?: unknown;
+    initialValue?: unknown | ((record: FormListFieldData) => unknown);
   } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 ```
 
-需要注意的是 ` (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>)` 这个定义，通常是用来设置操作列的，具体用法可参考上面的示例。
+需要注意的是 `(({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>)` 这个定义，通常是用来设置操作列的，具体用法可参考上面的示例。
 
 :::info{title=TIP}
 从上面可以看出 `FormTableColumnType` 扩展自 Antd Table 的 column 属性，所以 column 能用的这里都支持。为了方便，下面只列出了扩展的属性
@@ -69,4 +74,4 @@ type FormTableColumnType =
 | `tooltip` | 表头字段提示文案 | `React.ReactNode` | - |
 | `rules` | 字段在 form 中使用的校验规则 | `FormItemProps['rules'] \| ((record: FormListFieldData) => FormItemProps['rules'])` | - |
 | `children` | 嵌套表格的子列 | `Array<FormTableColumnType>` | - |
-| `initialValue` | 字段初始值 | `unknown` | - |
+| `initialValue` | 字段初始值 | `unknown` \| `((record: FormListFieldData) => unknown)` | - |

@@ -54,5 +54,11 @@ export default defineConfig({
       width: 30% !important;
       min-width: 240px !important;
     }`,
+    `.dumi-default-container.markdown {
+      margin-top: 24px !important;
+    }`,
+    `.dumi-default-previewer {
+      margin: 0 0 24px !important;
+    }`,
   ],
 });
