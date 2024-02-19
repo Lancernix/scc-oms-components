@@ -78,8 +78,8 @@
     "stylis": "^4.3.0"
   },
   "lint-staged": {
-    "*": [
-      "eslint src/**/*.ts{,x} --fix"
+    "src/**/*.ts{,x}": [
+      "eslint --fix"
     ]
   },
   "config": {
