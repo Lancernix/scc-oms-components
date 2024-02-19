@@ -25,8 +25,7 @@ export default defineConfig({
       ios: 10,
       ie: 11,
     },
-    extraBabelPresets: ['@babel/preset-env'], // 额外的babel预设
-    // 额外的babel插件
+    // 额外的babel插件，这里直接使用corejs进行了polyfill
     extraBabelPlugins: [
       [
         '@babel/plugin-transform-runtime',
