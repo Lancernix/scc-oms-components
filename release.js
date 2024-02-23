@@ -56,7 +56,7 @@ function checkClean() {
  */
 function getOldVersion() {
   const pkgPath = path.join(__dirname, 'package.json');
-  pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
+  const pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
   const version = JSON.parse(pkgData).version;
   return version;
 }
