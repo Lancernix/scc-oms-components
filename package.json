@@ -35,7 +35,8 @@
     "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
     "prepare": "husky install && dumi setup",
     "prepublishOnly": "npm run build",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "release": "node ./release.js"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.8.0",
