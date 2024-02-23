@@ -99,18 +99,21 @@ async function doRelease(isBeta) {
   const type = answers.type;
   // 发包前需要切换到官方源
   execSync('npm config set registry https://registry.npmjs.org');
-  const command = `npm version ${isBeta ? 'pre' : ''}${type}`;
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`无法执行此命令: ${error}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`执行命令出错: ${stderr}`);
-      return;
-    }
-    console.log(stdout);
-  });
+  const command = `npm version ${isBeta ? 'pre' : ''}${type}${isBeta ? ' --preid beta' : ''}`;
+  const res = execSync(command).toString().trim();
+  console.log("🚀 ~ doRelease ~ res:", res);
+
+  // exec(command, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`无法执行此命令: ${error}`);
+  //     return;
+  //   }
+  //   if (stderr) {
+  //     console.error(`执行命令出错: ${stderr}`);
+  //     return;
+  //   }
+  //   console.log(stdout);
+  // });
 }
 
 async function main() {
