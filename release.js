@@ -1,11 +1,14 @@
 import { exec, execSync } from 'node:child_process';
-import path from 'node:path';
+import path, { dirname } from 'node:path';
 import { readFileSync } from 'node:fs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
+import { fileURLToPath } from 'url';
 
 const MASTER_BRANCH = 'master';
 const CLEAN_TEXT = 'nothing to commit, working tree clean';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * 获取用户选择的发版类型并进行确认
