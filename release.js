@@ -1,4 +1,6 @@
 import { exec, execSync } from 'node:child_process';
+import path from 'node:path';
+import { readFileSync } from 'node:fs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 
@@ -7,15 +9,15 @@ const CLEAN_TEXT = 'nothing to commit, working tree clean';
 
 /**
  * 获取用户选择的发版类型并进行确认
- * @param {boolean} isBeta
+ * @param {boolean} isPre
  * @returns {Promise<boolean>}
  */
-async function checkReleaseType(isBeta) {
+async function checkReleaseType(isPre) {
   const answers = await inquirer.prompt([
     {
       type: 'confirm',
       name: 'continue',
-      message: `当前分支为 ${chalk.yellow.bold(isBeta ? '开发/fix分支，可发布测试包' : 'master分支，可发布正式包')}，是否继续？`,
+      message: `当前分支为 ${chalk.yellow.bold(isPre ? '开发/fix分支，可发布测试包' : 'master分支，可发布正式包')}，是否继续？`,
       default: true,
     }
   ]);
@@ -46,11 +48,22 @@ function checkClean() {
 }
 
 /**
+ * 获取当前版本号
+ * @returns {string}
+ */
+function getOldVersion() {
+  const pkgPath = path.join(__dirname, 'package.json');
+  pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
+  const version = JSON.parse(pkgData).version;
+  return version;
+}
+
+/**
  * 分支比较，判断是否符合发版条件
- * @param {boolean} isBeta
+ * @param {boolean} isPre
  * @returns {void}
  */
-function compareWithOriginMaster(isBeta) {
+function compareWithOriginMaster(isPre) {
   console.log(chalk.blue('info - 分支commit检测：'));
   const stdout = execSync('git remote -v').toString().trim();
   const strArr = stdout.match(/^(.+?)\s/);
@@ -58,7 +71,7 @@ function compareWithOriginMaster(isBeta) {
     const remoteName = strArr[1];
     execSync(`git fetch ${remoteName}`);
     const behind = execSync(`git rev-list HEAD..${remoteName}/master`).toString().trim();
-    if (isBeta) {
+    if (isPre) {
       if (!!behind) {
         console.log(chalk.red.bold('❌ 当前分支落后于master分支，请合并后再发版'));
         process.exit(0);
@@ -82,7 +95,7 @@ function compareWithOriginMaster(isBeta) {
 }
 
 
-async function doRelease(isBeta) {
+async function doRelease(isPre) {
   const answers = await inquirer.prompt([
     {
       type: 'list',
@@ -96,34 +109,38 @@ async function doRelease(isBeta) {
       ]
     }
   ]);
+  const oldVersion = getOldVersion();
+  const isBeta = false;
+  if (oldVersion.includes('-')) {
+    isBeta = true;
+  }
   const type = answers.type;
   // 发包前需要切换到官方源
   execSync('npm config set registry https://registry.npmjs.org');
-  const command = `npm version ${isBeta ? 'pre' : ''}${type}${isBeta ? ' --preid beta' : ''}`;
-  const res = execSync(command).toString().trim();
-  console.log("🚀 ~ doRelease ~ res:", res);
-
-  // exec(command, (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error(`无法执行此命令: ${error}`);
-  //     return;
-  //   }
-  //   if (stderr) {
-  //     console.error(`执行命令出错: ${stderr}`);
-  //     return;
-  //   }
-  //   console.log(stdout);
-  // });
+  const command = `npm version ${isPre ? 'pre' : ''}${type}${isPre ? ' --preid beta' : ''}`;
+  const betaCommand = 'npm version prerelease';
+  const execCommand = isBeta ? betaCommand : command;
+  const newVersion = execSync(execCommand).toString().trim();
+  console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
+  exec('npm publish', (error, stdout, stderr) => {
+    if (error) {
+      console.log(error);
+    };
+    if (stderr) {
+      console.log(stdout);
+    }
+    console.log(stdout);
+  });
 }
 
 async function main() {
   try {
     checkClean();
-    const isBeta = !isMasterBranch();
-    const isContinue = await checkReleaseType(isBeta);
+    const isPre = !isMasterBranch();
+    const isContinue = await checkReleaseType(isPre);
     if (isContinue) {
-      compareWithOriginMaster(isBeta);
-      await doRelease(isBeta);
+      compareWithOriginMaster(isPre);
+      await doRelease(isPre);
     }
   } catch (error) {
     console.log(error);
