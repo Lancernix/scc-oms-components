@@ -113,7 +113,7 @@ async function doRelease(isPre) {
     }
   ]);
   const oldVersion = getOldVersion();
-  const isBeta = false;
+  let isBeta = false;
   if (oldVersion.includes('-')) {
     isBeta = true;
   }
