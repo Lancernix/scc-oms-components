@@ -11,7 +11,7 @@ import React, { memo } from 'react';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
-const StyledTable = styled(Table)`
+const StyledTable = styled(Table<FormListFieldData>)`
   .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
     padding: 8px;
   }
