@@ -29,7 +29,7 @@ async function checkReleaseType(isBeta) {
  * @returns {boolean}
  */
 function isMasterBranch() {
-  const curBranch = execSync('git symbolic-ref --short HEAD').toString();
+  const curBranch = execSync('git symbolic-ref --short HEAD').toString().trim();
   let isMaster = false;
   if (curBranch === MASTER_BRANCH) {
     isMaster = true;
@@ -38,7 +38,7 @@ function isMasterBranch() {
 }
 
 function checkClean() {
-  const stdout = execSync('git status').toString();
+  const stdout = execSync('git status').toString().trim();
   if (!stdout.endsWith(CLEAN_TEXT)) {
     console.log(chalk.red.bold('❌ 工作区存在未提交的改动，请提交后再进行后续操作'));
     process.exit(0);
@@ -52,18 +52,18 @@ function checkClean() {
  */
 function compareWithOriginMaster(isBeta) {
   console.log(chalk.blue('info - 分支commit检测：'));
-  const stdout = execSync('git remote -v').toString();
+  const stdout = execSync('git remote -v').toString().trim();
   const strArr = stdout.match(/^(.+?)\s/);
   if (strArr) {
     const remoteName = strArr[1];
     execSync(`git fetch ${remoteName}`);
-    const behind = execSync(`git rev-list HEAD..${remoteName}/master`).toString();
+    const behind = execSync(`git rev-list HEAD..${remoteName}/master`).toString().trim();
     if (isBeta) {
       if (!!behind) {
         console.log(chalk.red.bold('❌ 当前分支落后于master分支，请合并后再发版'));
         process.exit(0);
       }
-      const beyond = execSync(`git rev-list ${remoteName}/master..HEAD`).toString();
+      const beyond = execSync(`git rev-list ${remoteName}/master..HEAD`).toString().trim();
       if (!beyond) {
         console.log(chalk.red.bold('❌ 当前分支commit记录与master分支相同，代码没有更新，不需要发版'));
         process.exit(0);
