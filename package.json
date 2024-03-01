@@ -47,7 +47,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.23.4",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "styled-components": "^6.1.1"
   },
   "devDependencies": {
     "@ant-design/icons": "^4.8.0",
@@ -75,7 +76,6 @@
     "moment": "^2.29.4",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "styled-components": "^6.1.1",
     "stylelint": "^15.11.0",
     "stylelint-config-standard": "^34.0.0",
     "stylis": "^4.3.0"

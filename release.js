@@ -91,7 +91,7 @@ function compareWithOriginMaster(isPre) {
         console.log(chalk.red.bold('❌ 当前master分支落后于远程master分支，请pull后再发版'));
         process.exit(0);
       } else {
-        console.log(chalk.red.bold('✅ 符合要求，可以发版'));
+        console.log(chalk.green.bold('✅ 符合要求，可以发版'));
       }
     }
   }
