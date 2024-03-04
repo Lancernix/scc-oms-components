@@ -12,15 +12,15 @@ const __dirname = dirname(__filename);
 
 /**
  * 获取用户选择的发版类型并进行确认
- * @param {boolean} isPre
+ * @param {boolean} isMaster
  * @returns {Promise<boolean>}
  */
-async function checkReleaseType(isPre) {
+async function checkReleaseType(isMaster) {
   const answers = await inquirer.prompt([
     {
       type: 'confirm',
       name: 'continue',
-      message: `当前分支为 ${chalk.yellow.bold(isPre ? '开发/fix分支，可发布测试包' : 'master分支，可发布正式包')}，是否继续？`,
+      message: `当前分支为 ${chalk.yellow.bold(isMaster ? 'master分支，可发布正式包' : '开发/fix分支，可发布测试包')}，是否继续？`,
       default: true,
     }
   ]);
@@ -63,10 +63,10 @@ function getOldVersion() {
 
 /**
  * 分支比较，判断是否符合发版条件
- * @param {boolean} isPre
+ * @param {boolean} isMaster
  * @returns {void}
  */
-function compareWithOriginMaster(isPre) {
+function compareWithOriginMaster(isMaster) {
   console.log(chalk.blue('info - 分支commit检测：'));
   const stdout = execSync('git remote -v').toString().trim();
   const strArr = stdout.match(/^(.+?)\s/);
@@ -74,7 +74,7 @@ function compareWithOriginMaster(isPre) {
     const remoteName = strArr[1];
     execSync(`git fetch ${remoteName}`);
     const behind = execSync(`git rev-list HEAD..${remoteName}/master`).toString().trim();
-    if (isPre) {
+    if (!isMaster) {
       if (!!behind) {
         console.log(chalk.red.bold('❌ 当前分支落后于master分支，请合并后再发版'));
         process.exit(0);
@@ -98,7 +98,7 @@ function compareWithOriginMaster(isPre) {
 }
 
 
-async function doRelease(isPre) {
+async function doRelease(isMaster) {
   const answers = await inquirer.prompt([
     {
       type: 'list',
@@ -120,9 +120,9 @@ async function doRelease(isPre) {
   const type = answers.type;
   // 发包前需要切换到官方源
   execSync('npm config set registry https://registry.npmjs.org');
-  const command = `npm version ${isPre ? 'pre' : ''}${type}${isPre ? ' --preid beta' : ''}`;
+  const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
   const betaCommand = 'npm version prerelease';
-  const execCommand = isBeta ? betaCommand : command;
+  const execCommand = !isMaster && isBeta ? betaCommand : command;
   const newVersion = execSync(execCommand).toString().trim();
   console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
   exec('npm publish', (error, stdout, stderr) => {
@@ -139,11 +139,11 @@ async function doRelease(isPre) {
 async function main() {
   try {
     checkClean();
-    const isPre = !isMasterBranch();
-    const isContinue = await checkReleaseType(isPre);
+    const isMaster = isMasterBranch();
+    const isContinue = await checkReleaseType(isMaster);
     if (isContinue) {
-      compareWithOriginMaster(isPre);
-      await doRelease(isPre);
+      compareWithOriginMaster(isMaster);
+      await doRelease(isMaster);
     }
   } catch (error) {
     console.log(error);

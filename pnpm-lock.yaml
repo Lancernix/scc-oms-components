@@ -34,6 +34,9 @@ devDependencies:
   '@commitlint/config-conventional':
     specifier: ^18.1.0
     version: 18.6.2
+  '@types/inquirer':
+    specifier: ^9.0.7
+    version: 9.0.7
   '@types/lodash-es':
     specifier: ^4.17.10
     version: 4.17.12
@@ -3246,6 +3249,13 @@ packages:
     resolution: {integrity: sha1-T8M6AMHQwWmHsaIM+S0gYUxVrDU=}
     dev: true
 
+  /@types/inquirer@9.0.7:
+    resolution: {integrity: sha1-YbuNDkLwOLmhc4sI+6f6mK2bSyQ=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@types/inquirer/-/inquirer-9.0.7.tgz}
+    dependencies:
+      '@types/through': 0.0.33
+      rxjs: 7.8.1
+    dev: true
+
   /@types/istanbul-lib-coverage@2.0.6:
     resolution: {integrity: sha1-dznCMqH+6bTTzomF8xTAxtM1Sdc=}
     dev: true
@@ -3374,6 +3384,12 @@ packages:
 
   /@types/stylis@4.2.0:
     resolution: {integrity: sha1-GZo/Rz8MOm9uThsXzbyWfydL3Gs=}
+
+  /@types/through@0.0.33:
+    resolution: {integrity: sha1-FOv1mTIOHHhR59WYFJrxg8a56lY=, tarball: https://artifactory.sf-express.com:443/artifactory/api/npm/npm/@types/through/-/through-0.0.33.tgz}
+    dependencies:
+      '@types/node': 20.11.19
+    dev: true
 
   /@types/unist@2.0.10:
     resolution: {integrity: sha1-BP+n9AarYo9/fpfKI+KQzYqxXvw=}
