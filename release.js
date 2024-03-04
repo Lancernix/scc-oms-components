@@ -125,7 +125,15 @@ async function doRelease(isMaster) {
   const execCommand = !isMaster && isBeta ? betaCommand : command;
   const newVersion = execSync(execCommand).toString().trim();
   console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
-  exec('npm publish');
+  exec('npm publish', (error, stdout, stderr) => {
+    if (error) {
+      console.log(error);
+    };
+    if (stderr) {
+      console.log(stdout);
+    }
+    console.log(stdout);
+  });
 }
 
 async function main() {
