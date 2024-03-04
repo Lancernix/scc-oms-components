@@ -1,4 +1,7 @@
 node_modules
+/dist
+/esm
+/cjs
 /docs-dist
 .dumi/tmp
 .dumi/tmp-test
