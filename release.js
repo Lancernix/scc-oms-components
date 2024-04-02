@@ -130,7 +130,7 @@ async function doRelease(isMaster) {
       console.log(error);
     };
     if (stderr) {
-      console.log(stdout);
+      console.log(stderr);
     }
     console.log(stdout);
   });
