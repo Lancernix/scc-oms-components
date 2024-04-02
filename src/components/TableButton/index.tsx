@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Popconfirm } from 'antd';
 import type { ButtonProps, PopconfirmProps } from 'antd';
+import { LocaleContext } from 'components/LocaleProvider';
 
 interface Props extends Omit<ButtonProps, 'type'> {
   /**
@@ -26,13 +27,14 @@ interface Props extends Omit<ButtonProps, 'type'> {
 }
 
 function TableButton(props: Props) {
+  const locale = useContext(LocaleContext);
   const {
     children,
     withConfirm = false,
     onClick,
-    popconfirmTitle = '确定执行该操作吗？',
-    popconfirmOkText = '确定',
-    popconfirmCancelText = '取消',
+    popconfirmTitle = locale.confirmTitle,
+    popconfirmOkText = locale.confirm,
+    popconfirmCancelText = locale.cancel,
     loading,
     style,
     ...rest

@@ -1,6 +1,6 @@
 /**
  * title: 基础用法
- * description: 结合业务需要，不同的编辑状态，底部的基本按钮也会不同（新建/编辑时则有确认、重置按钮；查看时只有确认按钮，并且调用的是 `onCancel` 回调）。弹窗的高度会自适应当前视窗的高度，并且增加了常用的两种 loading
+ * description: 结合业务需要，不同的编辑状态，底部的基本按钮也会不同（新建/编辑/复制时有确认、重置按钮；查看时只有确认按钮，并且调用的是 `onCancel` 回调）。弹窗的高度会自适应当前视窗的高度，并且增加了常用的两种 loading
  */
 import React, { useState } from 'react';
 import { Button, Divider, Radio, type RadioChangeEvent } from 'antd';
@@ -36,6 +36,7 @@ function Index() {
         <Radio value="view">查看</Radio>
         <Radio value="create">新建</Radio>
         <Radio value="edit">编辑</Radio>
+        <Radio value="copy">复制</Radio>
       </Radio.Group>
       <br />
       <span>size属性：</span>

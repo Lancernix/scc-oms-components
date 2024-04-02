@@ -9,6 +9,7 @@ export {
 export { default as FormTable, type FormTableColumnType, type FormTableProps } from 'components/FormTable';
 export { default as DataModal, type DataModalProps } from 'components/DataModal';
 export { default as TableButton, type TableButtonProps } from 'components/TableButton';
+export { default as LocaleProvider } from 'components/LocaleProvider';
 
 /** hook */
 export { default as useValidatedFormValues } from 'hooks/useValidatedFormValues';

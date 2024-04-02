@@ -12,6 +12,10 @@
         "import": "./esm/index.js",
         "require": "./cjs/index.js"
       }
+    },
+    "./locale/*": {
+      "import": "./esm/locale/*.js",
+      "require": "./cjs/locale/*.js"
     }
   },
   "main": "cjs/index.js",

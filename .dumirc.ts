@@ -8,6 +8,7 @@ export default defineConfig({
     components: resolve(__dirname, 'src/components'),
     utils: resolve(__dirname, 'src/utils'),
     hooks: resolve(__dirname, 'src/hooks'),
+    locale: resolve(__dirname, 'src/locale'),
   },
   // 文档输出目录
   outputPath: 'docs-dist',
@@ -23,7 +24,7 @@ export default defineConfig({
   themeConfig: {
     name: 'scc-oms-components',
     nav: [
-      { title: '组件', link: '/components/date-time-picker' },
+      { title: '组件', link: '/components/table-button' },
       { title: '工具', link: '/utils/moment-transform' },
       { title: 'Hook', link: '/hooks/use-validated-form-values' },
     ],
@@ -35,6 +36,9 @@ export default defineConfig({
   styles: [
     `.dumi-default-header-left {
       width: 360px !important
+    }`,
+    `.dumi-default-hero-title {
+      font-size: 120px !important
     }`,
     `.dumi-default-doc-layout > main {
       max-width: 1800px !important

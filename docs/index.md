@@ -4,9 +4,11 @@ hero:
   description: Antd components for SCC
   actions:
     - text: 查看文档
-      link: /components/date-time-picker
+      link: /components/table-button
     - text: 开发指南
       link: /guide
+    - text: 国际化
+      link: /i18n
 features:
   - title: API 友好
     emoji: 💎

@@ -17,11 +17,32 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
    * @default 'YYYY-MM-DD HH:mm:ss'
    */
   format?: string;
+  /**
+   * 当设定了 showTime 的时候，面板是否显示“此刻”按钮
+   */
+  showNow?: boolean;
+  /**
+   * 是否展示“今天”按钮
+   * @default true
+   */
+  showToday?: boolean;
+  /**
+   * 增加时间选择功能
+   */
+  showTime?: boolean | Record<string, any>;
 };
 
 /** 日期组件 */
 export function DatePicker(props: DatePickerProps) {
-  const { value, onChange, valueType = 'string', format = 'YYYY-MM-DD HH:mm:ss', picker, ...rest } = props;
+  const {
+    value,
+    onChange,
+    valueType = 'string',
+    format = 'YYYY-MM-DD HH:mm:ss',
+    showToday = true,
+    picker,
+    ...rest
+  } = props;
 
   // 转换成antd需要的moment对象
   const momentValue = useMemo(() => valueToMoment(value, format), [format, value]);
@@ -31,7 +52,16 @@ export function DatePicker(props: DatePickerProps) {
     onChange?.(newVal);
   };
 
-  return <AntdDatePicker value={momentValue} onChange={handleChange} format={format} picker={picker} {...rest} />;
+  return (
+    <AntdDatePicker
+      value={momentValue}
+      onChange={handleChange}
+      format={format}
+      picker={picker}
+      showToday={showToday}
+      {...rest}
+    />
+  );
 }
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {

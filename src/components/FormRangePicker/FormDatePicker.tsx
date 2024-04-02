@@ -40,8 +40,8 @@ interface Props {
   useStartAndEndOfDay?: boolean;
   /** rangePicker的其他属性，常用的属性都已经提升到顶层了，有需要可以在这里添加 */
   otherRangePickerProps?: Omit<
-  RangePickerProps,
-  'empty' | 'value' | 'defaultValue' | 'onChange' | 'format' | 'showTime' | 'allowClear'
+    RangePickerProps,
+    'empty' | 'value' | 'defaultValue' | 'onChange' | 'format' | 'showTime' | 'allowClear'
   >;
   /** formItem的其他属性，常用的属性都已经提升到顶层了，有需要可以在这里添加 */
   otherFormItemProps?: Omit<FormItemProps, 'labelCol' | 'wrapperCol' | 'label' | 'initialValue' | 'name' | 'rules'>;

@@ -18,6 +18,7 @@ order: 4
 <code src='./demo/example-nofooter.tsx'></code>
 <code src='./demo/example-noscroll.tsx'></code>
 <code src='./demo/example-extra-footer.tsx'></code>
+<code src='./demo/example-custom-footer.tsx'></code>
 
 ## API
 
@@ -25,7 +26,7 @@ order: 4
 
 | 属性  | 说明  | 类型  | 默认值 |
 |-------|-------|-------|-------|
-| `type` | 弹窗状态（这个属性可以帮你设置弹窗的 title，如果你不需要直接设置 `title` 属性覆盖即可） | `'view'` \| `'edit'` \| `'create'` | `'view'` |
+| `type` | 弹窗状态（这个属性可以帮你设置弹窗的 title，如果你不需要直接设置 `title` 属性覆盖即可） | `'view'` \| `'edit'` \| `'create'` \| `'copy'` | - |
 | `size` | 弹窗的大小，替代了 width 属性（尺寸设置: xl-1360px \| l-1120px \| m-880px \| s-640px \| xs-400px） | `'xl'` \| `'l'` \| `'m'` \| `'s'` \| `'xs'` | `'m'` |
 | `onReset` | 重置按钮的回调 | `(e?: React.MouseEvent<HTMLElement, MouseEvent>) => void` | - |
 | `resetText` | 重置按钮的展示文本（ `view` 状态下没有重置按钮） | `React.ReactNode` | `'重置'` |
@@ -33,3 +34,4 @@ order: 4
 | `contentScrollY` | 内容区域是否竖向滚动 | `boolean` | `true` |
 | `showFooter` | 是否展示弹窗底部区域 | `boolean` | `true` |
 | `extraFooter` | 底部额外的内容（只有在 `showFooter` 为 true 时才有效） | `React.ReactNode` | - |
+| `customFooter` | 自定义底部内容，如果想覆盖默认的footer，则可以使用这个属性（同样只有在 `showFooter` 为 true 时才有效） | `React.ReactNode` | - |
