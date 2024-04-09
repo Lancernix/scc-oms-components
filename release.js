@@ -7,6 +7,7 @@ import inquirer from 'inquirer';
 
 const MASTER_BRANCH = 'master';
 const CLEAN_TEXT = 'nothing to commit, working tree clean';
+const ZN_CLEAN_TEXT = '无文件要提交，干净的工作区';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -44,7 +45,7 @@ function isMasterBranch() {
 
 function checkClean() {
   const stdout = execSync('git status').toString().trim();
-  if (!stdout.endsWith(CLEAN_TEXT)) {
+  if (!stdout.endsWith(CLEAN_TEXT) && !stdout.endsWith(ZN_CLEAN_TEXT)) {
     console.log(chalk.red.bold('❌ 工作区存在未提交的改动，请提交后再进行后续操作'));
     process.exit(0);
   }
