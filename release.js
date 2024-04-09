@@ -7,7 +7,6 @@ import inquirer from 'inquirer';
 
 const MASTER_BRANCH = 'master';
 const CLEAN_TEXT = 'nothing to commit, working tree clean';
-const ZN_CLEAN_TEXT = '无文件要提交，干净的工作区';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -45,10 +44,32 @@ function isMasterBranch() {
 
 function checkClean() {
   const stdout = execSync('git status').toString().trim();
-  if (!stdout.endsWith(CLEAN_TEXT) && !stdout.endsWith(ZN_CLEAN_TEXT)) {
+  if (!stdout.endsWith(CLEAN_TEXT)) {
     console.log(chalk.red.bold('❌ 工作区存在未提交的改动，请提交后再进行后续操作'));
     process.exit(0);
   }
+}
+
+function getNpmPackageVersions(packageName) {
+  return new Promise((resolve, reject) => {
+    exec(`npm view ${packageName} versions --json`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`执行出错: ${error}`);
+        return reject(error);
+      }
+      if (stderr) {
+        console.error(`标准错误输出: ${stderr}`);
+        return reject(stderr);
+      }
+      try {
+        const versions = JSON.parse(stdout);
+        resolve(versions);
+      } catch (parseError) {
+        console.error(`JSON解析错误: ${parseError}`);
+        reject(parseError);
+      }
+    });
+  });
 }
 
 /**
@@ -56,10 +77,15 @@ function checkClean() {
  * @returns {string}
  */
 function getOldVersion() {
-  const pkgPath = path.join(__dirname, 'package.json');
-  const pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
-  const version = JSON.parse(pkgData).version;
-  return version;
+  getNpmPackageVersions('express').then(versions => {
+    console.log(versions); // 输出express的版本列表
+    const pkgPath = path.join(__dirname, 'package.json');
+    const pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
+    const version = JSON.parse(pkgData).version;
+    return version;
+  }).catch(error => {
+    console.error('获取版本列表失败:', error);
+  });
 }
 
 /**
