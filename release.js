@@ -1,12 +1,13 @@
 import { exec, execSync } from 'node:child_process';
 import path, { dirname } from 'node:path';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { fileURLToPath } from 'url';
 
 const MASTER_BRANCH = 'master';
 const CLEAN_TEXT = 'nothing to commit, working tree clean';
+const ZN_CLEAN_TEXT = '无文件要提交，干净的工作区';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -22,7 +23,7 @@ async function checkReleaseType(isMaster) {
       name: 'continue',
       message: `当前分支为 ${chalk.yellow.bold(isMaster ? 'master分支，可发布正式包' : '开发/fix分支，可发布测试包')}，是否继续？`,
       default: true,
-    }
+    },
   ]);
   const res = answers.continue;
   return res;
@@ -44,7 +45,7 @@ function isMasterBranch() {
 
 function checkClean() {
   const stdout = execSync('git status').toString().trim();
-  if (!stdout.endsWith(CLEAN_TEXT)) {
+  if (!stdout.endsWith(CLEAN_TEXT) && !stdout.endsWith(ZN_CLEAN_TEXT)) {
     console.log(chalk.red.bold('❌ 工作区存在未提交的改动，请提交后再进行后续操作'));
     process.exit(0);
   }
@@ -75,7 +76,7 @@ function compareWithOriginMaster(isMaster) {
     execSync(`git fetch ${remoteName}`);
     const behind = execSync(`git rev-list HEAD..${remoteName}/master`).toString().trim();
     if (!isMaster) {
-      if (!!behind) {
+      if (behind) {
         console.log(chalk.red.bold('❌ 当前分支落后于master分支，请合并后再发版'));
         process.exit(0);
       }
@@ -87,7 +88,7 @@ function compareWithOriginMaster(isMaster) {
         console.log(chalk.green.bold('✅ 当前分支超前于master分支，可以发版'));
       }
     } else {
-      if (!!behind) {
+      if (behind) {
         console.log(chalk.red.bold('❌ 当前master分支落后于远程master分支，请pull后再发版'));
         process.exit(0);
       } else {
@@ -96,7 +97,6 @@ function compareWithOriginMaster(isMaster) {
     }
   }
 }
-
 
 async function doRelease(isMaster) {
   const answers = await inquirer.prompt([
@@ -108,9 +108,9 @@ async function doRelease(isMaster) {
       choices: [
         { name: '不兼容的版本更新-major', value: 'major' },
         { name: '向后兼容的新增特性-minor', value: 'minor' },
-        { name: '向后兼容的问题修复-patch', value: 'patch' }
-      ]
-    }
+        { name: '向后兼容的问题修复-patch', value: 'patch' },
+      ],
+    },
   ]);
   const oldVersion = getOldVersion();
   let isBeta = false;
@@ -151,12 +151,3 @@ async function main() {
 }
 
 main();
-
-
-
-
-
-
-
-
-
