@@ -78,7 +78,7 @@ function getNpmPackageVersions(packageName) {
  * @returns {string}
  */
 function getOldVersion() {
-  getNpmPackageVersions('express').then(versions => {
+  getNpmPackageVersions('scc-oms-components').then(versions => {
     console.log(versions); // 输出express的版本列表
     const pkgPath = path.join(__dirname, 'package.json');
     const pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
