@@ -83,7 +83,7 @@ pnpm start
 
 ## 发版流程测试
 
-test1
+test2
 
 ## LICENSE
 
