@@ -210,34 +210,36 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
-      const betaCommand = 'npm version prerelease';
-      const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
-      const newVersion = execSync(execCommand).toString().trim();
-      console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
-      exec('npm publish', (error, stdout, stderr) => {
-        if (error) {
-          console.log(error);
-        };
-        if (stderr) {
-          console.log(stderr);
-        }
-        console.log(stdout);
-      });
     }
-
-    async function main() {
-      try {
-        checkClean();
-        const isMaster = isMasterBranch();
-        const isContinue = await checkReleaseType(isMaster);
-        if (isContinue) {
-          compareWithOriginMaster(isMaster);
-          await doRelease(isMaster);
-        }
-      } catch (error) {
+    const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
+    const betaCommand = 'npm version prerelease';
+    const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
+    const newVersion = execSync(execCommand).toString().trim();
+    console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
+    exec('npm publish', (error, stdout, stderr) => {
+      if (error) {
         console.log(error);
+      };
+      if (stderr) {
+        console.log(stderr);
       }
-    }
+      console.log(stdout);
+    });
+  }
+}
 
-    main();
+async function main() {
+  try {
+    checkClean();
+    const isMaster = isMasterBranch();
+    const isContinue = await checkReleaseType(isMaster);
+    if (isContinue) {
+      compareWithOriginMaster(isMaster);
+      await doRelease(isMaster);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+main();
