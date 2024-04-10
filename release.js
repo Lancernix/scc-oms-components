@@ -155,7 +155,6 @@ async function doRelease(isMaster) {
   ]);
   const oldVersion = getOldVersion();
   const remoteVersion = await getNpmPackageVersions('scc-oms-components');
-  console.log(remoteVersion);
   let isBeta = false;
   if (oldVersion.includes('-')) {
     isBeta = true;
@@ -175,6 +174,7 @@ async function doRelease(isMaster) {
     while (i < remoteVersion.length) {
       const temp = remoteVersion[i].split('-beta.');
       if (temp[0] === oldVersionNum[0] && temp[1] > oldVersion[1]) {
+        console.log(temp);
         console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
         process.exit(0);
       } else {
