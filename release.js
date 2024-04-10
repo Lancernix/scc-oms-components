@@ -77,22 +77,11 @@ function getNpmPackageVersions(packageName) {
  * 获取当前版本号
  * @returns {string}
  */
-async function getOldVersion() {
-  const data = await getNpmPackageVersions('scc-oms-components');
-  console.log(data);
+function getOldVersion() {
   const pkgPath = path.join(__dirname, 'package.json');
   const pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
   const version = JSON.parse(pkgData).version;
   return version;
-  // .then(versions => {
-  //   console.log(versions); // 输出express的版本列表
-  //   const pkgPath = path.join(__dirname, 'package.json');
-  //   const pkgData = readFileSync(pkgPath, { encoding: 'utf-8' });
-  //   const version = JSON.parse(pkgData).version;
-  //   return version;
-  // }).catch(error => {
-  //   console.error('获取版本列表失败:', error);
-  // });
 }
 
 /**
@@ -146,6 +135,8 @@ async function doRelease(isMaster) {
     },
   ]);
   const oldVersion = getOldVersion();
+  const ver = await getNpmPackageVersions('scc-oms-components');
+  console.log(ver);
   let isBeta = false;
   if (oldVersion.includes('-')) {
     isBeta = true;
