@@ -173,8 +173,8 @@ async function doRelease(isMaster) {
     let i = 0;
     while (i < remoteVersion.length) {
       const temp = remoteVersion[i].split('-beta.');
-      if (temp[0] === oldVersionNum[0] && temp[1] > oldVersion[1]) {
-        console.log(temp, oldVersionNum, temp[1], oldVersion[1]);
+      if (temp[0] === oldVersionNum[0] && temp[1] > oldVersionNum[1]) {
+        console.log(temp, oldVersionNum, temp[1], oldVersionNum[1]);
         console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
         process.exit(0);
       } else {
