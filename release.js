@@ -51,6 +51,7 @@ function checkClean() {
   }
 }
 
+// 获取远程分支列表
 function getNpmPackageVersions(packageName) {
   return new Promise((resolve, reject) => {
     exec(`npm view ${packageName} versions --json`, (error, stdout, stderr) => {
@@ -135,8 +136,8 @@ async function doRelease(isMaster) {
     },
   ]);
   const oldVersion = getOldVersion();
-  const ver = await getNpmPackageVersions('scc-oms-components');
-  console.log(ver);
+  const remoteVersion = await getNpmPackageVersions('scc-oms-components');
+  console.log(remoteVersion);
   let isBeta = false;
   if (oldVersion.includes('-')) {
     isBeta = true;
@@ -144,34 +145,99 @@ async function doRelease(isMaster) {
   const type = answers.type;
   // 发包前需要切换到官方源
   execSync('npm config set registry https://registry.npmjs.org');
-  const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
-  const betaCommand = 'npm version prerelease';
-  const execCommand = !isMaster && isBeta ? betaCommand : command;
-  const newVersion = execSync(execCommand).toString().trim();
-  console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
-  exec('npm publish', (error, stdout, stderr) => {
-    if (error) {
-      console.log(error);
-    };
-    if (stderr) {
-      console.log(stderr);
-    }
-    console.log(stdout);
-  });
-}
 
-async function main() {
-  try {
-    checkClean();
-    const isMaster = isMasterBranch();
-    const isContinue = await checkReleaseType(isMaster);
-    if (isContinue) {
-      compareWithOriginMaster(isMaster);
-      await doRelease(isMaster);
+  let resultVersion = '';
+  // 如果本地是beta版本，如果有比本地新的版本，报错，否则更新beta版本
+  if (isBeta) {
+    const oldVersionNum = oldVersion.split('-beta.');
+    let i = 0;
+    while (i < remoteVersion.length) {
+      const temp = item[i].split('-beta.');
+      if (temp[0] === oldVersionNum[0] && temp[1] > oldVersion[1]) {
+        console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
+        process.exit(0);
+      } else {
+        i++;
+      }
     }
-  } catch (error) {
-    console.log(error);
-  }
-}
+  } else {
+    // 本地是正式版本
+    const oldVersionNum = oldVersion.split('.');
+    if (type === 'patch') {
+      const start = `${oldVersionNum[0]}.${oldVersionNum[1]}`;
+      let i = 0;
+      while (i < remoteVersion.length) {
+        const temp = remoteVersion[i].split('.');
+        const tempPath = remoteVersion[i].includes('beta') ? temp[2].split('-') : [];
+        // 如果有大于本地版本的正式版本，报错
+        if (!remoteVersion[i].includes('beta') && (temp[0] > oldVersion[0] || temp[1] > oldVersion[1] || temp[2] > oldVersion[2])) {
+          console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
+          process.exit(0);
+        } else if (remoteVersion[i].startsWith(start) && tempPath.length && tempPath[0] > oldVersionNum[2]) {
+          // 如果path位有大于本地的测试版本，path在取稍大的值上+1
+          resultVersion = `${start}.${tempPath[0] + 1}-beta.0`;
+        } else {
+          i++;
+        }
+      }
+    } else if (type === 'minor') {
+      let i = 0;
+      while (i < remoteVersion.length) {
+        const temp = remoteVersion[i].split('.');
+        // 如果有大于本地版本的正式版本，报错
+        if (!remoteVersion[i].includes('beta') && (temp[0] > oldVersion[0] || temp[1] > oldVersion[1])) {
+          console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
+          process.exit(0);
+        } else if (remoteVersion[i].startsWith(oldVersion[0]) && remoteVersion[i].includes('beta') && temp[1] > oldVersionNum[1]) {
+          // 如果path位有大于本地的测试版本，path在取稍大的值上+1
+          resultVersion = `${temp[0]}.${temp[1] + 1}.0-beta.0`;
+        } else {
+          i++;
+        }
+      }
+    } else if (type === 'major') {
+      let i = 0;
+      while (i < remoteVersion.length) {
+        const temp = remoteVersion[i].split('.');
+        // 如果有大于本地版本的正式版本，报错
+        if (!remoteVersion[i].includes('beta') && temp[0] > oldVersion[0]) {
+          console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
+          process.exit(0);
+        } else if (remoteVersion[i].includes('beta') && item[0] > oldVersionNum[0]) {
+          // 如果path位有大于本地的测试版本，path在取稍大的值上+1
+          resultVersion = `${temp[0] + 1}.0.0-beta.0`;
+        } else {
+          i++;
+        }
+      }
+      const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
+      const betaCommand = 'npm version prerelease';
+      const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
+      const newVersion = execSync(execCommand).toString().trim();
+      console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
+      exec('npm publish', (error, stdout, stderr) => {
+        if (error) {
+          console.log(error);
+        };
+        if (stderr) {
+          console.log(stderr);
+        }
+        console.log(stdout);
+      });
+    }
 
-main();
+    async function main() {
+      try {
+        checkClean();
+        const isMaster = isMasterBranch();
+        const isContinue = await checkReleaseType(isMaster);
+        if (isContinue) {
+          compareWithOriginMaster(isMaster);
+          await doRelease(isMaster);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    main();
