@@ -173,7 +173,7 @@ async function doRelease(isMaster) {
     const oldVersionNum = oldVersion.split('-beta.');
     let i = 0;
     while (i < remoteVersion.length) {
-      const temp = item[i].split('-beta.');
+      const temp = remoteVersion[i].split('-beta.');
       if (temp[0] === oldVersionNum[0] && temp[1] > oldVersion[1]) {
         console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
         process.exit(0);
@@ -227,7 +227,7 @@ async function doRelease(isMaster) {
         if (!remoteVersion[i].includes('beta') && temp[0] > oldVersion[0]) {
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
-        } else if (remoteVersion[i].includes('beta') && item[0] > oldVersionNum[0]) {
+        } else if (remoteVersion[i].includes('beta') && temp[0] > oldVersionNum[0]) {
           // 如果path位有大于本地的测试版本，path在取稍大的值上+1
           resultVersion = `${temp[0] + 1}.0.0-beta.0`;
         } else {
