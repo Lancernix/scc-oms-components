@@ -30,6 +30,24 @@ async function checkReleaseType(isMaster) {
 }
 
 /**
+ * 获取当前发版号，让用户确认
+ * @param {boolean} isMaster
+ * @returns {Promise<boolean>}
+ */
+async function currentVersion(version) {
+  const answers = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'continue',
+      message: `当前发布版本号为 ${chalk.yellow.bold(version)}，是否继续？`,
+      default: true,
+    },
+  ]);
+  const res = answers.continue;
+  return res;
+}
+
+/**
  * 判断当前分支是否是master
  * @returns {boolean}
  * @returns {boolean}
@@ -147,6 +165,9 @@ async function doRelease(isMaster) {
   execSync('npm config set registry https://registry.npmjs.org');
 
   let resultVersion = '';
+  if (isMaster) {
+    resultVersion = oldVersion.split('-beta.')[0];
+  }
   // 如果本地是beta版本，如果有比本地新的版本，报错，否则更新beta版本
   if (isBeta) {
     const oldVersionNum = oldVersion.split('-beta.');
@@ -160,6 +181,7 @@ async function doRelease(isMaster) {
         i++;
       }
     }
+    resultVersion = resultVersion ?? `${oldVersionNum[0]}-beta${oldVersionNum[1] + 1}`;
   } else {
     // 本地是正式版本
     const oldVersionNum = oldVersion.split('.');
@@ -180,6 +202,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
+      resultVersion = resultVersion ?? `${start}${oldVersion[2] + 1}-beta.0`;
     } else if (type === 'minor') {
       let i = 0;
       while (i < remoteVersion.length) {
@@ -195,6 +218,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
+      resultVersion = resultVersion ?? `${oldVersion[0]}.${oldVersion[1] + 1}.0-beta.0`;
     } else if (type === 'major') {
       let i = 0;
       while (i < remoteVersion.length) {
@@ -210,21 +234,25 @@ async function doRelease(isMaster) {
           i++;
         }
       }
+      resultVersion = resultVersion ?? `${oldVersion[0] + 1}.0.0-beta.0`;
     }
-    const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
-    const betaCommand = 'npm version prerelease';
-    const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
-    const newVersion = execSync(execCommand).toString().trim();
-    console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
-    exec('npm publish', (error, stdout, stderr) => {
-      if (error) {
-        console.log(error);
-      };
-      if (stderr) {
-        console.log(stderr);
-      }
-      console.log(stdout);
-    });
+    const versionConfirm = await currentVersion(resultVersion);
+    if (versionConfirm) {
+      // const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
+      const betaCommand = `npm version prerelease ${resultVersion}`;
+      // const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
+      const newVersion = execSync(betaCommand).toString().trim();
+      console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
+      exec('npm publish', (error, stdout, stderr) => {
+        if (error) {
+          console.log(error);
+        };
+        if (stderr) {
+          console.log(stderr);
+        }
+        console.log(stdout);
+      });
+    }
   }
 }
 
