@@ -139,7 +139,7 @@ async function doRelease(isMaster) {
       ],
     },
   ]);
-  const oldVersion = getOldVersion();
+  const oldVersion = await getOldVersion();
   let isBeta = false;
   if (oldVersion.includes('-')) {
     isBeta = true;
