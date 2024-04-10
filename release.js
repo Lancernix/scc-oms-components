@@ -181,7 +181,7 @@ async function doRelease(isMaster) {
         i++;
       }
     }
-    resultVersion = resultVersion ?? `${oldVersionNum[0]}-beta${oldVersionNum[1] + 1}`;
+    resultVersion = `${oldVersionNum[0]}-beta${oldVersionNum[1] + 1}`;
   } else {
     // 本地是正式版本
     const oldVersionNum = oldVersion.split('.');
