@@ -236,23 +236,23 @@ async function doRelease(isMaster) {
       }
       resultVersion = resultVersion ?? `${oldVersion[0] + 1}.0.0-beta.0`;
     }
-    const versionConfirm = await currentVersion(resultVersion);
-    if (versionConfirm) {
-      // const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
-      const betaCommand = `npm version prerelease ${resultVersion}`;
-      // const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
-      const newVersion = execSync(betaCommand).toString().trim();
-      console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
-      exec('npm publish', (error, stdout, stderr) => {
-        if (error) {
-          console.log(error);
-        };
-        if (stderr) {
-          console.log(stderr);
-        }
-        console.log(stdout);
-      });
-    }
+  }
+  const versionConfirm = await currentVersion(resultVersion);
+  if (versionConfirm) {
+    // const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
+    const betaCommand = `npm version prerelease ${resultVersion}`;
+    // const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
+    const newVersion = execSync(betaCommand).toString().trim();
+    console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
+    exec('npm publish', (error, stdout, stderr) => {
+      if (error) {
+        console.log(error);
+      };
+      if (stderr) {
+        console.log(stderr);
+      }
+      console.log(stdout);
+    });
   }
 }
 
