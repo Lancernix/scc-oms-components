@@ -237,6 +237,7 @@ async function doRelease(isMaster) {
       resultVersion = resultVersion ?? `${oldVersion[0] + 1}.0.0-beta.0`;
     }
   }
+  console.log(resultVersion);
   const versionConfirm = await currentVersion(resultVersion);
   if (versionConfirm) {
     // const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
