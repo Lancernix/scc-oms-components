@@ -155,6 +155,7 @@ async function doRelease(isMaster) {
   ]);
   const oldVersion = getOldVersion();
   const remoteVersion = await getNpmPackageVersions('scc-oms-components');
+  console.log(remoteVersion);
   let isBeta = false;
   if (oldVersion.includes('-')) {
     isBeta = true;
