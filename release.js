@@ -220,7 +220,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = resultVersion ?? `${oldVersionNum[0]}.${Number(oldVersionNum[1]) + 1}.0-beta.0`;
+      resultVersion = resultVersion === '' ? `${oldVersionNum[0]}.${Number(oldVersionNum[1]) + 1}.0-beta.0` : resultVersion;
     } else if (type === 'major') {
       let i = 0;
       while (i < remoteVersion.length) {
@@ -236,7 +236,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = resultVersion ?? `${oldVersionNum[0] + 1}.0.0-beta.0`;
+      resultVersion = resultVersion === '' ? `${oldVersionNum[0] + 1}.0.0-beta.0` : resultVersion;
     }
   }
   console.log(resultVersion);
