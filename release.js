@@ -199,12 +199,12 @@ async function doRelease(isMaster) {
           process.exit(0);
         } else if (remoteVersion[i].startsWith(start) && tempPath.length && tempPath[0] > oldVersionNum[2]) {
           // 如果path位有大于本地的测试版本，path在取稍大的值上+1
-          resultVersion = `${start}.${tempPath[0] + 1}-beta.0`;
+          resultVersion = `${start}.${Number(tempPath[0]) + 1}-beta.0`;
         } else {
           i++;
         }
       }
-      resultVersion = resultVersion === '' ? `${start}${oldVersionNum[2] + 1}-beta.0` : resultVersion;
+      resultVersion = resultVersion === '' ? `${start}.${Number(oldVersionNum[2]) + 1}-beta.0` : resultVersion;
     } else if (type === 'minor') {
       let i = 0;
       while (i < remoteVersion.length) {
