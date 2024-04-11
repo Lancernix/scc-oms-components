@@ -236,7 +236,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = resultVersion === '' ? `${oldVersionNum[0] + 1}.0.0-beta.0` : resultVersion;
+      resultVersion = resultVersion === '' ? `${Number(oldVersionNum[0]) + 1}.0.0-beta.0` : resultVersion;
     }
   }
   console.log(resultVersion);
