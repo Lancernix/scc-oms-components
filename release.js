@@ -193,7 +193,7 @@ async function doRelease(isMaster) {
         const temp = remoteVersion[i].split('.');
         const tempPath = remoteVersion[i].includes('beta') ? temp[2].split('-') : [];
         // 如果有大于本地版本的正式版本，报错
-        if (!remoteVersion[i].includes('-') && (temp[0] > oldVersionNum[0] || temp[1] > oldVersionNum[1] || temp[2] > oldVersionNum[2])) {
+        if (!remoteVersion[i].includes('-') && (temp[0] > oldVersionNum[0] || (temp[0] == oldVersionNum[0] && temp[1] > oldVersionNum[1]) || (temp[0] == oldVersionNum[0] && temp[1] == oldVersionNum[1] && temp[2] > oldVersionNum[2]))) {
           console.log(remoteVersion[i]);
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
