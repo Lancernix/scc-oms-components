@@ -186,6 +186,7 @@ async function doRelease(isMaster) {
   } else {
     // 本地是正式版本
     const oldVersionNum = oldVersion.split('.');
+    let maxPath = Number.NEGATIVE_INFINITY;
     if (type === 'patch') {
       const start = `${oldVersionNum[0]}.${oldVersionNum[1]}`;
       let i = 0;
@@ -197,47 +198,50 @@ async function doRelease(isMaster) {
           console.log(remoteVersion[i]);
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
-        } else if (remoteVersion[i].startsWith(start) && tempPath.length && tempPath[0] > oldVersionNum[2]) {
+        } else if (remoteVersion[i].startsWith(start) && tempPath.length && tempPath[0] > oldVersionNum[2] && tempPath[0] > maxPath) {
           // 如果path位有大于本地的测试版本，path在取稍大的值上+1
-          resultVersion = `${start}.${Number(tempPath[0]) + 1}-beta.0`;
+          maxPath = Number(tempPath[0]) + 1;
         } else {
           i++;
         }
       }
-      resultVersion = resultVersion === '' ? `${start}.${Number(oldVersionNum[2]) + 1}-beta.0` : resultVersion;
+      resultVersion = maxPath > Number.NEGATIVE_INFINITY ? `${start}.${Number(maxPath) + 1}-beta.0` : `${start}.${Number(oldVersionNum[2]) + 1}-beta.0`;
     } else if (type === 'minor') {
       let i = 0;
+      let maxMinor = Number.NEGATIVE_INFINITY;
       while (i < remoteVersion.length) {
         const temp = remoteVersion[i].split('.');
         // 如果有大于本地版本的正式版本，报错
-        console.log(remoteVersion[i].startsWith(oldVersionNum[0]));
         if (!remoteVersion[i].includes('-') && (temp[0] > oldVersionNum[0] || (temp[0] == oldVersionNum[0] && temp[1] > oldVersionNum[1]))) {
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
-        } else if (remoteVersion[i].startsWith(oldVersionNum[0]) && remoteVersion[i].includes('-') && temp[1] > oldVersionNum[1]) {
+        } else if (temp[0] == oldVersionNum[0] && temp[1] > oldVersionNum[1] && remoteVersion[i].includes('-') && temp[1] > maxMinor) {
           // 如果path位有大于本地的测试版本，path在取稍大的值上+1
-          resultVersion = `${temp[0]}.${Number(temp[1]) + 1}.0-beta.0`;
+          maxMinor = Number(temp[1]) + 1;
+          // resultVersion = `${temp[0]}.${Number(temp[1]) + 1}.0-beta.0`;
         } else {
           i++;
         }
       }
-      resultVersion = resultVersion === '' ? `${oldVersionNum[0]}.${Number(oldVersionNum[1]) + 1}.0-beta.0` : resultVersion;
+      resultVersion = maxMinor > Number.NEGATIVE_INFINITY ? `${temp[0]}.${Number(maxMinor) + 1}.0-beta.0` : `${oldVersionNum[0]}.${Number(oldVersionNum[1]) + 1}.0-beta.0`;
     } else if (type === 'major') {
       let i = 0;
+      let maxMajor = Number.NEGATIVE_INFINITY;
       while (i < remoteVersion.length) {
         const temp = remoteVersion[i].split('.');
         // 如果有大于本地版本的正式版本，报错
         if (!remoteVersion[i].includes('-') && temp[0] > oldVersionNum[0]) {
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
-        } else if (remoteVersion[i].includes('-') && temp[0] > oldVersionNum[0]) {
+        } else if (remoteVersion[i].includes('-') && temp[0] > oldVersionNum[0] && temp[0] > maxMajor) {
           // 如果path位有大于本地的测试版本，path在取稍大的值上+1
-          resultVersion = `${Number(temp[0]) + 1}.0.0-beta.0`;
+          maxMajor = Number(temp[0]) + 1;
+          // resultVersion = `${Number(temp[0]) + 1}.0.0-beta.0`;
         } else {
           i++;
         }
       }
-      resultVersion = resultVersion === '' ? `${Number(oldVersionNum[0]) + 1}.0.0-beta.0` : resultVersion;
+      resultVersion = maxMajor > Number.NEGATIVE_INFINITY ? `${Number(temp[0]) + 1}.0.0-beta.0` : `${Number(oldVersionNum[0]) + 1}.0.0-beta.0`;
     }
   }
   console.log(resultVersion);
