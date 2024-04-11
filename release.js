@@ -204,7 +204,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = resultVersion ?? `${start}${oldVersionNum[2] + 1}-beta.0`;
+      resultVersion = resultVersion === '' ? `${start}${oldVersionNum[2] + 1}-beta.0` : resultVersion;
     } else if (type === 'minor') {
       let i = 0;
       while (i < remoteVersion.length) {
