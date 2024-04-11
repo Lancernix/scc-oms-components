@@ -191,7 +191,7 @@ async function doRelease(isMaster) {
       let i = 0;
       while (i < remoteVersion.length) {
         const temp = remoteVersion[i].split('.');
-        const tempPath = remoteVersion[i].includes('beta') ? temp[2].split('-') : [];
+        const tempPath = remoteVersion[i].includes('-') ? temp[2].split('-') : [];
         // 如果有大于本地版本的正式版本，报错
         if (!remoteVersion[i].includes('-') && (temp[0] > oldVersionNum[0] || (temp[0] == oldVersionNum[0] && temp[1] > oldVersionNum[1]) || (temp[0] == oldVersionNum[0] && temp[1] == oldVersionNum[1] && temp[2] > oldVersionNum[2]))) {
           console.log(remoteVersion[i]);
@@ -210,12 +210,13 @@ async function doRelease(isMaster) {
       while (i < remoteVersion.length) {
         const temp = remoteVersion[i].split('.');
         // 如果有大于本地版本的正式版本，报错
+        console.log(remoteVersion[i].startsWith(oldVersionNum[0]));
         if (!remoteVersion[i].includes('-') && (temp[0] > oldVersionNum[0] || (temp[0] == oldVersionNum[0] && temp[1] > oldVersionNum[1]))) {
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
-        } else if (remoteVersion[i].startsWith(oldVersionNum[0]) && remoteVersion[i].includes('beta') && temp[1] > oldVersionNum[1]) {
+        } else if (remoteVersion[i].startsWith(oldVersionNum[0]) && remoteVersion[i].includes('-') && temp[1] > oldVersionNum[1]) {
           // 如果path位有大于本地的测试版本，path在取稍大的值上+1
-          resultVersion = `${temp[0]}.${temp[1] + 1}.0-beta.0`;
+          resultVersion = `${temp[0]}.${Number(temp[1]) + 1}.0-beta.0`;
         } else {
           i++;
         }
@@ -226,7 +227,7 @@ async function doRelease(isMaster) {
       while (i < remoteVersion.length) {
         const temp = remoteVersion[i].split('.');
         // 如果有大于本地版本的正式版本，报错
-        if (!remoteVersion[i].includes('beta') && temp[0] > oldVersionNum[0]) {
+        if (!remoteVersion[i].includes('-') && temp[0] > oldVersionNum[0]) {
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
         } else if (remoteVersion[i].includes('-') && temp[0] > oldVersionNum[0]) {
