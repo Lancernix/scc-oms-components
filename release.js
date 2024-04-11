@@ -205,7 +205,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = maxPath > Number.NEGATIVE_INFINITY ? `${start}.${Number(maxPath) + 1}-beta.0` : `${start}.${Number(oldVersionNum[2]) + 1}-beta.0`;
+      resultVersion = maxPath > Number.NEGATIVE_INFINITY ? `${start}.${maxPath}-beta.0` : `${start}.${Number(oldVersionNum[2]) + 1}-beta.0`;
     } else if (type === 'minor') {
       let i = 0;
       let maxMinor = Number.NEGATIVE_INFINITY;
@@ -223,7 +223,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = maxMinor > Number.NEGATIVE_INFINITY ? `${oldVersionNum[0]}.${Number(maxMinor) + 1}.0-beta.0` : `${oldVersionNum[0]}.${Number(oldVersionNum[1]) + 1}.0-beta.0`;
+      resultVersion = maxMinor > Number.NEGATIVE_INFINITY ? `${oldVersionNum[0]}.${maxMinor}.0-beta.0` : `${oldVersionNum[0]}.${Number(oldVersionNum[1]) + 1}.0-beta.0`;
     } else if (type === 'major') {
       let i = 0;
       let maxMajor = Number.NEGATIVE_INFINITY;
@@ -241,7 +241,7 @@ async function doRelease(isMaster) {
           i++;
         }
       }
-      resultVersion = maxMajor > Number.NEGATIVE_INFINITY ? `${Number(maxMajor) + 1}.0.0-beta.0` : `${Number(oldVersionNum[0]) + 1}.0.0-beta.0`;
+      resultVersion = maxMajor > Number.NEGATIVE_INFINITY ? `${maxMajor}.0.0-beta.0` : `${Number(oldVersionNum[0]) + 1}.0.0-beta.0`;
     }
   }
   console.log(resultVersion);
