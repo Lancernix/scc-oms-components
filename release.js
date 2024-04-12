@@ -175,7 +175,6 @@ async function doRelease(isMaster) {
     while (i < remoteVersion.length) {
       const temp = remoteVersion[i].split('-beta.');
       if (temp[0] === oldVersionNum[0] && temp[1] > oldVersionNum[1]) {
-        console.log(temp, oldVersionNum, temp[1], oldVersionNum[1]);
         console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
         process.exit(0);
       } else {
@@ -195,7 +194,6 @@ async function doRelease(isMaster) {
         const tempPath = remoteVersion[i].includes('-') ? temp[2].split('-') : [];
         // 如果有大于本地版本的正式版本，报错
         if (!remoteVersion[i].includes('-') && (temp[0] > oldVersionNum[0] || (temp[0] == oldVersionNum[0] && temp[1] > oldVersionNum[1]) || (temp[0] == oldVersionNum[0] && temp[1] == oldVersionNum[1] && temp[2] > oldVersionNum[2]))) {
-          console.log(remoteVersion[i]);
           console.log(chalk.red.bold('❌ 请合并最新提交后再进行操作'));
           process.exit(0);
         } else if (remoteVersion[i].startsWith(start) && tempPath.length && tempPath[0] > oldVersionNum[2] && tempPath[0] > maxPath) {
@@ -244,13 +242,10 @@ async function doRelease(isMaster) {
       resultVersion = maxMajor > Number.NEGATIVE_INFINITY ? `${maxMajor}.0.0-beta.0` : `${Number(oldVersionNum[0]) + 1}.0.0-beta.0`;
     }
   }
-  console.log(resultVersion);
   const versionConfirm = await currentVersion(resultVersion);
   if (versionConfirm) {
     // const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
-    const betaCommand = `npm version v0.3.0-beta.7`;
-    console.log(betaCommand);
-    const text = await currentVersion(resultVersion);
+    const betaCommand = `npm version ${resultVersion}`;
     // const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
     const newVersion = execSync(betaCommand).toString().trim();
     console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
