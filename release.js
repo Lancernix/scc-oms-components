@@ -250,6 +250,7 @@ async function doRelease(isMaster) {
     // const command = `npm version ${isMaster ? '' : 'pre'}${type}${isMaster ? '' : ' --preid beta'}`;
     const betaCommand = `npm version ${resultVersion}`;
     console.log(betaCommand);
+    const text = await currentVersion(resultVersion);
     // const execCommand = resultVersion ? `${betaCommand} ${resultVersion}` : (!isMaster && isBeta ? betaCommand : command);
     const newVersion = execSync(betaCommand).toString().trim();
     console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(newVersion)}，开始发布...`));
