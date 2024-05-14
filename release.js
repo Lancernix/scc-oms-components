@@ -64,7 +64,7 @@ async function confirmNewVersion(version) {
     {
       type: 'confirm',
       name: 'continue',
-      message: `即将发布新版本号为 ${chalk.yellow.bold(version)}，是否继续？`,
+      message: `即将发布的新版本号为 ${chalk.yellow.bold(version)}，是否继续？`,
       default: true,
     },
   ]);
@@ -312,7 +312,7 @@ async function main() {
     const isMaster = isMasterBranch();
     const isContinue = await confirmReleaseType(isMaster);
     if (isContinue) {
-      const newVersion = getNewVersion(isMaster);
+      const newVersion = await getNewVersion(isMaster);
       const confirm = await confirmNewVersion(newVersion);
       if (confirm) {
         await doRelease(newVersion);
