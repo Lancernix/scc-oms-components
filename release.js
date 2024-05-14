@@ -295,14 +295,13 @@ async function doRelease(version) {
   const command = `npm version ${version}`;
   const versionStr = execSync(command).toString().trim();
   console.log(chalk.blue(`版本号已更新为 ${chalk.green.bold(versionStr)}，开始发布...`));
-  exec('npm publish', (error, stdout, stderr) => {
+  exec('npm run build && npm publish', (error, _stdout, stderr) => {
     if (error) {
-      console.log(error);
+      console.error(error);
     };
     if (stderr) {
-      console.log(stderr);
+      console.error(stderr);
     }
-    console.log(stdout);
   });
 }
 
