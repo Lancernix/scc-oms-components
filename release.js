@@ -289,7 +289,7 @@ async function getNewVersion(isMaster) {
  * 执行发版
  * @param {string} version
  */
-async function doRelease(version) {
+function doRelease(version) {
   // 发包前需要切换到官方源
   execSync('npm config set registry https://registry.npmjs.org');
   const command = `npm version ${version}`;
@@ -314,7 +314,7 @@ async function main() {
       const newVersion = await getNewVersion(isMaster);
       const confirm = await confirmNewVersion(newVersion);
       if (confirm) {
-        await doRelease(newVersion);
+        doRelease(newVersion);
       }
     }
   } catch (error) {
