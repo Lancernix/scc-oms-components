@@ -210,7 +210,7 @@ async function getNewVersion(isMaster) {
         i++;
       }
     })
-    const newVersionArr = allFormalVersions[0].split('.');
+    const newVersionArr = allFormalVersions[0].split('.').map((item) => isFinite(item) ? Number(item) : item);
     // 在这个基础上+1
     switch (versionType) {
       case 'major':
