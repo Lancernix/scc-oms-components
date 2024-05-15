@@ -1,8 +1,8 @@
 {
   "recommendations": [
     "editorconfig.editorconfig",
-    "dbaeumer.vscode-eslint",
     "mervin.markdown-formatter",
-    "wayou.vscode-todo-highlight"
+    "wayou.vscode-todo-highlight",
+    "biomejs.biome"
   ]
 }

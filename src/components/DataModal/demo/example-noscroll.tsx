@@ -11,7 +11,9 @@ function Index() {
 
   return (
     <>
-      <Button type="primary" onClick={() => setVisible(true)}>打开弹窗</Button>
+      <Button type="primary" onClick={() => setVisible(true)}>
+        打开弹窗
+      </Button>
       <DataModal visible={visible} onCancel={() => setVisible(false)} contentScrollY={false}>
         <p>弹窗内容...</p>
         <p>弹窗内容...</p>

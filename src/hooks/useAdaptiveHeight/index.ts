@@ -22,6 +22,7 @@ export default function useAdaptiveHeight(offsetTop: number, offsetButtom: numbe
     setHeight(res);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 这个地方没必要加这个依赖
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => {

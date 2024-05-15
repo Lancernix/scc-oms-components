@@ -19,14 +19,10 @@ function Index() {
   return (
     <>
       <Divider />
-      <Button type="primary" onClick={() => setVisible(true)}>打开弹窗</Button>
-      <DataModal
-        type="create"
-        size="l"
-        visible={visible}
-        onCancel={() => setVisible(false)}
-        extraFooter={extraFooter}
-      >
+      <Button type="primary" onClick={() => setVisible(true)}>
+        打开弹窗
+      </Button>
+      <DataModal type="create" size="l" visible={visible} onCancel={() => setVisible(false)} extraFooter={extraFooter}>
         <p>弹窗内容...</p>
         <p>弹窗内容...</p>
         <p>弹窗内容...</p>

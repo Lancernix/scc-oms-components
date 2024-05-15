@@ -32,8 +32,8 @@ interface Props {
     wrapperCol: FormItemProps['wrapperCol'];
   };
   otherRangePickerProps?: Omit<
-  TimeRangePickerProps,
-  'empty' | 'value' | 'defaultValue' | 'onChange' | 'format' | 'allowClear'
+    TimeRangePickerProps,
+    'empty' | 'value' | 'defaultValue' | 'onChange' | 'format' | 'allowClear'
   >;
   /** formItem的其他属性，常用的属性都已经提升到顶层了，有需要可以在这里添加 */
   otherFormItemProps?: Omit<FormItemProps, 'labelCol' | 'wrapperCol' | 'label' | 'initialValue' | 'name' | 'rules'>;

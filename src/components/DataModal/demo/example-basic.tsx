@@ -60,7 +60,9 @@ function Index() {
         <Radio value={false}>false</Radio>
       </Radio.Group>
       <Divider />
-      <Button type="primary" onClick={() => setVisible(true)}>打开弹窗</Button>
+      <Button type="primary" onClick={() => setVisible(true)}>
+        打开弹窗
+      </Button>
       <DataModal
         type={type}
         size={size}

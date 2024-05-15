@@ -33,32 +33,32 @@ const StyledTable = styled(Table<FormListFieldData>)`
 /** FormTableColumn类型定义 */
 export type FormTableColumnType =
   | ({
-    /**
-     * 是否可编辑，是则需要增加对应的编辑组件
-     * @default false
-     */
-    editable?: boolean;
-    /** 可编辑cell对应的组件，`editable`为true时必须设置 */
-    component?: React.ReactNode | ((record: FormListFieldData) => React.ReactNode);
-    /**
-     * 是否隐藏该字段
-     * @default false
-     */
-    hidden?: boolean;
-    /**
-     * 是否展示表头必填标识
-     * @default false
-     */
-    requiredMark?: boolean;
-    /** 字段提示 */
-    tooltip?: React.ReactNode;
-    /** 组件在form中使用的校验规则 */
-    rules?: FormItemProps['rules'] | ((record: FormListFieldData) => FormItemProps['rules']);
-    /** 子列 */
-    children?: Array<FormTableColumnType>;
-    /** 初始值 */
-    initialValue?: unknown | ((record: FormListFieldData) => unknown);
-  } & TableColumnType<FormListFieldData>)
+      /**
+       * 是否可编辑，是则需要增加对应的编辑组件
+       * @default false
+       */
+      editable?: boolean;
+      /** 可编辑cell对应的组件，`editable`为true时必须设置 */
+      component?: React.ReactNode | ((record: FormListFieldData) => React.ReactNode);
+      /**
+       * 是否隐藏该字段
+       * @default false
+       */
+      hidden?: boolean;
+      /**
+       * 是否展示表头必填标识
+       * @default false
+       */
+      requiredMark?: boolean;
+      /** 字段提示 */
+      tooltip?: React.ReactNode;
+      /** 组件在form中使用的校验规则 */
+      rules?: FormItemProps['rules'] | ((record: FormListFieldData) => FormItemProps['rules']);
+      /** 子列 */
+      children?: Array<FormTableColumnType>;
+      /** 初始值 */
+      initialValue?: unknown | ((record: FormListFieldData) => unknown);
+    } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 
 interface Props {
@@ -83,21 +83,27 @@ interface Props {
 }
 
 /** 字段展示组件 */
-const Display = memo(
-  function Display({ value }: { value?: React.ReactText; onChange?: (val: React.ReactText) => void }) {
-    return <span>{value}</span>;
-  },
-);
+const Display = memo(function Display({
+  value,
+}: { value?: React.ReactText; onChange?: (val: React.ReactText) => void }) {
+  return <span>{value}</span>;
+});
 
 /** 扩展title展示组件 */
-const Title = memo(function RequiredTitle(
-  { title, requiredMark, tooltip }: { title: React.ReactNode; requiredMark: boolean; tooltip?: React.ReactNode },
-) {
+const Title = memo(function RequiredTitle({
+  title,
+  requiredMark,
+  tooltip,
+}: { title: React.ReactNode; requiredMark: boolean; tooltip?: React.ReactNode }) {
   return (
     <>
       {requiredMark ? <span className="required-mark">*</span> : null}
       {title}
-      {tooltip ? (<Tooltip title={tooltip}><QuestionCircleOutlined className="title-icon" /></Tooltip>) : null}
+      {tooltip ? (
+        <Tooltip title={tooltip}>
+          <QuestionCircleOutlined className="title-icon" />
+        </Tooltip>
+      ) : null}
     </>
   );
 });
@@ -116,11 +122,16 @@ function genFormTableColumns(
       // 其他正常列
       if (originCol.children?.length) {
         // 嵌套表头
-        resCol.title = originCol.requiredMark
-          ? <Title title={originCol.title} tooltip={originCol.tooltip} requiredMark={originCol.requiredMark} />
-          : originCol.title;
-        (resCol as TableColumnGroupType<FormListFieldData>).children
-          = genFormTableColumns(originCol.children, { remove, add, move });
+        resCol.title = originCol.requiredMark ? (
+          <Title title={originCol.title} tooltip={originCol.tooltip} requiredMark={originCol.requiredMark} />
+        ) : (
+          originCol.title
+        );
+        (resCol as TableColumnGroupType<FormListFieldData>).children = genFormTableColumns(originCol.children, {
+          remove,
+          add,
+          move,
+        });
       } else {
         const {
           requiredMark = false,
@@ -135,9 +146,12 @@ function genFormTableColumns(
 
         resCol = rest;
         // 正常表头
-        resCol.title = (requiredMark || tooltip)
-          ? <Title title={originCol.title} tooltip={tooltip} requiredMark={requiredMark} />
-          : originCol.title;
+        resCol.title =
+          requiredMark || tooltip ? (
+            <Title title={originCol.title} tooltip={tooltip} requiredMark={requiredMark} />
+          ) : (
+            originCol.title
+          );
         resCol.key = originCol.key ?? (originCol.dataIndex as string | number);
         resCol.width = originCol.width;
         if (hidden) {
@@ -204,13 +218,11 @@ export default function FormTable(props: Props) {
               dataSource={fields}
               columns={genFormTableColumns(tableColumns, { add, remove, move })}
             />
-            {operateBtnsNode
-              ? (
-                <div className="operate-btns-area">
-                  {typeof operateBtnsNode === 'function' ? operateBtnsNode({ add, remove, move }) : operateBtnsNode}
-                </div>
-              )
-              : null}
+            {operateBtnsNode ? (
+              <div className="operate-btns-area">
+                {typeof operateBtnsNode === 'function' ? operateBtnsNode({ add, remove, move }) : operateBtnsNode}
+              </div>
+            ) : null}
           </div>
         );
       }}

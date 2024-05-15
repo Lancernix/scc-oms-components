@@ -27,12 +27,8 @@ function Index() {
 
   return (
     <>
-      <TableButton onClick={onClickView}>
-        查看
-      </TableButton>
-      <TableButton onClick={onClickEdit}>
-        编辑
-      </TableButton>
+      <TableButton onClick={onClickView}>查看</TableButton>
+      <TableButton onClick={onClickEdit}>编辑</TableButton>
       <TableButton danger onClick={onClickDel} withConfirm loading={loading}>
         删除
       </TableButton>

@@ -20,7 +20,9 @@ function Index() {
   return (
     <>
       <Divider />
-      <Button type="primary" onClick={() => setVisible(true)}>打开弹窗</Button>
+      <Button type="primary" onClick={() => setVisible(true)}>
+        打开弹窗
+      </Button>
       <DataModal
         type="create"
         size="l"

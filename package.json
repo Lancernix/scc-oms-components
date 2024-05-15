@@ -22,11 +22,7 @@
   "module": "esm/index.js",
   "unpkg": "dist/scc-oms-components.min.js",
   "types": "esm/index.d.ts",
-  "files": [
-    "cjs",
-    "dist",
-    "esm"
-  ],
+  "files": ["cjs", "dist", "esm"],
   "engines": {
     "node": "^16.0.0 || ^18.0.0 || >=20.0.0"
   },
@@ -39,7 +35,8 @@
     "doctor": "father doctor",
     "lint": "npm run lint:es && npm run lint:css",
     "lint:css": "stylelint \"{src,test}/**/*.{css,less}\"",
-    "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
+    "lint:es": "biome lint ./src",
+    "format": "biome format ./src",
     "prepare": "husky install && dumi setup",
     "start": "npm run dev",
     "release": "node ./release.js"
@@ -58,9 +55,9 @@
   },
   "devDependencies": {
     "@ant-design/icons": "^4.8.0",
-    "@antfu/eslint-config": "^2.1.1",
     "@babel/plugin-transform-runtime": "^7.23.4",
     "@babel/preset-env": "^7.23.3",
+    "@biomejs/biome": "^1.7.3",
     "@commitlint/cli": "^18.2.0",
     "@commitlint/config-conventional": "^18.1.0",
     "@types/inquirer": "^9.0.7",
@@ -72,10 +69,6 @@
     "commitizen": "^4.3.0",
     "cz-customizable": "^7.0.0",
     "dumi": "^2.2.14",
-    "eslint": "^8.54.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
     "father": "^4.3.6",
     "husky": "^8.0.3",
     "inquirer": "^9.2.15",
@@ -88,8 +81,9 @@
     "stylis": "^4.3.0"
   },
   "lint-staged": {
-    "src/**/*.ts{,x}": [
-      "eslint --fix"
+    "**.{js,ts,cjs,mjs,jsx,tsx,json,jsonc}": [
+      "biome lint --apply --no-errors-on-unmatched",
+      "biome format --write --no-errors-on-unmatched"
     ]
   },
   "config": {
@@ -103,11 +97,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "authors": [
-    "lancernix@gmail.com"
-  ],
-  "maintainers": [
-    "lancernix@gmail.com",
-    "18829598229@163.com"
-  ]
+  "authors": ["lancernix@gmail.com"],
+  "maintainers": ["lancernix@gmail.com", "18829598229@163.com"]
 }

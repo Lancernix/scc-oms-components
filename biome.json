@@ -1,0 +1,38 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": [".vscode/**", ".husky/**"],
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "ignore": [".vscode/**", ".husky/**"],
+    "lineWidth": 120,
+    "indentStyle": "space"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "arrowParentheses": "asNeeded"
+    },
+    "jsxRuntime": "reactClassic"
+  },
+  "overrides": [
+    {
+      "include": ["src/**/demo/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    }
+  ]
+}

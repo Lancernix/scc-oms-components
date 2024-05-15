@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
 import { DatePicker as AntdDatePicker, TimePicker as AntdTimePicker } from 'antd';
 import type { DatePickerProps as AntdDatePickerProps, TimePickerProps as AntdTimePickerProps } from 'antd';
 import type { Moment } from 'moment';
+import React, { useMemo } from 'react';
 import { momentToValue, valueToMoment } from 'utils/momentTransform';
 
 export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | 'format'> & {
@@ -29,7 +29,7 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
   /**
    * 增加时间选择功能
    */
-  showTime?: boolean | Record<string, any>;
+  showTime?: boolean | Record<string, unknown>;
 };
 
 /** 日期组件 */

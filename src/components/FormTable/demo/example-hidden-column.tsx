@@ -70,9 +70,7 @@ function Index() {
       dataIndex: 'operate',
       render: (_, record) => (
         <>
-          <Link onClick={() => add({ country: '中国', height: 175 })}>
-            新增
-          </Link>
+          <Link onClick={() => add({ country: '中国', height: 175 })}>新增</Link>
           <Link style={{ marginLeft: '10px' }} onClick={() => remove(record.name)}>
             删除
           </Link>
@@ -82,10 +80,13 @@ function Index() {
   ];
 
   const handleSubmit = () => {
-    form.validateFields().then((val: any) => {
-      console.log(val);
-      setValue(val);
-    }).catch(e => console.log(e));
+    form
+      .validateFields()
+      .then((val: any) => {
+        console.log(val);
+        setValue(val);
+      })
+      .catch(e => console.log(e));
   };
 
   return (

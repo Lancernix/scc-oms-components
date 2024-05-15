@@ -57,14 +57,10 @@ const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
       return (
         <>
           {extraFooter ?? null}
-          <Button style={{ marginLeft: '10px' }} key="reset" onClick={onReset}>{resetText}</Button>
-          <Button
-            style={{ marginLeft: '10px' }}
-            key="submit"
-            type="primary"
-            onClick={onOk}
-            loading={confirmLoading}
-          >
+          <Button style={{ marginLeft: '10px' }} key="reset" onClick={onReset}>
+            {resetText}
+          </Button>
+          <Button style={{ marginLeft: '10px' }} key="submit" type="primary" onClick={onOk} loading={confirmLoading}>
             {okText}
           </Button>
         </>
@@ -73,7 +69,9 @@ const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
       return (
         <>
           {extraFooter ?? null}
-          <Button key="ok" style={{ marginLeft: '10px' }} type="primary" onClick={onCancel}>{okText}</Button>
+          <Button key="ok" style={{ marginLeft: '10px' }} type="primary" onClick={onCancel}>
+            {okText}
+          </Button>
         </>
       );
   }
@@ -123,20 +121,22 @@ export default function DataModal(props: Props) {
       onOk={onOk}
       okText={okText}
       onCancel={onCancel}
-      footer={showFooter
-        ? (customFooter ?? (
-          <DefaultFooter
-            type={type}
-            onOk={onOk}
-            okText={okText}
-            confirmLoading={confirmLoading}
-            onReset={onReset}
-            resetText={resetText}
-            extraFooter={extraFooter}
-            onCancel={onCancel}
-          />
-        ))
-        : null}
+      footer={
+        showFooter
+          ? customFooter ?? (
+              <DefaultFooter
+                type={type}
+                onOk={onOk}
+                okText={okText}
+                confirmLoading={confirmLoading}
+                onReset={onReset}
+                resetText={resetText}
+                extraFooter={extraFooter}
+                onCancel={onCancel}
+              />
+            )
+          : null
+      }
     >
       <Spin spinning={fetchLoading}>{children}</Spin>
     </AntdModal>

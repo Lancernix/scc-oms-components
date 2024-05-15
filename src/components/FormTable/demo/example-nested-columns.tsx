@@ -110,9 +110,7 @@ function Index() {
       editable: false,
       render: (_, record) => (
         <>
-          <Link onClick={() => add()}>
-            新增
-          </Link>
+          <Link onClick={() => add()}>新增</Link>
           <Link style={{ marginLeft: '10px' }} onClick={() => remove(record.name)}>
             删除
           </Link>

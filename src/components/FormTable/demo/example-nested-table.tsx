@@ -70,19 +70,21 @@ function subTable(formValues?: any) {
         editable: true,
         component: <Input />,
         requiredMark: true,
-        rules: ({ name }) => ([
+        rules: ({ name }) => [
           { required: true, message: '请填写学号' },
           {
             validator(_, value) {
               const usedNoList = (belongClass.stuList as Array<any>)
-                .filter((_: any, index) => index !== name).map(stu => stu.stuNo).filter(Boolean);
+                .filter((_: any, index) => index !== name)
+                .map(stu => stu.stuNo)
+                .filter(Boolean);
               if (usedNoList.includes(value)) {
                 return Promise.reject(new Error('学号不能重复'));
               }
               return Promise.resolve();
             },
           },
-        ]),
+        ],
       },
       {
         title: '姓名',
@@ -109,10 +111,7 @@ function subTable(formValues?: any) {
         className: 'op-col',
         render: (_, record) => (
           <>
-            <Link
-              onClick={() => add()}
-              disabled={belongClass?.studentNum <= belongClass?.stuList?.length}
-            >
+            <Link onClick={() => add()} disabled={belongClass?.studentNum <= belongClass?.stuList?.length}>
               新增
             </Link>
             <Link
@@ -128,19 +127,16 @@ function subTable(formValues?: any) {
       }),
     ];
 
-    return (
-      <FormTable
-        name={[parentObj.name, 'stuList']}
-        tableColumns={columns}
-      />
-    );
+    return <FormTable name={[parentObj.name, 'stuList']} tableColumns={columns} />;
   };
 
   return res;
 }
 
 const opBtns: FormTableProps['operateBtnsNode'] = ({ add }) => (
-  <Button type="dashed" block onClick={() => add({ stuList: [{}] })}>新增班级</Button>
+  <Button type="dashed" block onClick={() => add({ stuList: [{}] })}>
+    新增班级
+  </Button>
 );
 
 function Index() {
@@ -160,7 +156,8 @@ function Index() {
             <Select
               options={classOpts}
               onChange={(_, opt) =>
-                form.setFieldValue(['classList', record.name, 'classTitle'], (opt as (typeof classOpts)[number]).title)}
+                form.setFieldValue(['classList', record.name, 'classTitle'], (opt as (typeof classOpts)[number]).title)
+              }
             />
           ),
           requiredMark: true,
@@ -209,9 +206,12 @@ function Index() {
   ];
 
   const handleSubmit = () => {
-    form.validateFields().then((val: any) => {
-      setValue(val);
-    }).catch(e => console.log(e));
+    form
+      .validateFields()
+      .then((val: any) => {
+        setValue(val);
+      })
+      .catch(e => console.log(e));
   };
 
   return (
@@ -246,7 +246,6 @@ function Index() {
         </span>
       </div>
     </>
-
   );
 }
 

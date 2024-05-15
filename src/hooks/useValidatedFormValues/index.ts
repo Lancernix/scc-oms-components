@@ -21,7 +21,7 @@ export default function useValidatedFormValues<VT = Record<string, unknown>>(for
         .then(values => {
           if (filterFields?.length) {
             const newValues = cloneDeep(values);
-            filterFields.forEach(field => {
+            for (const field of filterFields) {
               if (field.deep) {
                 // 深度过滤
                 removeSomeProperty(newValues as Record<string, unknown>, field.name);
@@ -31,7 +31,7 @@ export default function useValidatedFormValues<VT = Record<string, unknown>>(for
                   delete (newValues as Record<string, unknown>)[field.name];
                 }
               }
-            });
+            }
             return Promise.resolve(newValues);
           }
           return Promise.resolve(values);

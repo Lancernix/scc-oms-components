@@ -3,59 +3,12 @@
   "eslint.experimental.useFlatConfig": true,
   "prettier.enable": false,
   "vsicons.projectDetection.autoReload": true,
+  "editor.defaultFormatter": "biomejs.biome",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": false,
-    "source.fixAll.eslint": true
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
-  "eslint.rules.customizations": [
-    {
-      "rule": "style/*",
-      "severity": "error"
-    },
-    {
-      "rule": "*-indent",
-      "severity": "error"
-    },
-    {
-      "rule": "*-spacing",
-      "severity": "error"
-    },
-    {
-      "rule": "*-spaces",
-      "severity": "error"
-    },
-    {
-      "rule": "*-order",
-      "severity": "error"
-    },
-    {
-      "rule": "*-dangle",
-      "severity": "error"
-    },
-    {
-      "rule": "*-newline",
-      "severity": "error"
-    },
-    {
-      "rule": "*quotes",
-      "severity": "error"
-    },
-    {
-      "rule": "*semi",
-      "severity": "error"
-    }
-  ],
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "html",
-    "json",
-    "jsonc",
-    "yaml"
-  ],
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   // 是否启用格式化
