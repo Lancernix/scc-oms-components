@@ -1,6 +1,6 @@
 import { exec, execSync } from 'node:child_process';
-import path, { dirname } from 'node:path';
 import { readFileSync } from 'node:fs';
+import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -46,7 +46,9 @@ async function confirmReleaseType(isMaster) {
     {
       type: 'confirm',
       name: 'continue',
-      message: `当前分支为 ${chalk.yellow.bold(isMaster ? 'master分支，可发布正式包' : '开发/fix分支，可发布测试包')}，是否继续？`,
+      message: `当前分支为 ${chalk.yellow.bold(
+        isMaster ? 'master分支，可发布正式包' : '开发/fix分支，可发布测试包',
+      )}，是否继续？`,
       default: true,
     },
   ]);
@@ -78,7 +80,7 @@ async function confirmNewVersion(version) {
  */
 function getAllReleasedVersions() {
   return new Promise((resolve, reject) => {
-    exec(`npm view scc-oms-components versions --json`, (error, stdout, stderr) => {
+    exec('npm view scc-oms-components versions --json', (error, stdout, stderr) => {
       if (error) {
         console.log(chalk.red.bold(`❌ 执行出错: ${error}`));
         return reject(error);
@@ -173,15 +175,16 @@ async function getVersionType() {
  */
 async function getNewVersion(isMaster) {
   const allVersions = await getAllReleasedVersions(); // 获取所有已发布的版本
-  let allBetaVersions = []; // 所有测试版本
-  let allFormalVersions = []; // 所有正式版本
-  allVersions.forEach((ver) => {
+  const allBetaVersions = []; // 所有测试版本
+  const allFormalVersions = []; // 所有正式版本
+  for (const ver of allVersions) {
     if (ver.includes('-beta') || ver.includes('-alpha')) {
       allBetaVersions.push(ver);
     } else {
       allFormalVersions.push(ver);
     }
-  });
+  }
+
   const versionType = await getVersionType();
   // 如果当前是master分支，则发布的是正式版
   // 此时需要看一下远程分支最新的正式版本号是什么
@@ -190,27 +193,31 @@ async function getNewVersion(isMaster) {
   if (isMaster) {
     // 拿到当前最大正式版本
     allFormalVersions.sort((aVer, bVer) => {
-      let aArr = aVer.split('.');
-      let bArr = bVer.split('.');
+      const aArr = aVer.split('.');
+      const bArr = bVer.split('.');
       let i = 0;
       while (true) {
-        let aNum = Number(aArr[i]);
-        let bNum = Number(bArr[i]);
-        if (isNaN(aNum) && isNaN(bNum)) {
+        const aNum = Number(aArr[i]);
+        const bNum = Number(bArr[i]);
+        if (Number.isNaN(aNum) && Number.isNaN(bNum)) {
           return 0;
-        } else if (isNaN(aNum)) {
+        }
+        if (Number.isNaN(aNum)) {
           return 1;
-        } else if (isNaN(bNum)) {
+        }
+        if (Number.isNaN(bNum)) {
           return -1;
-        } else if (aNum < bNum) {
+        }
+        if (aNum < bNum) {
           return 1;
-        } else if (aNum > bNum) {
+        }
+        if (aNum > bNum) {
           return -1;
         }
         i++;
       }
-    })
-    const newVersionArr = allFormalVersions[0].split('.').map((item) => isFinite(item) ? Number(item) : item);
+    });
+    const newVersionArr = allFormalVersions[0].split('.').map(item => (isFinite(item) ? Number(item) : item));
     // 在这个基础上+1
     switch (versionType) {
       case 'major':
@@ -232,10 +239,11 @@ async function getNewVersion(isMaster) {
   } else {
     const curVersion = getCurrentVersion(); // 当前版本
     // 拆分成数组  1.0.1-beta.1 => [1, 0, 1, 'beta', 1]  1.0.1 => [1, 0, 1]
-    const tempVersionArr = curVersion.split('-')
-      .map((item) => item.split('.'))
+    const tempVersionArr = curVersion
+      .split('-')
+      .map(item => item.split('.'))
       .flat(2)
-      .map((item) => isFinite(item) ? Number(item) : item);
+      .map(item => (isFinite(item) ? Number(item) : item));
     // 判断当前分支的版本是beta还是正式
     let isBeta = false;
     if (tempVersionArr.includes('beta') || tempVersionArr.includes('alpha')) {
@@ -261,10 +269,10 @@ async function getNewVersion(isMaster) {
           break;
       }
       newVersion = tempVersionArr.join('.');
-      const biggerVersions = allBetaVersions.filter((ver) => ver.startsWith(newVersion));
+      const biggerVersions = allBetaVersions.filter(ver => ver.startsWith(newVersion));
       // 判断是否已经有新版本的beta版本，有就退出流程并提示merge，没有则增加beta.0
       if (biggerVersions.length) {
-        console.log(chalk.red.bold(`❌ 新的beta分支已发布，请合并后再进行操作`));
+        console.log(chalk.red.bold('❌ 新的beta分支已发布，请合并后再进行操作'));
         process.exit(0);
       } else {
         newVersion = `${newVersion}-beta.0`;
@@ -272,12 +280,14 @@ async function getNewVersion(isMaster) {
     } else {
       // 已经是beta了，就看一下是否有新的beta，有就退出流程并提示merge，没有则beta+1
       const newVersionArr = newVersion.split('-beta.');
-      const biggerVersions = allBetaVersions.filter((ver) => ver.startsWith(newVersionArr[0]) && Number(ver.split('-beta.')[1]) > Number(newVersionArr[1]));
+      const biggerVersions = allBetaVersions.filter(
+        ver => ver.startsWith(newVersionArr[0]) && Number(ver.split('-beta.')[1]) > Number(newVersionArr[1]),
+      );
       if (biggerVersions.length) {
-        console.log(chalk.red.bold(`❌ 新的beta分支已发布，请合并后再进行操作`));
+        console.log(chalk.red.bold('❌ 新的beta分支已发布，请合并后再进行操作'));
         process.exit(0);
       } else {
-        newVersion = `${newVersionArr[0]}-beta.${Number(newVersionArr[1]) + 1}`
+        newVersion = `${newVersionArr[0]}-beta.${Number(newVersionArr[1]) + 1}`;
       }
     }
   }
@@ -298,7 +308,7 @@ function doRelease(version) {
   exec('npm run build && npm publish', (error, _stdout, stderr) => {
     if (error) {
       console.error(error);
-    };
+    }
     if (stderr) {
       console.error(stderr);
     }
