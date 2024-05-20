@@ -2,8 +2,8 @@
  * title: 基础用法
  * description: Table 中的每个 cell 都支持编辑，可以通过 `editable` 属性来设置
  */
-import React, { useState } from 'react';
 import { Button, Form, Input, InputNumber, Select, Typography } from 'antd';
+import React, { useState } from 'react';
 import { FormTable, type FormTableColumnType } from 'scc-oms-components';
 
 const genderOpts = [

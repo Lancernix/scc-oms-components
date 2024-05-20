@@ -1,3 +1,4 @@
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import type {
   FormItemProps,
   FormListFieldData,
@@ -8,7 +9,6 @@ import type {
 } from 'antd';
 import { Form, Table, Tooltip } from 'antd';
 import React, { memo } from 'react';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const StyledTable = styled(Table<FormListFieldData>)`
@@ -58,6 +58,8 @@ export type FormTableColumnType =
       children?: Array<FormTableColumnType>;
       /** 初始值 */
       initialValue?: unknown | ((record: FormListFieldData) => unknown);
+      /** formItem的其他属性 */
+      formItemProps?: Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>;
     } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 
@@ -141,6 +143,7 @@ function genFormTableColumns(
           rules,
           initialValue,
           tooltip,
+          formItemProps,
           ...rest
         } = originCol;
 
@@ -173,6 +176,7 @@ function genFormTableColumns(
                 rules={typeof rules === 'function' ? rules(record) : rules}
                 hidden={originCol.hidden} // 这里控制FormItem是否展示
                 initialValue={typeof initialValue === 'function' ? initialValue(record) : initialValue}
+                {...formItemProps}
               >
                 {typeof component === 'function' ? component(record) : component}
               </Form.Item>
@@ -183,7 +187,9 @@ function genFormTableColumns(
             <Form.Item
               name={[record.name, originCol.dataIndex as string | number]}
               style={{ margin: 0 }}
+              hidden={originCol.hidden}
               initialValue={typeof initialValue === 'function' ? initialValue(record) : initialValue}
+              {...formItemProps}
             >
               <Display />
             </Form.Item>
