@@ -59,7 +59,9 @@ export type FormTableColumnType =
       /** 初始值 */
       initialValue?: unknown | ((record: FormListFieldData) => unknown);
       /** formItem的其他属性 */
-      formItemProps?: Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>;
+      formItemProps?:
+        | Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>
+        | ((record: FormListFieldData) => Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>);
     } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 
@@ -176,7 +178,7 @@ function genFormTableColumns(
                 rules={typeof rules === 'function' ? rules(record) : rules}
                 hidden={originCol.hidden} // 这里控制FormItem是否展示
                 initialValue={typeof initialValue === 'function' ? initialValue(record) : initialValue}
-                {...formItemProps}
+                {...(typeof formItemProps === 'function' ? formItemProps(record) : formItemProps)}
               >
                 {typeof component === 'function' ? component(record) : component}
               </Form.Item>
@@ -189,7 +191,7 @@ function genFormTableColumns(
               style={{ margin: 0 }}
               hidden={originCol.hidden}
               initialValue={typeof initialValue === 'function' ? initialValue(record) : initialValue}
-              {...formItemProps}
+              {...(typeof formItemProps === 'function' ? formItemProps(record) : formItemProps)}
             >
               <Display />
             </Form.Item>

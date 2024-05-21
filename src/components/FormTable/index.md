@@ -55,7 +55,9 @@ type FormTableColumnType =
     rules?: FormItemProps['rules'] | ((record: FormListFieldData) => FormItemProps['rules']);
     children?: Array<FormTableColumnType>;
     initialValue?: unknown | ((record: FormListFieldData) => unknown);
-    formItemProps?: Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>;
+    formItemProps?:
+      | Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>
+      | ((record: FormListFieldData) => Omit<FormItemProps, 'name' | 'rules' | 'hidden' | 'initialValue'>);
   } & TableColumnType<FormListFieldData>)
   | (({ add, remove, move }: FormListOperation) => TableColumnType<FormListFieldData>);
 ```
@@ -76,7 +78,7 @@ type FormTableColumnType =
 | `rules` | 字段在 form 中使用的校验规则 | `FormItemProps['rules'] \| ((record: FormListFieldData) => FormItemProps['rules'])` | - |
 | `children` | 嵌套表格的子列 | `Array<FormTableColumnType>` | - |
 | `initialValue` | 字段初始值 | `unknown` \| `((record: FormListFieldData) => unknown)` | - |
-| `formItemProps` | formItem 的其他属性 | `Omit<FormItemProps, 'name' \| 'rules' \| 'hidden' \| 'initialValue'>` | - |
+| `formItemProps` | formItem 的其他属性 | `Omit<FormItemProps, 'name' \| 'rules' \| 'hidden' \| 'initialValue'> \| ((record: FormListFieldData) => Omit<FormItemProps, 'name' \| 'rules' \| 'hidden' \| 'initialValue'>)` | - |
 
 :::info{title=TIP}
 基于样式需要，组件默认设置了 formItem 的 `style={{ margin: 0 }}`，如果你需要设置 `formItemProps` 中的 `style` 属性进行样式修改，这样会覆盖默认设置。如果你仍然需要默认的样式，手动补充一下即可
