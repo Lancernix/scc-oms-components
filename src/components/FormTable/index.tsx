@@ -24,7 +24,6 @@ const StyledTable = styled(Table<FormListFieldData>)`
       margin-right: 4px;
     }
     .title-icon {
-      vertical-align: -0.2em;
       margin-left: 4px;
     }
   }
