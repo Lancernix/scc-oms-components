@@ -1,7 +1,7 @@
 ---
-toc: content
-title: 日期时间转换（moment）
-order: 3
+toc: content # 导航在内容区才显示，在左侧导航栏不显示
+title: 获取当前时区 # 组件的标题，会在菜单侧边栏展示
+order: 1
 ---
 
 # 时区相关的方法
@@ -14,4 +14,4 @@ order: 3
 
 ## 示例
 
-<!-- <code src='./demo/example-basic.tsx'></code> -->
+<code src='./demo/example-basic.tsx'></code>

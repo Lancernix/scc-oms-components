@@ -43,10 +43,13 @@
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.8.0",
-    "antd": "^4.22.0",
+    "antd": "~4.22.0",
+    "dayjs": "^1.11.11",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.45",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "rc-picker": "~2.6.10"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.23.4",
@@ -68,12 +71,14 @@
     "chalk": "^5.3.0",
     "commitizen": "^4.3.0",
     "cz-customizable": "^7.0.0",
+    "dayjs": "^1.11.11",
     "dumi": "^2.2.14",
     "father": "^4.3.6",
     "husky": "^8.0.3",
     "inquirer": "^9.2.15",
     "lint-staged": "^15.0.2",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.45",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "stylelint": "^15.11.0",

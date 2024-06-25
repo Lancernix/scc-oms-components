@@ -1,18 +1,21 @@
-import { DatePicker as AntdDatePicker, TimePicker as AntdTimePicker } from 'antd';
-import type { DatePickerProps as AntdDatePickerProps, TimePickerProps as AntdTimePickerProps } from 'antd';
-import type { Moment } from 'moment';
+import type { Dayjs } from 'dayjs';
 import React, { useMemo } from 'react';
+import { dayjsToValue, valueToDayjs } from 'utils/dayjsTransform';
 import getTimeZone from 'utils/getTimeZone';
-import { momentToValue, valueToMoment } from 'utils/momentTransform';
+import AntdDatePicker from './DatePicker';
+import AntdTimePicker from './TimerPicker';
+
+type AntdDatePickerProps = React.ComponentProps<typeof AntdDatePicker>;
+type AntdTimePickerProps = React.ComponentProps<typeof AntdTimePicker>;
 
 export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | 'format'> & {
-  value?: string | Moment | number;
+  value?: string | Dayjs | number;
   /**
    * value类型，如选择string则form收集到的值为string类型
    * @default 'string';
    */
-  valueType?: 'string' | 'secondTimestamp' | 'timestamp' | 'moment';
-  onChange?: (value: string | number | Moment) => void;
+  valueType?: 'string' | 'secondTimestamp' | 'timestamp' | 'dayjs';
+  onChange?: (value: string | number | Dayjs) => void;
   /**
    * 日期字符串格式化模版
    * @default 'YYYY-MM-DD HH:mm:ss'
@@ -55,20 +58,20 @@ export function DatePicker(props: DatePickerProps) {
     ...rest
   } = props;
 
-  // 转换成antd需要的moment对象
-  const momentValue = useMemo(
-    () => valueToMoment(value, valueType, format, displayTimeZone),
+  // 转换成antd需要的Dayjs对象
+  const dayjsValue = useMemo(
+    () => valueToDayjs(value, valueType, format, displayTimeZone),
     [format, valueType, value, displayTimeZone],
   );
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {
-    const newVal = momentToValue(val, valueType, format, timeZone);
+    const newVal = dayjsToValue(val, valueType, format, timeZone);
     onChange?.(newVal);
   };
 
   return (
     <AntdDatePicker
-      value={momentValue}
+      value={dayjsValue}
       onChange={handleChange}
       format={format}
       picker={picker}
@@ -79,10 +82,10 @@ export function DatePicker(props: DatePickerProps) {
 }
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
-  value?: string | Moment | number;
+  value?: string | Dayjs | number;
   /** value类型，如选择string则form收集到的值为string类型，默认为string */
-  valueType?: 'string' | 'moment';
-  onChange?: (value: string | Moment) => void;
+  valueType?: 'string' | 'dayjs';
+  onChange?: (value: string | Dayjs) => void;
   /** 时间字符串格式化模版，默认为HH:mm:ss */
   format?: string;
 };
@@ -91,12 +94,12 @@ export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | '
 export function TimePicker(props: TimePickerProps) {
   const { value, onChange, valueType = 'string', format = 'HH:mm:ss', ...rest } = props;
 
-  const momentValue = useMemo(() => valueToMoment(value, valueType, format), [format, valueType, value]);
+  const dayjsValue = useMemo(() => valueToDayjs(value, valueType, format), [format, valueType, value]);
 
   const handleChange: AntdTimePickerProps['onChange'] = val => {
-    const newVal = momentToValue(val, valueType, format);
-    onChange?.(newVal as string | Moment);
+    const newVal = dayjsToValue(val, valueType, format);
+    onChange?.(newVal as string | Dayjs);
   };
 
-  return <AntdTimePicker value={momentValue} onChange={handleChange} format={format} {...rest} />;
+  return <AntdTimePicker value={dayjsValue} onChange={handleChange} format={format} {...rest} />;
 }

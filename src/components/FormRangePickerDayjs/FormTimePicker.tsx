@@ -1,8 +1,8 @@
 import type { FormInstance, FormItemProps } from 'antd';
-import { Form, Input, TimePicker } from 'antd';
-import type { TimeRangePickerProps } from 'antd/es/time-picker';
-import type { Moment } from 'moment';
+import { Form, Input } from 'antd';
+import type { Dayjs } from 'dayjs';
 import React from 'react';
+import TimePicker, { type TimeRangePickerProps } from '../DateTimePickerDayjs/TimerPicker';
 import useRangePicker from './hooks';
 
 const { RangePicker } = TimePicker;
@@ -16,10 +16,10 @@ interface Props {
   name?: FormItemProps['name'];
   /** form实例 */
   form: FormInstance;
-  /** formitem初始值，进行了扩展，数据类型可以是moment，string */
-  initialValue?: [Moment, Moment] | [string, string];
+  /** formitem初始值，进行了扩展，数据类型可以是Dayjs，string */
+  initialValue?: [Dayjs, Dayjs] | [string, string];
   /** value类型，如选择string则form收集到的值为string类型，默认为string */
-  valueType?: 'string' | 'moment';
+  valueType?: 'string' | 'dayjs';
   /** 时间字符串格式化模版，默认为HH:mm:ss */
   format?: string;
   /** 是否允许清空，默认为true */
@@ -39,11 +39,11 @@ interface Props {
    * formItem的其他属性，常用的属性都已经提升到顶层了，有需要可以在这里添加
    * @description 这里有一个默认的labelCol、wrapperCol设置，如果不需要可以覆盖
    */
-  otherFormItemProps?: Omit<FormItemProps, 'label' | 'initialValue' | 'name' | 'rules'>;
+  otherFormItemProps?: Omit<FormItemProps, 'labelCol' | 'wrapperCol' | 'label' | 'initialValue' | 'name' | 'rules'>;
 }
 
 /**
- * 默认样式属性
+ * 默认属性
  */
 const formDefaultProps = {
   labelCol: {
@@ -71,8 +71,9 @@ function FormTimePicker(props: Props) {
     allowClear = true,
     format = 'HH:mm:ss',
     valueType = 'string',
+    formItemLayout = formDefaultProps,
     otherRangePickerProps = {},
-    otherFormItemProps = formDefaultProps,
+    otherFormItemProps = {},
   } = props;
 
   const [initValue, onChangeValue] = useRangePicker(initialValue, {
@@ -87,6 +88,7 @@ function FormTimePicker(props: Props) {
       <Form.Item
         label={label}
         name={name ?? `${fields[0]}__${fields[1]}`}
+        {...formItemLayout}
         initialValue={initValue}
         rules={rules}
         {...otherFormItemProps}

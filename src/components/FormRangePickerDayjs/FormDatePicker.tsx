@@ -1,9 +1,10 @@
 import type { FormInstance, FormItemProps } from 'antd';
-import { DatePicker, Form, Input } from 'antd';
-import type { Moment } from 'moment';
+import { Form, Input } from 'antd';
+import type { Dayjs } from 'dayjs';
 import React from 'react';
+import { dayjsToValue } from 'utils/dayjsTransform';
 import getTimeZone from 'utils/getTimeZone';
-import { momentToValue, valueToMoment } from 'utils/momentTransform';
+import DatePicker from '../DateTimePickerDayjs/DatePicker';
 import useRangePicker from './hooks';
 
 const { RangePicker } = DatePicker;
@@ -18,12 +19,12 @@ interface Props {
   name?: FormItemProps['name'];
   /** form实例 */
   form: FormInstance;
-  /** formitem初始值，进行了扩展，类型可以是moment、string或者时间戳 */
-  initialValue?: [Moment, Moment] | [string, string] | [number, number];
+  /** formitem初始值，进行了扩展，类型可以是Dayjs、string或者时间戳 */
+  initialValue?: [Dayjs, Dayjs] | [string, string] | [number, number];
   /** 是否增加时间数据 */
   showTime?: boolean;
   /** value类型，如选择string则form收集到的值为string类型，默认为string */
-  valueType?: 'string' | 'secondTimestamp' | 'timestamp' | 'moment';
+  valueType?: 'string' | 'secondTimestamp' | 'timestamp' | 'dayjs';
   /** 日期字符串格式化模版，默认为YYYY-MM-DD HH:mm:ss */
   format?: string;
   /**
@@ -60,7 +61,7 @@ interface Props {
 }
 
 /**
- * 默认属性
+ * 默认样式属性
  */
 const formDefaultProps = {
   labelCol: {
@@ -74,7 +75,7 @@ const formDefaultProps = {
 };
 
 /**
- * 一个方便的日期范围选择组件，不再需要手动进行数据类型转换和字段赋值，组件已经替你做了～
+ * 一个方便的日期范围选择组件，不再需要手动进行数据类型转换和字段赋值，组件已经替你做了，并且可以传入时区相关的属性来方便的进行转换
  * @description 需要注意的一点是：组件会导致form的数据中多出一个额外的字段，所以需要你在提交的时候去剔除这个字段，可以用useValidatedFormValues来完成
  */
 function FormDatePicker(props: Props) {
@@ -119,10 +120,10 @@ function FormDatePicker(props: Props) {
       >
         <RangePicker showTime={showTime} picker={picker} allowClear={allowClear} onChange={onChangeValue} {...rest} />
       </Form.Item>
-      <Form.Item hidden name={fields[0]} initialValue={momentToValue(initValue[0], valueType, format, timeZone)}>
+      <Form.Item hidden name={fields[0]} initialValue={dayjsToValue(initValue[0], valueType, format, timeZone)}>
         <Input />
       </Form.Item>
-      <Form.Item hidden name={fields[1]} initialValue={momentToValue(initValue[1], valueType, format, timeZone)}>
+      <Form.Item hidden name={fields[1]} initialValue={dayjsToValue(initValue[1], valueType, format, timeZone)}>
         <Input />
       </Form.Item>
     </>

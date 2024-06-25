@@ -1,18 +1,18 @@
 /**
- * title: 初始值的设置
- * description: 组件赋初值的时候，需要注意一点：初始值的类型必须和 valueType 保持一致，不然初始值无法成功解析
+ * title: 指定时区
+ * description: 获取到的值会转换成指定时区的字符串格式，只有在valueType是`string`的时候才生效
  */
 import { Button, Form } from 'antd';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { FormDatePicker, useValidatedFormValues } from 'scc-oms-components';
+import { FormDatePickerDayjs, dayjsToString } from 'scc-oms-components';
 
 export default function Index() {
   const [value, setValue] = useState<Record<string, unknown>>();
   const [form] = Form.useForm();
-  const getFormValues = useValidatedFormValues(form);
 
   const handleSubmit = () => {
-    getFormValues([{ name: 'create_time' }]).then(values => {
+    form.validateFields().then(values => {
       console.log(values);
       setValue(values);
     });
@@ -21,13 +21,15 @@ export default function Index() {
   return (
     <>
       <Form form={form}>
-        <FormDatePicker
-          initialValue={['2023-09-09', '2023-10-01']} // 这里的初始值类型和 valueType 不一致，会导致解析有问题
+        <FormDatePickerDayjs
           form={form}
           name="create_time"
           fields={['create_time_start', 'create_time_end']}
-          valueType="secondTimestamp"
-          format="YYYY-MM-DD"
+          valueType="string"
+          initialValue={['2024-06-24 08:00:00', '2024-06-25 04:00:00']}
+          timeZone="America/Los_Angeles"
+          displayTimeZone="Asia/Tokyo"
+          showTime
         />
       </Form>
       <Button type="primary" onClick={() => handleSubmit()}>

@@ -1,10 +1,10 @@
 /**
- * title: 初始值的设置
- * description: 组件赋初值的时候，需要注意一点：初始值的类型必须和 valueType 保持一致，不然初始值无法成功解析
+ * title: 配合 useValidatedFromValues hook 使用
+ * description: 从 Form 中获取的值中还存在原始的字段，通常我们用不到这个字段，这时就可以结合 hook 来从结果中剔除这个字段
  */
 import { Button, Form } from 'antd';
 import React, { useState } from 'react';
-import { FormDatePicker, useValidatedFormValues } from 'scc-oms-components';
+import { FormDatePickerDayjs, useValidatedFormValues } from 'scc-oms-components';
 
 export default function Index() {
   const [value, setValue] = useState<Record<string, unknown>>();
@@ -21,8 +21,7 @@ export default function Index() {
   return (
     <>
       <Form form={form}>
-        <FormDatePicker
-          initialValue={['2023-09-09', '2023-10-01']} // 这里的初始值类型和 valueType 不一致，会导致解析有问题
+        <FormDatePickerDayjs
           form={form}
           name="create_time"
           fields={['create_time_start', 'create_time_end']}

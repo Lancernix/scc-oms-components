@@ -1,7 +1,7 @@
-import React, { memo, useContext } from 'react';
 import { Modal as AntdModal, Button, type ModalProps, Spin } from 'antd';
-import useAdaptiveHeight from 'hooks/useAdaptiveHeight';
 import { LocaleContext } from 'components/LocaleProvider';
+import useAdaptiveHeight from 'hooks/useAdaptiveHeight';
+import React, { memo, useContext } from 'react';
 
 interface Props extends Omit<ModalProps, 'width' | 'footer'> {
   /**

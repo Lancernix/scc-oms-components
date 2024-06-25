@@ -13,7 +13,11 @@ export default defineConfig({
   platform: 'browser', // esm默认就是browser
   targets: {
     // 运行环境兼容性
-    ie: 11,
+    chrome: 49,
+    firefox: 64,
+    safari: 10,
+    edge: 14,
+    ios: 10,
   },
   esm: {
     input: 'src', // 默认值就是src
@@ -54,11 +58,12 @@ export default defineConfig({
     name: 'scc-oms-components',
     output: 'dist',
     externals: {
-      "@ant-design/icons": "icons",
-      "antd": "antd",
-      "moment": "moment",
-      "react": "React",
-      "react-dom": "ReactDOM"
+      '@ant-design/icons': 'icons',
+      antd: 'antd',
+      moment: 'moment',
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      dayjs: 'dayjs',
     },
-  }
+  },
 });
