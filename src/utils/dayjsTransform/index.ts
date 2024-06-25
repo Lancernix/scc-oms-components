@@ -41,7 +41,7 @@ export function dayjsToString(
   utcSuffix = false,
 ) {
   if (dayjs.isDayjs(value)) {
-    const realFormat = utcSuffix ? `${format}[(UTC]Z[)]` : format;
+    const realFormat = utcSuffix ? `${format} [(UTC]Z[)]` : format;
     return value.tz(timeZone).format(realFormat);
   }
   return null;
@@ -79,15 +79,18 @@ export function dayjsToValue(
 
 /**
  * 日期字符串转dayjs对象
- * @description 项目中最常用的两种格式：2023-01-01、2023-01-01 01:01:01支持直接解析，其他格式需要传format参数
+ * @description 转换之后是一个当前时区标记的dayjs对象。比如你给定的时区是Asia/Shanghai，而当前所在时区是Asia/Tokyo，那么返回的将是一个标记为Asia/Tokyo的dayjs对象
  * @param timeString 日期字符串
  * @param format 字符串格式，默认为YYYY-MM-DD HH:mm:ss
  * @param timeZone 时区，默认为当前所在的时区
  * @returns dayjs对象，如果入参是无效日期字符串，则返回null
  */
 export function stringToDayjs(timeString: string, format = 'YYYY-MM-DD HH:mm:ss', timeZone = getTimeZone()) {
-  const res = dayjs(timeString, format).tz(timeZone);
-  return res.isValid() ? res : null;
+  const resGivenTz = dayjs.tz(timeString, format, timeZone);
+  if (resGivenTz.isValid()) {
+    return resGivenTz.local();
+  }
+  return null;
 }
 
 /**
@@ -138,7 +141,7 @@ export function valueToDayjs(
 
 /**
  * 使用dayjs获取指定时区的时间UTC偏移量
- * @param timeZone 时区，默认为东八区(Asia/Shanghai)
+ * @param timeZone 时区，默认为当前所在时区
  * @returns 格式化过的偏移量字符串，如UTC+08:00
  * @description 返回值的形式为UTC±[hh]:[mm]
  */

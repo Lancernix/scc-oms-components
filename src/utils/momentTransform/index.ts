@@ -36,7 +36,7 @@ export function momentToString(
   utcSuffix = false,
 ) {
   if (moment.isMoment(value)) {
-    const realFormat = utcSuffix ? `${format}[(UTC]Z[)]` : format;
+    const realFormat = utcSuffix ? `${format} [(UTC]Z[)]` : format;
     // 这里需要clone一个新的moment对象，不然调用tz时会永久修改value这个对象的时区，会造成一些问题
     return value.clone().tz(timeZone).format(realFormat);
   }
@@ -75,18 +75,18 @@ export function momentToValue(
 
 /**
  * 日期字符串转moment对象
- * @description 项目中最常用的两种格式：2023-01-01、2023-01-01 01:01:01支持直接解析，其他格式需要传format参数
+ * @description 转换之后是一个当前时区标记的moment对象。比如你给定的时区是Asia/Shanghai，而当前所在时区是Asia/Tokyo，那么返回的将是一个标记为Asia/Tokyo的moment对象
  * @param value 日期字符串
- * @param format 字符串格式
+ * @param format 字符串格式，默认为YYYY-MM-DD HH:mm:ss
  * @param timeZone 时区，默认为当前所在的时区
  * @returns moment对象，如果入参是无效日期字符串，则返回null
  */
 export function stringToMoment(value: string, format = 'YYYY-MM-DD HH:mm:ss', timeZone = getTimeZone()) {
-  if (typeof value === 'undefined') {
-    return value;
+  const resGivenTz = moment.tz(value, format, timeZone);
+  if (resGivenTz.isValid()) {
+    return resGivenTz.local();
   }
-  const res = moment(value, format).tz(timeZone);
-  return res.isValid() ? res : null;
+  return null;
 }
 
 /**
@@ -95,9 +95,6 @@ export function stringToMoment(value: string, format = 'YYYY-MM-DD HH:mm:ss', ti
  * @returns moment对象，如果入参不是一个integer，则返回null
  */
 export function secondToMoment(value: number) {
-  if (typeof value === 'undefined') {
-    return value;
-  }
   return Number.isInteger(value) ? moment.unix(value) : null;
 }
 
@@ -107,9 +104,6 @@ export function secondToMoment(value: number) {
  * @returns moment对象，如果入参不是一个integer，则返回null
  */
 export function millisecondToMoment(value: number) {
-  if (typeof value === 'undefined') {
-    return value;
-  }
   return Number.isInteger(value) ? moment(value) : null;
 }
 
@@ -143,7 +137,7 @@ export function valueToMoment(
 
 /**
  * 使用moment获取指定时区的时间UTC偏移量
- * @param timeZone 时区，默认为东八区(Asia/Shanghai)
+ * @param timeZone 时区，默认为当前所在时区
  * @returns 格式化过的偏移量字符串，如UTC+08:00
  * @description 返回值的形式为UTC±[hh]:[mm]
  */
