@@ -84,7 +84,7 @@ function FormDatePicker(props: Props) {
     rules,
     allowClear = true,
     fields,
-    initialValue = [void 0, void 0],
+    initialValue,
     form,
     showTime = false,
     useStartAndEndOfDay = false,

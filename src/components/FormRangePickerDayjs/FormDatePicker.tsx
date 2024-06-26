@@ -19,7 +19,7 @@ interface Props {
   name?: FormItemProps['name'];
   /** form实例 */
   form: FormInstance;
-  /** formitem初始值，进行了扩展，类型可以是Dayjs、string或者时间戳 */
+  /** formitem初始值，进行了扩展，类型可以是dayjs、string或者时间戳 */
   initialValue?: [Dayjs, Dayjs] | [string, string] | [number, number];
   /** 是否增加时间数据 */
   showTime?: boolean;
@@ -85,7 +85,7 @@ function FormDatePicker(props: Props) {
     rules,
     allowClear = true,
     fields,
-    initialValue = [void 0, void 0],
+    initialValue,
     form,
     showTime = false,
     useStartAndEndOfDay = false,

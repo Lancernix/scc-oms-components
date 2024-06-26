@@ -65,7 +65,7 @@ function FormTimePicker(props: Props) {
     label,
     fields,
     name,
-    initialValue = [void 0, void 0],
+    initialValue,
     form,
     rules,
     allowClear = true,

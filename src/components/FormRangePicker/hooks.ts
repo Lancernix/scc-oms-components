@@ -23,7 +23,7 @@ function convertInitalValue(
   format: string,
   displayTimeZone?: string,
 ): [Moment, Moment] {
-  if (!_value.length) {
+  if (!_value?.length) {
     return [void 0, void 0];
   }
   return [
