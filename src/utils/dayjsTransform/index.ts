@@ -129,9 +129,9 @@ export function valueToDayjs(
   format = 'YYYY-MM-DD HH:mm:ss',
   timeZone = getTimeZone(),
 ) {
-  // undefined不需要处理
-  if (typeof value === 'undefined') {
-    return value;
+  // 一些falsy值都统一处理成undefined
+  if ([null, undefined, 0, ''].includes(value as string | number)) {
+    return undefined;
   }
   switch (valueType) {
     case 'string':
