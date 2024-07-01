@@ -92,6 +92,7 @@ export function DatePicker(props: DatePickerProps) {
       format={format}
       picker={picker}
       showToday={showToday}
+      showTime={showTime}
       {...rest}
     />
   );
