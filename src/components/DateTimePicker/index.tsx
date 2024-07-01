@@ -15,7 +15,7 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
   onChange?: (value: string | number | Moment) => void;
   /**
    * 日期字符串格式化模版
-   * @default 'YYYY-MM-DD HH:mm:ss'
+   * @default 'YYYY-MM-DD'
    */
   format?: string;
   /**
@@ -37,18 +37,21 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
    * @default true
    */
   showToday?: boolean;
-  /** 增加时间选择功能 */
+  /**
+   * 增加时间选择功能
+   * @default false
+   */
   showTime?: boolean | Record<string, unknown>;
   /**
    * 当只有日期展示时，是否将时间默认为一天的开始00:00:00
    * @default false
-   * @description 只有在showTime为false时生效，而且要注意format需要包含时间
+   * @description 只有在showTime为false时生效
    */
   useStartOfDay?: boolean;
   /**
    * 当只有日期展示时，是否将时间默认为一天的结束23:59:59
    * @default false
-   * @description 只有在showTime为false时生效，而且要注意format需要包含时间
+   * @description 只有在showTime为false时生效
    */
   useEndOfDay?: boolean;
 };
@@ -59,7 +62,7 @@ export function DatePicker(props: DatePickerProps) {
     value,
     onChange,
     valueType = 'string',
-    format = 'YYYY-MM-DD HH:mm:ss',
+    format = 'YYYY-MM-DD',
     timeZone = getTimeZone(),
     displayTimeZone = getTimeZone(),
     showToday = true,
@@ -78,10 +81,12 @@ export function DatePicker(props: DatePickerProps) {
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {
     let realVal = val;
+    let realFormat = format;
     if (!showTime && (useStartOfDay || useEndOfDay)) {
       realVal = useStartOfDay ? val.startOf('day') : val.endOf('day');
+      realFormat = 'YYYY-MM-DD HH:mm:ss';
     }
-    const newVal = momentToValue(realVal, valueType, format, timeZone);
+    const newVal = momentToValue(realVal, valueType, realFormat, timeZone);
     onChange?.(newVal);
   };
 
@@ -100,10 +105,16 @@ export function DatePicker(props: DatePickerProps) {
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: string | Moment | number;
-  /** value类型，如选择string则form收集到的值为string类型，默认为string */
+  /**
+   * value类型，如选择string则form收集到的值为string类型
+   * @default 'string'
+   */
   valueType?: 'string' | 'moment';
   onChange?: (value: string | Moment) => void;
-  /** 时间字符串格式化模版，默认为HH:mm:ss */
+  /**
+   * 时间字符串格式化模版
+   * @default 'HH:mm:ss'
+   */
   format?: string;
 };
 

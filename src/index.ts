@@ -11,6 +11,8 @@ export {
   TimePicker as TimePickerDayjs,
   type DatePickerProps as DatePickerDayjsProps,
   type TimePickerProps as TimePickerDayjsProps,
+  type DateRangePickerProps as DateRangePickerDayjsProps,
+  type TimeRangePickerProps as TimeRangePickerDayjsProps,
 } from 'components/DateTimePickerDayjs';
 export {
   FormDatePicker as FormDatePickerDayjs,

@@ -18,7 +18,7 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
   onChange?: (value: string | number | Dayjs) => void;
   /**
    * 日期字符串格式化模版
-   * @default 'YYYY-MM-DD HH:mm:ss'
+   * @default 'YYYY-MM-DD'
    */
   format?: string;
   /**
@@ -40,29 +40,32 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
    * @default true
    */
   showToday?: boolean;
-  /** 增加时间选择功能 */
+  /**
+   * 增加时间选择功能
+   * @default false
+   */
   showTime?: boolean | Record<string, unknown>;
   /**
    * 当只有日期展示时，是否将时间默认为一天的开始00:00:00
    * @default false
-   * @description 只有在showTime为false时生效，而且要注意format需要包含时间
+   * @description 只有在showTime为false时生效
    */
   useStartOfDay?: boolean;
   /**
    * 当只有日期展示时，是否将时间默认为一天的结束23:59:59
    * @default false
-   * @description 只有在showTime为false时生效，而且要注意format需要包含时间
+   * @description 只有在showTime为false时生效
    */
   useEndOfDay?: boolean;
 };
 
 /** 日期组件 */
-function DatePicker(props: DatePickerProps) {
+function InnerDatePicker(props: DatePickerProps) {
   const {
     value,
     onChange,
     valueType = 'string',
-    format = 'YYYY-MM-DD HH:mm:ss',
+    format = 'YYYY-MM-DD',
     timeZone = getTimeZone(),
     displayTimeZone = getTimeZone(),
     showToday = true,
@@ -81,10 +84,12 @@ function DatePicker(props: DatePickerProps) {
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {
     let realVal = val;
+    let realFormat = format;
     if (!showTime && (useStartOfDay || useEndOfDay)) {
       realVal = useStartOfDay ? val.startOf('day') : val.endOf('day');
+      realFormat = 'YYYY-MM-DD HH:mm:ss';
     }
-    const newVal = dayjsToValue(realVal, valueType, format, timeZone);
+    const newVal = dayjsToValue(realVal, valueType, realFormat, timeZone);
     onChange?.(newVal);
   };
 
@@ -100,19 +105,29 @@ function DatePicker(props: DatePickerProps) {
     />
   );
 }
-DatePicker.RangePicker = AntdDatePicker.RangePicker;
+// 补上RangePicker
+export const DatePicker = Object.assign(InnerDatePicker, {
+  RangePicker: AntdDatePicker.RangePicker,
+});
+export type DateRangePickerProps = typeof AntdDatePicker.RangePicker;
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: string | Dayjs | number;
-  /** value类型，如选择string则form收集到的值为string类型，默认为string */
+  /**
+   * value类型，如选择string则form收集到的值为string类型
+   * @default 'string'
+   */
   valueType?: 'string' | 'dayjs';
   onChange?: (value: string | Dayjs) => void;
-  /** 时间字符串格式化模版，默认为HH:mm:ss */
+  /**
+   * 时间字符串格式化模版
+   * @default 'HH:mm:ss'
+   */
   format?: string;
 };
 
 /** 时间组件 */
-function TimePicker(props: TimePickerProps) {
+function InnerTimePicker(props: TimePickerProps) {
   const { value, onChange, valueType = 'string', format = 'HH:mm:ss', ...rest } = props;
 
   const dayjsValue = useMemo(() => valueToDayjs(value, valueType, format), [format, valueType, value]);
@@ -124,6 +139,8 @@ function TimePicker(props: TimePickerProps) {
 
   return <AntdTimePicker value={dayjsValue} onChange={handleChange} format={format} {...rest} />;
 }
-TimePicker.RangePicker = AntdTimePicker.RangePicker;
-
-export { DatePicker, TimePicker };
+// 补上RangePicker
+export const TimePicker = Object.assign(InnerTimePicker, {
+  RangePicker: AntdTimePicker.RangePicker,
+});
+export type TimeRangePickerProps = typeof AntdTimePicker.RangePicker;
