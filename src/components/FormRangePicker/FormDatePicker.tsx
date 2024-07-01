@@ -44,7 +44,7 @@ interface Props {
   rules?: FormItemProps['rules'];
   /**
    * 只展示日期时，是否格式化时间为一天的开始和结束，只有在showTime为false时生效，默认为false
-   * @description 比如2023-08-01～2023-08-02传参时实际是为2023-08-01 00:00:00～2023-08-02 23:59:59
+   * @description 比如2023-08-01～2023-08-02传参时实际是为2023-08-01 00:00:00～2023-08-02 23:59:59，注意此时的format应该包含时间
    */
   useStartAndEndOfDay?: boolean;
   /** rangePicker的其他属性，常用的属性都已经提升到顶层了，有需要可以在这里添加 */

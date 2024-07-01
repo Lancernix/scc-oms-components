@@ -59,6 +59,9 @@ export function momentToValue(
   timeZone = getTimeZone(),
   utcSuffix = false,
 ) {
+  if (typeof value === 'undefined') {
+    return value;
+  }
   switch (valueType) {
     case 'string':
       return momentToString(value, format, timeZone, utcSuffix);
@@ -121,6 +124,9 @@ export function valueToMoment(
   format = 'YYYY-MM-DD HH:mm:ss',
   timeZone = getTimeZone(),
 ) {
+  if (typeof value === 'undefined') {
+    return value;
+  }
   switch (valueType) {
     case 'string':
       return stringToMoment(value as string, format, timeZone);

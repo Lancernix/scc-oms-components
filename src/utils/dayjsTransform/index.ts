@@ -63,6 +63,10 @@ export function dayjsToValue(
   timeZone = getTimeZone(),
   utcSuffix = false,
 ) {
+  // undefined不需要处理
+  if (typeof value === 'undefined') {
+    return value;
+  }
   switch (valueType) {
     case 'string':
       return dayjsToString(value, format, timeZone, utcSuffix);
@@ -125,6 +129,10 @@ export function valueToDayjs(
   format = 'YYYY-MM-DD HH:mm:ss',
   timeZone = getTimeZone(),
 ) {
+  // undefined不需要处理
+  if (typeof value === 'undefined') {
+    return value;
+  }
   switch (valueType) {
     case 'string':
       return stringToDayjs(value as string, format, timeZone);

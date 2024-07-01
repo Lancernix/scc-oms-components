@@ -42,6 +42,18 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
   showToday?: boolean;
   /** 增加时间选择功能 */
   showTime?: boolean | Record<string, unknown>;
+  /**
+   * 当只有日期展示时，是否将时间默认为一天的开始00:00:00
+   * @default false
+   * @description 只有在showTime为false时生效，而且要注意format需要包含时间
+   */
+  useStartOfDay?: boolean;
+  /**
+   * 当只有日期展示时，是否将时间默认为一天的结束23:59:59
+   * @default false
+   * @description 只有在showTime为false时生效，而且要注意format需要包含时间
+   */
+  useEndOfDay?: boolean;
 };
 
 /** 日期组件 */
@@ -55,6 +67,9 @@ export function DatePicker(props: DatePickerProps) {
     displayTimeZone = getTimeZone(),
     showToday = true,
     picker,
+    useStartOfDay = false,
+    useEndOfDay = false,
+    showTime = false,
     ...rest
   } = props;
 
@@ -65,7 +80,11 @@ export function DatePicker(props: DatePickerProps) {
   );
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {
-    const newVal = dayjsToValue(val, valueType, format, timeZone);
+    let realVal = val;
+    if (!showTime && (useStartOfDay || useEndOfDay)) {
+      realVal = useStartOfDay ? val.startOf('day') : val.endOf('day');
+    }
+    const newVal = dayjsToValue(realVal, valueType, format, timeZone);
     onChange?.(newVal);
   };
 
