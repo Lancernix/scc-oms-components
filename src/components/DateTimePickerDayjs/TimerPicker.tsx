@@ -5,7 +5,7 @@ import DatePicker from './DatePicker';
 
 const { RangePicker } = DatePicker;
 
-interface InnerTimeRangePickerProps extends Omit<RangePickerTimeProps<Dayjs>, 'picker'> {
+export interface InnerTimeRangePickerProps extends Omit<RangePickerTimeProps<Dayjs>, 'picker'> {
   popupClassName?: string;
 }
 

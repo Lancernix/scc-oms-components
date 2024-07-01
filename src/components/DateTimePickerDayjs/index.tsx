@@ -57,7 +57,7 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
 };
 
 /** 日期组件 */
-export function DatePicker(props: DatePickerProps) {
+function DatePicker(props: DatePickerProps) {
   const {
     value,
     onChange,
@@ -100,6 +100,7 @@ export function DatePicker(props: DatePickerProps) {
     />
   );
 }
+DatePicker.RangePicker = AntdDatePicker.RangePicker;
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: string | Dayjs | number;
@@ -111,7 +112,7 @@ export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | '
 };
 
 /** 时间组件 */
-export function TimePicker(props: TimePickerProps) {
+function TimePicker(props: TimePickerProps) {
   const { value, onChange, valueType = 'string', format = 'HH:mm:ss', ...rest } = props;
 
   const dayjsValue = useMemo(() => valueToDayjs(value, valueType, format), [format, valueType, value]);
@@ -123,3 +124,6 @@ export function TimePicker(props: TimePickerProps) {
 
   return <AntdTimePicker value={dayjsValue} onChange={handleChange} format={format} {...rest} />;
 }
+TimePicker.RangePicker = AntdTimePicker.RangePicker;
+
+export { DatePicker, TimePicker };
