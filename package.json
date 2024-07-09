@@ -1,7 +1,7 @@
 {
   "name": "scc-oms-components",
   "type": "module",
-  "version": "0.5.0-beta.7",
+  "version": "0.5.0-beta.8",
   "packageManager": "pnpm@8.11.0",
   "description": "Antd components for SCC React Projects",
   "license": "MIT",
