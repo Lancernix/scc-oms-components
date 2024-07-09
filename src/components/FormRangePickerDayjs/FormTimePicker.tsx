@@ -2,7 +2,7 @@ import type { FormInstance, FormItemProps } from 'antd';
 import { Form, Input } from 'antd';
 import type { Dayjs } from 'dayjs';
 import React from 'react';
-import TimePicker, { type TimeRangePickerProps } from '../DateTimePickerDayjs/TimerPicker';
+import { TimePicker, type TimeRangePickerProps } from '../DateTimePickerDayjs';
 import useRangePicker from './hooks';
 
 const { RangePicker } = TimePicker;
