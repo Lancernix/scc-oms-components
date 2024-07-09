@@ -2,8 +2,8 @@ import type { Dayjs } from 'dayjs';
 import React, { useMemo } from 'react';
 import { dayjsToValue, valueToDayjs } from 'utils/dayjsTransform';
 import getTimeZone from 'utils/getTimeZone';
-import AntdDatePicker from './DatePicker';
-import AntdTimePicker from './TimerPicker';
+import AntdDatePicker, { type InnerDateRangePickerProps } from './DatePicker';
+import AntdTimePicker, { type InnerTimeRangePickerProps } from './TimerPicker';
 
 type AntdDatePickerProps = React.ComponentProps<typeof AntdDatePicker>;
 type AntdTimePickerProps = React.ComponentProps<typeof AntdTimePicker>;
@@ -109,7 +109,7 @@ function InnerDatePicker(props: DatePickerProps) {
 export const DatePicker = Object.assign(InnerDatePicker, {
   RangePicker: AntdDatePicker.RangePicker,
 });
-export type DateRangePickerProps = typeof AntdDatePicker.RangePicker;
+export type DateRangePickerProps = InnerDateRangePickerProps;
 
 export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: string | Dayjs | number;
@@ -143,4 +143,4 @@ function InnerTimePicker(props: TimePickerProps) {
 export const TimePicker = Object.assign(InnerTimePicker, {
   RangePicker: AntdTimePicker.RangePicker,
 });
-export type TimeRangePickerProps = typeof AntdTimePicker.RangePicker;
+export type TimeRangePickerProps = InnerTimeRangePickerProps;

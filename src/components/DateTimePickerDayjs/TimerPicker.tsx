@@ -33,4 +33,3 @@ const TimePicker = Object.assign(
 );
 
 export default TimePicker;
-export type TimeRangePickerProps = InnerTimeRangePickerProps;
