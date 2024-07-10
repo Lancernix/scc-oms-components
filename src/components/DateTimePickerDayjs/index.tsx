@@ -86,7 +86,7 @@ function InnerDatePicker(props: DatePickerProps) {
     let realVal = val;
     let realFormat = format;
     if (!showTime && (useStartOfDay || useEndOfDay)) {
-      realVal = useStartOfDay ? val.startOf('day') : val.endOf('day');
+      realVal = useStartOfDay ? val?.startOf('day') : val?.endOf('day');
       realFormat = 'YYYY-MM-DD HH:mm:ss';
     }
     const newVal = dayjsToValue(realVal, valueType, realFormat, timeZone);
