@@ -1,5 +1,6 @@
 {
   "name": "scc-oms-components",
+  "type": "module",
   "version": "0.5.0-beta.13",
   "packageManager": "pnpm@8.11.0",
   "description": "Antd components for SCC React Projects",
@@ -39,7 +40,7 @@
     "format": "biome format ./src",
     "prepare": "husky install && dumi setup",
     "start": "npm run dev",
-    "release": "node ./release.mjs"
+    "release": "node ./release.js"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.8.0",
