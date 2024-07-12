@@ -38,7 +38,7 @@
     "format": "biome format ./src",
     "prepare": "husky install && dumi setup",
     "start": "npm run dev",
-    "release": "node ./release.js"
+    "release": "node ./release.mjs"
   },
   "peerDependencies": {
     "@ant-design/icons": "^4.8.0",
