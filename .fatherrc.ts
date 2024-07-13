@@ -25,16 +25,8 @@ export default defineConfig({
     ignores: [
       'src/**/demo/**', // 避免打包demo文件到npm包里面
     ],
-    // 额外的babel插件，这里直接使用corejs进行了polyfill
-    extraBabelPlugins: [
-      [
-        '@babel/plugin-transform-runtime',
-        {
-          corejs: { version: 3, proposals: true },
-          version: runtimeVersion,
-        },
-      ],
-    ],
+    // 额外的babel插件，这里只进行语法的降级，并没有使用corejs进行polyfill
+    extraBabelPlugins: [['@babel/plugin-transform-runtime', { version: runtimeVersion }]],
   },
   cjs: {
     input: 'src', // 默认值就是src
@@ -42,16 +34,8 @@ export default defineConfig({
     ignores: [
       'src/**/demo/**', // 避免打包demo文件到npm包里面
     ],
-    // 额外的babel插件，这里直接使用corejs进行了polyfill
-    extraBabelPlugins: [
-      [
-        '@babel/plugin-transform-runtime',
-        {
-          corejs: { version: 3, proposals: true },
-          version: runtimeVersion,
-        },
-      ],
-    ],
+    // 额外的babel插件，这里只进行语法的降级，并没有使用corejs进行polyfill
+    extraBabelPlugins: [['@babel/plugin-transform-runtime', { version: runtimeVersion }]],
   },
   umd: {
     entry: 'src/index.ts',

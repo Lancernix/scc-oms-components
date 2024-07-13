@@ -12,6 +12,9 @@
 * styled-components
 * lodash-es
 * moment
+* dayjs
+
+> 项目在使用组件库的时候，moment、dayjs 选择其一就可以了。这里使用 dayjs 是替换了 Antd 中日期、时间、日历等组件默认使用的 moment，以降低打包体积。如果你不需要，那就不用安装 dayjs。
 
 ## 开发构建工具
 
@@ -60,7 +63,17 @@ pnpm start
 
 ## 兼容性
 
-组件库兼容至 ie11，如果不满足你当前业务系统的要求，可自行进行降级处理。
+组件库兼容列表如下：
+
+* chrome: 49
+* firefox: 64
+* safari: 10
+* edge: 14
+* ios: 10
+
+如果不满足你当前业务系统的要求，可自行进行降级处理。
+
+> 这里只进行了 ES 语法的降级，如果你需要同时进行 ES api 的 polyfill，请在项目中使用 corejs 等相关的库来完成此项流程。
 
 ## 发布流程
 
@@ -81,9 +94,9 @@ pnpm start
 
 项目需要使用必要的插件来完成 lint 和格式化工作，强烈建议安装推荐的插件。详见[这里](./.vscode/extensions.json)。
 
-## 发版流程测试
+## 发版流程
 
-test2
+待补充
 
 ## LICENSE
 
