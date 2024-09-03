@@ -26,7 +26,7 @@ order: 6
 
 | 属性  | 说明  | 类型  | 默认值 |
 |-------|-------|-------|-------|
-| `type` | 弹窗状态（这个属性可以帮你设置弹窗的 title，如果你不需要直接设置 `title` 属性覆盖即可） | `'view'` \| `'edit'` \| `'create'` \| `'copy'` | - |
+| `type` | 弹窗状态（这个属性可以帮你设置弹窗的 title，如果你不需要直接设置 `title` 属性覆盖即可） | `'view'` \| `'edit'` \| `'create'` \| `'copy'` | `'view'` |
 | `size` | 弹窗的大小，替代了 width 属性（尺寸设置: xl-1360px \| l-1120px \| m-880px \| s-640px \| xs-400px） | `'xl'` \| `'l'` \| `'m'` \| `'s'` \| `'xs'` | `'m'` |
 | `onReset` | 重置按钮的回调 | `(e?: React.MouseEvent<HTMLElement, MouseEvent>) => void` | - |
 | `resetText` | 重置按钮的展示文本（ `view` 状态下没有重置按钮） | `React.ReactNode` | `'重置'` |

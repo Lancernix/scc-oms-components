@@ -7,6 +7,7 @@ interface Props extends Omit<ModalProps, 'width' | 'footer'> {
   /**
    * 弹窗状态
    * @description 这个属性可以默认设置弹窗的title，如果不需要直接设置`title`属性覆盖即可
+   * @default 'view'
    */
   type?: 'view' | 'edit' | 'create' | 'copy';
   /**
@@ -54,6 +55,7 @@ const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
   switch (type) {
     case 'edit':
     case 'create':
+    case 'copy':
       return (
         <>
           {extraFooter ?? null}
@@ -84,7 +86,7 @@ const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
 export default function DataModal(props: Props) {
   const locale = useContext(LocaleContext);
   const {
-    type,
+    type = 'view',
     size = 'm',
     onReset,
     onOk,
