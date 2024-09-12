@@ -2,6 +2,7 @@ import type { FormInstance, FormItemProps } from 'antd';
 import { Form, Input } from 'antd';
 import type { Dayjs } from 'dayjs';
 import React from 'react';
+import { dayjsToValue } from 'utils/dayjsTransform';
 import { TimePicker, type TimeRangePickerProps } from '../DateTimePickerDayjs';
 import useRangePicker from './hooks';
 
@@ -95,10 +96,10 @@ function FormTimePicker(props: Props) {
       >
         <RangePicker onChange={onChangeValue} allowClear={allowClear} {...otherRangePickerProps} />
       </Form.Item>
-      <Form.Item hidden name={fields[0]} initialValue={initialValue[0] ?? ''}>
+      <Form.Item hidden name={fields[0]} initialValue={dayjsToValue(initValue[0], valueType)}>
         <Input />
       </Form.Item>
-      <Form.Item hidden name={fields[1]} initialValue={initialValue[1] ?? ''}>
+      <Form.Item hidden name={fields[1]} initialValue={dayjsToValue(initValue[1], valueType)}>
         <Input />
       </Form.Item>
     </>
