@@ -9,7 +9,7 @@ interface IOptions {
   format: string; // 格式化
   valueType: 'string' | 'secondTimestamp' | 'timestamp' | 'moment'; // 数据类型
   timeZone?: string; // 提交时的需要的时区
-  displayTimeZone?: string; // 展示的时区
+  originTimeZone?: string; // value来源时区
   useStartAndEndOfDay?: boolean; // 只展示日期时，是否格式化时间为一天的开始和结束
   showTime?: boolean; // 是否展示时间数据
 }
@@ -21,22 +21,22 @@ function convertInitalValue(
   _value: Array<Moment | string | number>,
   valueType: 'string' | 'secondTimestamp' | 'timestamp' | 'moment',
   format: string,
-  displayTimeZone?: string,
+  originTimeZone?: string,
 ): [Moment, Moment] {
   if (!_value?.length) {
     return [void 0, void 0];
   }
   return [
-    valueToMoment(_value[0], valueType, format, displayTimeZone),
-    valueToMoment(_value[1], valueType, format, displayTimeZone),
+    valueToMoment(_value[0], valueType, format, originTimeZone),
+    valueToMoment(_value[1], valueType, format, originTimeZone),
   ];
 }
 
 function useRangePicker(initialValue: [Moment, Moment] | [string, string] | [number, number], options: IOptions) {
-  const { form, fields, format, valueType, timeZone, displayTimeZone, showTime, useStartAndEndOfDay } = options;
+  const { form, fields, format, valueType, timeZone, originTimeZone, showTime, useStartAndEndOfDay } = options;
   const initValue = useMemo(() => {
-    return convertInitalValue(initialValue, valueType, format, displayTimeZone);
-  }, [initialValue, valueType, format, displayTimeZone]);
+    return convertInitalValue(initialValue, valueType, format, originTimeZone);
+  }, [initialValue, valueType, format, originTimeZone]);
 
   /**
    * change事件
