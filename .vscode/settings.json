@@ -1,6 +1,5 @@
 {
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "eslint.experimental.useFlatConfig": true,
   "prettier.enable": false,
   "vsicons.projectDetection.autoReload": true,
   "editor.defaultFormatter": "biomejs.biome",

@@ -33,11 +33,11 @@ interface Props {
    */
   timeZone?: string;
   /**
-   * 组件展示所在的时区
+   * value来源时区
    * @default 当前所在时区
-   * @description 该属性影响的是组件展示，可以通过设置这个属性让日期按照你设置的时区展示而非当前所在的时区
+   * @description 该属性影响的是value转换成moment对象时使用的时区，比如接口返回的是Asia/Shanghai的日期字符串，那可以通过这个属性设置
    */
-  displayTimeZone?: string;
+  originTimeZone?: string;
   /** 是否允许清空，默认为true */
   allowClear?: boolean;
   /** formItem的校验规则 */
@@ -90,7 +90,7 @@ function FormDatePicker(props: Props) {
     useStartAndEndOfDay = false,
     format = 'YYYY-MM-DD HH:mm:ss',
     timeZone = getTimeZone(),
-    displayTimeZone = getTimeZone(),
+    originTimeZone = getTimeZone(),
     valueType = 'string',
     otherRangePickerProps = {},
     otherFormItemProps = formDefaultProps,
@@ -105,7 +105,7 @@ function FormDatePicker(props: Props) {
     useStartAndEndOfDay,
     showTime,
     timeZone,
-    displayTimeZone,
+    originTimeZone,
   });
 
   return (

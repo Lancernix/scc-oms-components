@@ -1,11 +1,11 @@
 /**
- * title: 指定时区
- * description: 获取到的值会转换成指定时区的字符串格式，只有在valueType是`string`的时候才生效
+ * title: 根据时区进行转换
+ * description: 可以传入`originTimezone`指定给定的日期字符串是哪个时区下的；也可以传入`timezone`将获取到的值换成目标时区的字符串（只有在valueType是`string`的时候才生效）
  */
+
 import { Button, Form } from 'antd';
-import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { FormDatePickerDayjs, dayjsToString } from 'scc-oms-components';
+import { FormDatePickerDayjs } from 'scc-oms-components';
 
 export default function Index() {
   const [value, setValue] = useState<Record<string, unknown>>();
@@ -28,7 +28,7 @@ export default function Index() {
           valueType="string"
           initialValue={['2024-06-24 08:00:00', '2024-06-25 04:00:00']}
           timeZone="America/Los_Angeles"
-          displayTimeZone="Asia/Tokyo"
+          originTimeZone="Asia/Tokyo"
           showTime
         />
       </Form>

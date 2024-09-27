@@ -28,7 +28,7 @@ export default function Index() {
           valueType="string"
           initialValue={[momentToString(moment()), momentToString(moment().add(1, 'day'))]}
           // timeZone="America/Los_Angeles"
-          displayTimeZone="Asia/Tokyo"
+          originTimeZone="Asia/Tokyo"
           showTime
         />
       </Form>
