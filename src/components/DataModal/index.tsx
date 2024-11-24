@@ -1,4 +1,4 @@
-import { Modal as AntdModal, Button, type ModalProps, Spin } from 'antd';
+import { Modal as AntdModal, Button, type ModalProps } from 'antd';
 import { LocaleContext } from 'components/LocaleProvider';
 import useAdaptiveHeight from 'hooks/useAdaptiveHeight';
 import React, { memo, useContext } from 'react';
@@ -11,11 +11,12 @@ interface Props extends Omit<ModalProps, 'width' | 'footer'> {
    */
   type?: 'view' | 'edit' | 'create' | 'copy';
   /**
-   * 弹窗的大小，替代了width属性
-   * @description 尺寸设置: xl-1360px | l-1120px | m-880px | s-640px | xs-400px
+   * 弹窗的宽度，替代了width属性
+   * @description 尺寸设置: xl-1360px | l-1120px | m-880px | s-640px | xs-400px | fit-'fit-content'
+   * @description 如果需要宽度适应弹窗内容宽度，使用 fit 即可
    * @default 'm'
    */
-  size?: 'xl' | 'l' | 'm' | 's' | 'xs';
+  size?: 'xl' | 'l' | 'm' | 's' | 'xs' | 'fit';
   /** 重置按钮的回调 */
   onReset?: (e?: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   /**
@@ -25,15 +26,15 @@ interface Props extends Omit<ModalProps, 'width' | 'footer'> {
    */
   resetText?: React.ReactNode;
   /**
+   * 是否展示重置按钮，只有在`type`为`edit`、`create`、`copy`时才有效
+   * @default true
+   */
+  showResetBtn?: boolean;
+  /**
    * 内容区域是否竖向滚动
    * @default true
    */
   contentScrollY?: boolean;
-  /**
-   * 内容区域loading
-   * @default false
-   */
-  fetchLoading?: boolean;
   /**
    * 是否展示弹窗底部区域
    * @default true
@@ -48,10 +49,11 @@ interface Props extends Omit<ModalProps, 'width' | 'footer'> {
   customFooter?: React.ReactNode;
 }
 
-const SIZE_MAP = { xs: '400px', s: '640px', m: '880px', l: '1120px', xl: '1360px' };
+const SIZE_MAP = { xs: '400px', s: '640px', m: '880px', l: '1120px', xl: '1360px', fit: 'fit-content' };
+const BTN_STYLE = { marginLeft: '10px' };
 
 const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
-  const { type, onReset, onOk, resetText, okText, confirmLoading, extraFooter, onCancel } = props;
+  const { type, onReset, onOk, resetText, showResetBtn, okText, confirmLoading, extraFooter, onCancel } = props;
   switch (type) {
     case 'edit':
     case 'create':
@@ -59,10 +61,12 @@ const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
       return (
         <>
           {extraFooter ?? null}
-          <Button style={{ marginLeft: '10px' }} key="reset" onClick={onReset}>
-            {resetText}
-          </Button>
-          <Button style={{ marginLeft: '10px' }} key="submit" type="primary" onClick={onOk} loading={confirmLoading}>
+          {showResetBtn ? (
+            <Button style={BTN_STYLE} key="reset" onClick={onReset}>
+              {resetText}
+            </Button>
+          ) : null}
+          <Button style={BTN_STYLE} key="submit" type="primary" onClick={onOk} loading={confirmLoading}>
             {okText}
           </Button>
         </>
@@ -71,7 +75,7 @@ const DefaultFooter = memo(function DefaultFooter(props: Partial<Props>) {
       return (
         <>
           {extraFooter ?? null}
-          <Button key="ok" style={{ marginLeft: '10px' }} type="primary" onClick={onCancel}>
+          <Button key="ok" style={BTN_STYLE} type="primary" onClick={onCancel}>
             {okText}
           </Button>
         </>
@@ -92,7 +96,7 @@ export default function DataModal(props: Props) {
     onOk,
     okText = locale.confirm,
     resetText = locale.reset,
-    fetchLoading = false,
+    showResetBtn = true,
     contentScrollY = true,
     bodyStyle,
     extraFooter,
@@ -118,14 +122,19 @@ export default function DataModal(props: Props) {
     <AntdModal
       {...rest}
       width={SIZE_MAP[size]}
-      bodyStyle={{ ...bodyStyle, height: 'fit-content', maxHeight, overflowY: contentScrollY ? 'auto' : 'hidden' }}
+      bodyStyle={{
+        height: 'fit-content',
+        maxHeight,
+        overflowY: contentScrollY ? 'auto' : 'hidden',
+        ...bodyStyle,
+      }}
       title={title ?? TITLE_MAP[type]}
       onOk={onOk}
       okText={okText}
       onCancel={onCancel}
       footer={
         showFooter
-          ? customFooter ?? (
+          ? (customFooter ?? (
               <DefaultFooter
                 type={type}
                 onOk={onOk}
@@ -133,14 +142,15 @@ export default function DataModal(props: Props) {
                 confirmLoading={confirmLoading}
                 onReset={onReset}
                 resetText={resetText}
+                showResetBtn={showResetBtn}
                 extraFooter={extraFooter}
                 onCancel={onCancel}
               />
-            )
+            ))
           : null
       }
     >
-      <Spin spinning={fetchLoading}>{children}</Spin>
+      {children}
     </AntdModal>
   );
 }

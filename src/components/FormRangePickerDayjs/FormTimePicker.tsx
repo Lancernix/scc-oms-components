@@ -60,6 +60,7 @@ const formDefaultProps = {
 /**
  * 一个方便的时间范围选择组件，不再需要手动进行数据类型转换和字段赋值，组件已经替你做了～
  * @description 需要注意的一点是：组件会导致form的数据中多出一个额外的字段，所以需要你在提交的时候去剔除这个字段
+ * @deprecated 组件仍然可用，但是不建议再用了，有更好的选择，参见：FormTimeRangePicker
  */
 function FormTimePicker(props: Props) {
   const {

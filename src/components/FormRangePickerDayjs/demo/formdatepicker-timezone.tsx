@@ -1,6 +1,6 @@
 /**
  * title: 根据时区进行转换
- * description: 可以传入`originTimezone`指定给定的日期字符串是哪个时区下的；也可以传入`timezone`将获取到的值换成目标时区的字符串（只有在valueType是`string`的时候才生效）
+ * description: 可以传入`sourceTimeZone`指定给定的日期字符串是哪个时区下的；也可以传入`timezone`将获取到的值换成目标时区的字符串（只有在valueType是`string`的时候才生效）
  */
 
 import { Button, Form } from 'antd';
@@ -28,7 +28,7 @@ export default function Index() {
           valueType="string"
           initialValue={['2024-06-24 08:00:00', '2024-06-25 04:00:00']}
           timeZone="America/Los_Angeles"
-          originTimeZone="Asia/Tokyo"
+          sourceTimeZone="Asia/Tokyo"
           showTime
         />
       </Form>

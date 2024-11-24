@@ -1,11 +1,11 @@
 /**
- * title: 指定时区
- * description: 获取到的值会转换成指定时区的字符串格式，只有在valueType是`string`的时候才生效
+ * title: 格式为字符串
+ * description: 从 Form 中可以直接取到拆分之后的字段，格式为字符串
  */
 import { Button, Form } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { FormDatePicker, momentToString } from 'scc-oms-components';
+import { FormTimeRangePickerDayjs } from 'scc-oms-components';
 
 export default function Index() {
   const [value, setValue] = useState<Record<string, unknown>>();
@@ -21,17 +21,18 @@ export default function Index() {
   return (
     <>
       <Form form={form}>
-        <FormDatePicker
-          form={form}
-          name="create_time"
-          fields={['create_time_start', 'create_time_end']}
-          valueType="string"
-          initialValue={[momentToString(moment()), momentToString(moment().add(1, 'day'))]}
-          // timeZone="America/Los_Angeles"
-          sourceTimeZone="Asia/Tokyo"
-          showTime
-        />
+        <Form.Item name="create_time" initialValue={[dayjs(), dayjs().add(2, 'hours')]}>
+          <FormTimeRangePickerDayjs
+            form={form}
+            fields={['create_time_start', 'create_time_end']}
+            fieldValueType="string"
+            format="HH:mm:ss"
+          />
+        </Form.Item>
       </Form>
+      <Button style={{ marginRight: '10px' }} onClick={() => form.resetFields()}>
+        重置
+      </Button>
       <Button type="primary" onClick={() => handleSubmit()}>
         提交
       </Button>

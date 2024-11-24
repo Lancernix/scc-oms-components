@@ -59,27 +59,25 @@ function Index() {
       },
     },
     {
+      name: 'dateRange',
+      label: '日期范围',
       type: 'dateRange',
       props: {
-        name: 'dateRange',
-        label: '日期范围',
+        style: { width: '100%' },
         form: form,
         fields: ['startDate', 'endDate'],
-        otherRangePickerProps: {
-          style: { width: '100%' },
-        },
+        fieldValueType: 'string',
       },
     },
     {
+      name: 'timeRange',
+      label: '时间范围',
       type: 'timeRange',
       props: {
-        name: 'timeRange',
-        label: '时间范围',
+        style: { width: '100%' },
         form: form,
-        fields: ['startTime', 'endTIme'],
-        otherRangePickerProps: {
-          style: { width: '100%' },
-        },
+        fields: ['startTime', 'endTime'],
+        fieldValueType: 'string',
       },
     },
   ];

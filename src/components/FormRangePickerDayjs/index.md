@@ -66,3 +66,49 @@ order: 5
 | `formItemLayout` | FormItem 的样式 | `{ labelCol: FormItemProps['labelCol']; wrapperCol: FormItemProps['wrapperCol'] }` | `{ labelCol: {xs: { span: 24 }, sm: { span: 4 }}, wrapperCol: {xs: {span: 24 }, sm: { span: 20 }}}` |
 | `otherRangePickerProps` | Antd RangePicker 的其他属性 | `Omit<RangePickerProps, 'empty' \| 'value' \| 'defaultValue' \| 'onChange' \| 'format' \| 'showTime' \| 'allowClear'>` | - |
 | `otherFormItemProps` | Antd FormItem 的其他属性 | `Omit<FormItemProps, 'labelCol' \| 'wrapperCol' \| 'label' \| 'initialValue' \| 'name' \| 'rules'>` | - |
+
+## FormDateRangePicker
+
+日期范围选择组件，之前的思路是将 RangePicker 对应的 FormItem 也封装进去，但是这样会导致这个组件和其他的表单组件用法差距有点大，在其他组件中使用这个组件的时候，还需要进行特殊处理。所以这里改变了一下思路，只传一个 form 实例进去，FormItem 就不封进去了，这样能够尽量保证和其他表单组件的一致性。不过由于 form 是一个必选的属性，所以只能在 Form 中使用（RangePicker 本身绝大多数情况也是用来表单提交的，所以这里问题也不大），如果有不适用的场景，那使用原生的 RangePicker 就可以了。
+
+### 示例
+
+<code src='./demo/formdaterangepicker-basic.tsx'></code>
+<code src='./demo/formdaterangepicker-timestamp.tsx'></code>
+<code src='./demo/formdaterangepicker-secondtimestamp.tsx'></code>
+<code src='./demo/formdaterangepicker-string.tsx'></code>
+<code src='./demo/formdaterangepicker-timezone.tsx'></code>
+
+### API
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ----- | ------- |
+| `fieldValueType` | 组件值的类型 | `'string'` \| `'secondTimestamp'` \| `'timestamp'` \| `'dayjs'` | `'dayjs'` |
+| `format` | 日期字符串格式化模版 | `string` | `'YYYY-MM-DD HH:mm:ss'` |
+| `form` | Form 实例 | `FormInstance` | - |
+| `fields` | 要拆分成的字段名称元组 | `[string, string]` | - |
+| `showTime` | 是否增加时间数据展示 | `boolean` | `false` |
+| `useStartAndEndOfDay` | 只展示日期时，是否格式化时间为一天的开始和结束（只有在 `showTime` 为 `false` 时生效），如2023-08-01～2023-08-02实际是为2023-08-01 00:00:00～2023-08-02 23:59:59 | `boolean` | `false` |
+| `targetTimeZone` | 目标转换时区 | `string` | 当前所在时区 |
+
+## FormTimeRangePicker
+
+时间范围选择组件，和上面的 FormDateRangePicker 组件实现类似。
+
+### 示例
+
+<code src='./demo/formtimerangepicker-basic.tsx'></code>
+<code src='./demo/formtimerangepicker-timestamp.tsx'></code>
+<code src='./demo/formtimerangepicker-secondtimestamp.tsx'></code>
+<code src='./demo/formtimerangepicker-string.tsx'></code>
+<code src='./demo/formtimerangepicker-timezone.tsx'></code>
+
+### API
+
+| 属性 | 说明 | 类型 | 默认值 |
+| ---- | ---- | ----- | ------- |
+| `fieldValueType` | 组件值的类型 | `'string'` \| `'secondTimestamp'` \| `'timestamp'` \| `'dayjs'` | `'dayjs'` |
+| `format` | 日期字符串格式化模版 | `string` | `'HH:mm:ss'` |
+| `form` | Form 实例 | `FormInstance` | - |
+| `fields` | 要拆分成的字段名称元组 | `[string, string]` | - |
+| `targetTimeZone` | 目标转换时区 | `string` | 当前所在时区 |

@@ -1,8 +1,7 @@
 {
   "typescript.tsdk": "./node_modules/typescript/lib",
   "prettier.enable": false,
-  "vsicons.projectDetection.autoReload": true,
-  "editor.defaultFormatter": "biomejs.biome",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "quickfix.biome": "explicit",
@@ -33,8 +32,23 @@
       "strings": true
     }
   },
-  "[css]": {
-    "editor.defaultFormatter": "stylelint.vscode-stylelint",
-    "editor.suggest.insertMode": "replace"
+  // 这里最好配置一下具体语言的格式化工具，如果只设置`editor.defaultFormatter`，有可能被编辑器的语言配置覆盖
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
   }
 }

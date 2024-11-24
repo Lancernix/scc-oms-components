@@ -30,7 +30,6 @@ order: 6
 | `size` | 弹窗的大小，替代了 width 属性（尺寸设置: xl-1360px \| l-1120px \| m-880px \| s-640px \| xs-400px） | `'xl'` \| `'l'` \| `'m'` \| `'s'` \| `'xs'` | `'m'` |
 | `onReset` | 重置按钮的回调 | `(e?: React.MouseEvent<HTMLElement, MouseEvent>) => void` | - |
 | `resetText` | 重置按钮的展示文本（ `view` 状态下没有重置按钮） | `React.ReactNode` | `'重置'` |
-| `fetchLoading` | 内容区域 loading | `boolean` | `false` |
 | `contentScrollY` | 内容区域是否竖向滚动 | `boolean` | `true` |
 | `showFooter` | 是否展示弹窗底部区域 | `boolean` | `true` |
 | `extraFooter` | 底部额外的内容（只有在 `showFooter` 为 true 时才有效） | `React.ReactNode` | - |

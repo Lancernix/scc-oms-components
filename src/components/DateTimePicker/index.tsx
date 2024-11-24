@@ -29,7 +29,7 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
    * @default 当前所在时区
    * @description 该属性影响的是value转换成moment对象时使用的时区，比如接口返回的是Asia/Shanghai的日期字符串，那可以通过这个属性设置
    */
-  originTimeZone?: string;
+  sourceTimeZone?: string;
   /** 当设定了 showTime 的时候，面板是否显示“此刻”按钮 */
   showNow?: boolean;
   /**
@@ -64,7 +64,7 @@ export function DatePicker(props: DatePickerProps) {
     valueType = 'string',
     format = 'YYYY-MM-DD',
     timeZone = getTimeZone(),
-    originTimeZone = getTimeZone(),
+    sourceTimeZone = getTimeZone(),
     showToday = true,
     picker,
     useStartOfDay = false,
@@ -75,8 +75,8 @@ export function DatePicker(props: DatePickerProps) {
 
   // 转换成antd需要的moment对象
   const momentValue = useMemo(
-    () => valueToMoment(value, valueType, format, originTimeZone),
-    [format, valueType, value, originTimeZone],
+    () => valueToMoment(value, valueType, format, sourceTimeZone),
+    [format, valueType, value, sourceTimeZone],
   );
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {

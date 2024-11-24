@@ -1,16 +1,15 @@
+import { Button, Divider, Radio, type RadioChangeEvent } from 'antd';
 /**
  * title: 基础用法
- * description: 结合业务需要，不同的编辑状态，底部的基本按钮也会不同（新建/编辑/复制时有确认、重置按钮；查看时只有确认按钮，并且调用的是 `onCancel` 回调）。弹窗的高度会自适应当前视窗的高度，并且增加了常用的两种 loading
+ * description: 结合业务需要，不同的编辑状态，底部的基本按钮也会不同（新建/编辑/复制时有确认、重置按钮；查看时只有确认按钮，并且调用的是 `onCancel` 回调）。弹窗的高度会自适应当前视窗的高度，不会出现超出底部的情况
  */
 import React, { useState } from 'react';
-import { Button, Divider, Radio, type RadioChangeEvent } from 'antd';
 import { DataModal, type DataModalProps } from 'scc-oms-components';
 
 function Index() {
   const [type, setType] = useState<DataModalProps['type']>('view');
   const [size, setSize] = useState<DataModalProps['size']>('m');
   const [visible, setVisible] = useState(false);
-  const [fetchLoading, setFetchLoading] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const onTypeChange = (e: RadioChangeEvent) => {
@@ -19,10 +18,6 @@ function Index() {
 
   const onSizeChange = (e: RadioChangeEvent) => {
     setSize(e.target.value);
-  };
-
-  const onFetchLoadingChange = (e: RadioChangeEvent) => {
-    setFetchLoading(e.target.value);
   };
 
   const onConfirmLoadingChange = (e: RadioChangeEvent) => {
@@ -48,12 +43,6 @@ function Index() {
         <Radio value="xl">xl</Radio>
       </Radio.Group>
       <br />
-      <span>fetchLoading属性：</span>
-      <Radio.Group onChange={onFetchLoadingChange} value={fetchLoading}>
-        <Radio value={true}>true</Radio>
-        <Radio value={false}>false</Radio>
-      </Radio.Group>
-      <br />
       <span>confirmLoading属性：</span>
       <Radio.Group onChange={onConfirmLoadingChange} value={confirmLoading}>
         <Radio value={true}>true</Radio>
@@ -68,7 +57,6 @@ function Index() {
         size={size}
         visible={visible}
         onCancel={() => setVisible(false)}
-        fetchLoading={fetchLoading}
         confirmLoading={confirmLoading}
       >
         <p>弹窗内容...</p>

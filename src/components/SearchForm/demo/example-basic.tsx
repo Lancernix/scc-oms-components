@@ -73,34 +73,31 @@ function Index() {
       label: '日期',
       name: 'date',
       type: 'date',
-
       props: {
         placeholder: '请选择',
         style: { width: '100%' },
       },
     },
     {
+      label: '日期范围',
+      name: 'dateRange',
       type: 'dateRange',
       props: {
-        name: 'dateRange',
-        label: '日期范围',
         form: form,
         fields: ['startDate', 'endDate'],
-        otherRangePickerProps: {
-          style: { width: '100%' },
-        },
+        style: { width: '100%' },
+        fieldValueType: 'string',
       },
     },
     {
+      label: '时间范围',
+      name: 'timeRange',
       type: 'timeRange',
       props: {
-        name: 'timeRange',
-        label: '时间范围',
+        style: { width: '100%' },
         form: form,
-        fields: ['startTime', 'endTIme'],
-        otherRangePickerProps: {
-          style: { width: '100%' },
-        },
+        fields: ['startTime', 'endTime'],
+        fieldValueType: 'string',
       },
     },
   ];

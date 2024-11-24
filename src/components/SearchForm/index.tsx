@@ -7,10 +7,10 @@ import React, { type CSSProperties, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components';
 import { DatePicker, type DatePickerProps, TimePicker, type TimePickerProps } from '../DateTimePickerDayjs';
 import {
-  FormDatePicker,
-  type FormDatePickerProps,
-  FormTimePicker,
-  type FormTimePickerProps,
+  FormDateRangePicker,
+  type FormDateRangePickerProps,
+  FormTimeRangePicker,
+  type FormTimeRangePickerProps,
 } from '../FormRangePickerDayjs';
 
 interface InputItem extends FormItemProps {
@@ -61,23 +61,23 @@ interface TimeItem extends FormItemProps {
   props?: TimePickerProps;
 }
 
-interface DateRangeItem {
+interface DateRangeItem extends FormItemProps {
   type: 'dateRange';
   /**
    * 表单项占用几个基础col
    * @default 2
    */
   multiCol?: number;
-  props: FormDatePickerProps;
+  props: FormDateRangePickerProps;
 }
-interface TimeRangeItem {
+interface TimeRangeItem extends FormItemProps {
   type: 'timeRange';
   /**
    * 表单项占用几个基础col
    * @default 2
    */
   multiCol?: number;
-  props: FormTimePickerProps;
+  props: FormTimeRangePickerProps;
 }
 
 interface CustomItem extends FormItemProps {
@@ -283,25 +283,22 @@ const renderItem = (item: FieldItem, colSpan: number, formItemMarginBottom: stri
       );
     }
     case 'dateRange': {
-      const { props } = rest as Omit<DateRangeItem, 'type' | 'multiCol'>;
+      const { props, ...formItemProps } = rest as Omit<DateRangeItem, 'type' | 'multiCol'>;
       return (
-        <Col span={colSpan} key={props.name.toString()}>
-          <FormDatePicker
-            otherFormItemProps={{ ...doubleFormItemLayout, style: { marginBottom: formItemMarginBottom } }}
-            {...props}
-          />
+        <Col span={colSpan} key={formItemProps.name.toString()}>
+          <FormItem {...doubleFormItemLayout} style={{ marginBottom: formItemMarginBottom }} {...formItemProps}>
+            <FormDateRangePicker {...props} />
+          </FormItem>
         </Col>
       );
     }
     case 'timeRange': {
-      const { props } = rest as Omit<TimeRangeItem, 'type' | 'multiCol'>;
+      const { props, ...formItemProps } = rest as Omit<TimeRangeItem, 'type' | 'multiCol'>;
       return (
-        <Col span={colSpan} key={props.name.toString()}>
-          <FormTimePicker
-            formItemLayout={doubleFormItemLayout}
-            otherFormItemProps={{ style: { marginBottom: formItemMarginBottom } }}
-            {...props}
-          />
+        <Col span={colSpan} key={formItemProps.name.toString()}>
+          <FormItem {...doubleFormItemLayout} style={{ marginBottom: formItemMarginBottom }} {...formItemProps}>
+            <FormTimeRangePicker {...props} />
+          </FormItem>
         </Col>
       );
     }

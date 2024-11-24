@@ -4,19 +4,20 @@
  */
 import moment from 'moment';
 import React, { useState } from 'react';
-import { DatePicker, type DatePickerProps } from 'scc-oms-components';
+import { DatePickerDayjs, type DatePickerDayjsProps } from 'scc-oms-components';
 import { momentToMillisecond } from 'utils/momentTransform';
 
 export default function Index() {
   const [value, setValue] = useState<number>(momentToMillisecond(moment()));
 
-  const handleChange: DatePickerProps['onChange'] = val => {
+  const handleChange: DatePickerDayjsProps['onChange'] = (val, dayjsValue) => {
     setValue(val as number);
+    console.log(dayjsValue);
   };
 
   return (
     <>
-      <DatePicker valueType="timestamp" value={value} onChange={handleChange} format="YYYY-MM-DD" />
+      <DatePickerDayjs valueType="timestamp" value={value} onChange={handleChange} format="YYYY-MM-DD" />
       <span style={{ marginLeft: '40px' }}>
         组件值为：
         {value}
