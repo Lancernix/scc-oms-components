@@ -2,6 +2,9 @@ import type { Moment } from 'moment';
 import moment from 'moment-timezone';
 import getTimeZone from 'utils/getTimeZone';
 
+/** 当前环境所在时区 */
+const currentTimeZone = getTimeZone();
+
 /**
  * moment对象转换成秒级时间戳
  * @param value moment对象
@@ -32,12 +35,12 @@ export function momentToMillisecond(value: Moment) {
 export function momentToString(
   value: Moment,
   format = 'YYYY-MM-DD HH:mm:ss',
-  targetTimeZone = getTimeZone(),
+  targetTimeZone = currentTimeZone,
   utcSuffix = false,
 ) {
   if (moment.isMoment(value)) {
     // 传入的value可能是普通的moment对象（没有时区信息以及时区相关的方法），这里需要先转换一下，否则后面在调用tz()可能会报错
-    const valueWithTimezone = moment.tz(value, getTimeZone());
+    const valueWithTimezone = moment.tz(value, currentTimeZone);
     const realFormat = utcSuffix ? `${format} [(UTC]Z[)]` : format;
     return valueWithTimezone.tz(targetTimeZone).format(realFormat);
   }
@@ -53,27 +56,27 @@ export function momentToString(
  * @param utcSuffix 是否在末尾添加(UTC+08:00)这样的后缀，默认为false
  * @returns 期待的类型数据，如果入参不是moment对象，则返回null
  */
-export function momentToValue(
+export function momentToValue<T extends 'string' | 'secondTimestamp' | 'timestamp' | 'moment'>(
   value: Moment,
-  valueType: 'string' | 'secondTimestamp' | 'timestamp' | 'moment',
+  valueType: T,
   format = 'YYYY-MM-DD HH:mm:ss',
-  targetTimeZone = getTimeZone(),
+  targetTimeZone = currentTimeZone,
   utcSuffix = false,
 ) {
-  if (typeof value === 'undefined') {
-    return value;
+  if (!moment.isMoment(value)) {
+    return null as never;
   }
   switch (valueType) {
     case 'string':
-      return momentToString(value, format, targetTimeZone, utcSuffix);
+      return momentToString(value, format, targetTimeZone, utcSuffix) as T extends 'string' ? string : never;
     case 'secondTimestamp':
-      return momentToSecond(value);
+      return momentToSecond(value) as T extends 'secondTimestamp' ? number : never;
     case 'timestamp':
-      return momentToMillisecond(value);
+      return momentToMillisecond(value) as T extends 'timestamp' ? number : never;
     case 'moment':
-      return moment.isMoment(value) ? value : null;
+      return value as T extends 'dayjs' ? Moment : never;
     default:
-      return null;
+      return null as never;
   }
 }
 
@@ -85,7 +88,11 @@ export function momentToValue(
  * @param sourceTimeZone 来源时区（即输入数据对应的时区），默认为当前所在的时区
  * @returns moment对象，如果入参是无效日期字符串，则返回null
  */
-export function stringToMoment(value: string, format = 'YYYY-MM-DD HH:mm:ss', sourceTimeZone = getTimeZone()) {
+export function stringToMoment(value: string, format = 'YYYY-MM-DD HH:mm:ss', sourceTimeZone = currentTimeZone) {
+  // 先进行一下类型判定，undefined、null都直接返回null
+  if (typeof value !== 'string') {
+    return null;
+  }
   const resGivenTz = moment.tz(value, format, sourceTimeZone);
   if (resGivenTz.isValid()) {
     return resGivenTz.local();
@@ -123,11 +130,11 @@ export function valueToMoment(
   value: Moment | string | number,
   valueType: 'string' | 'secondTimestamp' | 'timestamp' | 'moment',
   format = 'YYYY-MM-DD HH:mm:ss',
-  sourceTimeZone = getTimeZone(),
+  sourceTimeZone = currentTimeZone,
 ) {
-  // 一些falsy值都统一处理成undefined
-  if ([null, undefined, 0, ''].includes(value as string | number)) {
-    return undefined;
+  // 先进行类型判断，undefined、null都不处理直接返回null
+  if (!(typeof value === 'string' || typeof value === 'number' || moment.isMoment(value))) {
+    return null;
   }
   switch (valueType) {
     case 'string':
@@ -149,6 +156,6 @@ export function valueToMoment(
  * @returns 格式化过的偏移量字符串，如UTC+08:00
  * @description 返回值的形式为UTC±[hh]:[mm]
  */
-export function getUtcOffset(timeZone = getTimeZone()) {
+export function getUtcOffset(timeZone = currentTimeZone) {
   return moment().tz(timeZone).format('UTCZ');
 }

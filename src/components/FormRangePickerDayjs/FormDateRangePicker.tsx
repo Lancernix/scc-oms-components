@@ -1,8 +1,10 @@
 import type { FormInstance } from 'antd';
 import { Form, Input } from 'antd';
-import React, { useRef, useState } from 'react';
-import { dayjsToValue } from 'utils/dayjsTransform';
-import getTimeZone from 'utils/getTimeZone';
+import type { RangePickerDateProps } from 'antd/es/date-picker/generatePicker';
+import type { NamePath } from 'antd/es/form/interface';
+import type { Dayjs } from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { currentTimeZone, dayjsToValue } from 'utils/dayjsTransform';
 import DatePicker from '../DateTimePickerDayjs/DatePicker';
 
 const { RangePicker } = DatePicker;
@@ -12,7 +14,7 @@ type Props = {
   /** form实例 */
   form: FormInstance;
   /** 字段名称元组，如[create_time_start, create_time_end] */
-  fields: [string, string];
+  fields: [NamePath, NamePath];
   /**
    * 拆分字段对应的值类型
    * @default 'dayjs'
@@ -34,7 +36,7 @@ type Props = {
    * 是否展示时间数据
    * @default false
    */
-  showTime?: boolean;
+  showTime?: RangePickerDateProps<Dayjs>['showTime'];
   /**
    * 显示日期格式化
    * @default 'YYYY-MM-DD'
@@ -58,23 +60,24 @@ function FormDateRangePicker(props: Props) {
     showTime = false,
     useStartAndEndOfDay = false,
     format = 'YYYY-MM-DD',
-    targetTimeZone = getTimeZone(),
+    targetTimeZone = currentTimeZone,
     picker,
     ...rest
   } = props;
 
-  // 标识是否是组件首次加载
-  const isInitRender = useRef(true);
   // 拆分字段对应的初始值
   const [fieldsInitValue, setFieldsInitValue] = useState([]);
-  if (isInitRender.current) {
-    const startValue = useStartAndEndOfDay ? value?.[0]?.startOf('day') : value?.[0];
-    const endValue = useStartAndEndOfDay ? value?.[1]?.endOf('day') : value?.[1];
-    const initStart = dayjsToValue(startValue, fieldValueType, format, targetTimeZone);
-    const initEnd = dayjsToValue(endValue, fieldValueType, format, targetTimeZone);
-    setFieldsInitValue([initStart, initEnd]);
-    isInitRender.current = false;
-  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 首次加载将初始值转换并set到对应字段上
+  useEffect(() => {
+    if (value) {
+      const startValue = useStartAndEndOfDay ? value[0]?.startOf('day') : value[0];
+      const endValue = useStartAndEndOfDay ? value[1]?.endOf('day') : value[1];
+      const initStart = dayjsToValue(startValue, fieldValueType, format, targetTimeZone);
+      const initEnd = dayjsToValue(endValue, fieldValueType, format, targetTimeZone);
+      setFieldsInitValue([initStart, initEnd]);
+    }
+  }, []);
 
   const handleChange: RangePickerProps['onChange'] = (date, formatString) => {
     let start = date?.[0];
@@ -89,10 +92,8 @@ function FormDateRangePicker(props: Props) {
     // 触发外部的change事件
     onChange?.(date, formatString);
     // 设置form隐藏字段的值
-    form?.setFieldsValue({
-      [fields[0]]: formatStart,
-      [fields[1]]: formatEnd,
-    });
+    form?.setFieldValue(fields[0], formatStart);
+    form?.setFieldValue(fields[1], formatEnd);
   };
 
   return (

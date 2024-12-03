@@ -6,6 +6,11 @@ order: 9
 
 # 增强搜索表单
 
+:::info{title=组件必要依赖（确保项目中已经安装）}
+* `@atlaskit/pragmatic-drag-and-drop@^1.3.0`
+* `@atlaskit/pragmatic-drag-and-drop-hitbox@^1.0.3`
+:::
+
 带有基本样式的筛选项表单，常用于列表页的查询功能。减少了一些样板代码（比如不用写 `Form.Item` 、 `Col` 等基础的组件了），同时也尽可能保留了最大的自由度，你可以通过覆盖或者增加属性设置来满足你使用的场景。
 
 ## 示例

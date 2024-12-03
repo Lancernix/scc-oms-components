@@ -1,8 +1,8 @@
 import type { FormInstance } from 'antd';
 import { Form, Input } from 'antd';
-import React, { useRef, useState } from 'react';
-import { dayjsToValue } from 'utils/dayjsTransform';
-import getTimeZone from 'utils/getTimeZone';
+import type { NamePath } from 'antd/es/form/interface';
+import React, { useEffect, useState } from 'react';
+import { currentTimeZone, dayjsToValue } from 'utils/dayjsTransform';
 import TimerPicker from '../DateTimePickerDayjs/TimerPicker';
 
 const { RangePicker } = TimerPicker;
@@ -12,7 +12,7 @@ type Props = {
   /** form实例 */
   form: FormInstance;
   /** 字段名称元组，如[create_time_start, create_time_end] */
-  fields: [string, string];
+  fields: [NamePath, NamePath];
   /**
    * 拆分字段对应的值类型
    * @default 'dayjs'
@@ -46,19 +46,21 @@ function FormTimeRangePicker(props: Props) {
     value,
     onChange,
     format = 'HH:mm:ss',
-    targetTimeZone = getTimeZone(),
+    targetTimeZone = currentTimeZone,
     ...rest
   } = props;
 
-  // 初始值的设置
-  const isInitRender = useRef(true);
-  const [fieldsValue, setFieldsValue] = useState([]);
-  if (isInitRender.current) {
-    const initStart = dayjsToValue(value?.[0], fieldValueType, format, targetTimeZone);
-    const initEnd = dayjsToValue(value?.[1], fieldValueType, format, targetTimeZone);
-    setFieldsValue([initStart, initEnd]);
-    isInitRender.current = false;
-  }
+  // 拆分字段对应的初始值
+  const [fieldsInitValue, setFieldsInitValue] = useState([]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 首次加载将初始值转换并set到对应字段上
+  useEffect(() => {
+    if (value) {
+      const initStart = dayjsToValue(value?.[0], fieldValueType, format, targetTimeZone);
+      const initEnd = dayjsToValue(value?.[1], fieldValueType, format, targetTimeZone);
+      setFieldsInitValue([initStart, initEnd]);
+    }
+  }, []);
 
   const handleChange: RangePickerProps['onChange'] = (date, formatString) => {
     const [start, end] = date ?? [];
@@ -67,19 +69,17 @@ function FormTimeRangePicker(props: Props) {
     // 触发外部的change事件
     onChange?.(date, formatString);
     // 设置form隐藏字段的值
-    form?.setFieldsValue({
-      [fields[0]]: formatStart,
-      [fields[1]]: formatEnd,
-    });
+    form?.setFieldValue(fields[0], formatStart);
+    form?.setFieldValue(fields[1], formatEnd);
   };
 
   return (
     <>
       <RangePicker allowClear={allowClear} format={format} value={value} onChange={handleChange} {...rest} />
-      <Form.Item noStyle hidden name={fields[0]} initialValue={fieldsValue[0]}>
+      <Form.Item noStyle hidden name={fields[0]} initialValue={fieldsInitValue[0]}>
         <Input />
       </Form.Item>
-      <Form.Item noStyle hidden name={fields[1]} initialValue={fieldsValue[1]}>
+      <Form.Item noStyle hidden name={fields[1]} initialValue={fieldsInitValue[1]}>
         <Input />
       </Form.Item>
     </>

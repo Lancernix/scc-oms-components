@@ -1,5 +1,5 @@
+import type { PickerDateProps } from 'antd/es/date-picker/generatePicker';
 import type { Dayjs } from 'dayjs';
-import type { SharedTimeProps } from 'rc-picker/es/panels/TimePanel';
 import React, { useEffect, useRef, useState } from 'react';
 import { dayjsToValue, valueToDayjs } from 'utils/dayjsTransform';
 import getTimeZone from 'utils/getTimeZone';
@@ -9,20 +9,37 @@ import AntdTimePicker, { type InnerTimeRangePickerProps } from './TimerPicker';
 type AntdDatePickerProps = React.ComponentProps<typeof AntdDatePicker>;
 type AntdTimePickerProps = React.ComponentProps<typeof AntdTimePicker>;
 
-export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | 'format'> & {
-  value?: string | Dayjs | number;
+/** valueType类型定义 */
+type ValueType = 'string' | 'secondTimestamp' | 'timestamp' | 'dayjs';
+/** value的类型（根据valueType确定） */
+type Value<T extends ValueType> = T extends 'string'
+  ? string
+  : T extends 'secondTimestamp'
+    ? number
+    : T extends 'timestamp'
+      ? number
+      : T extends 'dayjs'
+        ? Dayjs
+        : never;
+
+export type DatePickerProps<T extends ValueType = 'dayjs'> = Omit<
+  AntdDatePickerProps,
+  'value' | 'onChange' | 'format'
+> & {
+  value?: Value<T> | null;
   /**
-   * value类型，如选择string则form收集到的值为string类型
-   * @default 'string';
+   * value类型
+   * @description 这个属性锁定了value的类型。比如选择string，那通过onChange取到的值是string类型，通过value传入的值也得是string类型，不然无法正确解析
+   * @default 'dayjs';
    */
-  valueType?: 'string' | 'secondTimestamp' | 'timestamp' | 'dayjs';
+  valueType?: T;
   /**
    * onChange回调
    * @param value
    * @param dayjsValue 这个值可以直接获取组件当前使用的dayjs对象，有些时候可能需要
    * @returns
    */
-  onChange?: (value: string | number | Dayjs, dayjsValue?: Dayjs) => void;
+  onChange?: (value: Value<T>, dayjsValue?: Dayjs) => void;
   /**
    * 日期字符串格式化模版
    * @default 'YYYY-MM-DD'
@@ -51,7 +68,7 @@ export type DatePickerProps = Omit<AntdDatePickerProps, 'value' | 'onChange' | '
    * 增加时间选择功能
    * @default false
    */
-  showTime?: boolean | SharedTimeProps<Dayjs>;
+  showTime?: PickerDateProps<Dayjs>['showTime'];
   /**
    * 当只有日期展示时，是否将时间默认为一天的开始00:00:00
    * @default false
@@ -71,7 +88,7 @@ function InnerDatePicker(props: DatePickerProps) {
   const {
     value,
     onChange,
-    valueType = 'string',
+    valueType = 'dayjs',
     format = 'YYYY-MM-DD',
     targetTimeZone = getTimeZone(),
     sourceTimeZone = getTimeZone(),
@@ -132,14 +149,18 @@ export const DatePicker = Object.assign(InnerDatePicker, {
 });
 export type DateRangePickerProps = InnerDateRangePickerProps;
 
-export type TimePickerProps = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
-  value?: string | Dayjs | number;
+export type TimePickerProps<T extends ValueType = 'dayjs'> = Omit<
+  AntdTimePickerProps,
+  'value' | 'onChange' | 'format'
+> & {
+  value?: Value<T>;
   /**
-   * value类型，如选择string则form收集到的值为string类型
-   * @default 'string'
+   * value类型
+   * @description 这个属性锁定了value的类型。比如选择string，那通过onChange取到的值是string类型，通过value传入的值也得是string类型，不然无法正确解析
+   * @default 'dayjs'
    */
-  valueType?: 'string' | 'dayjs' | 'secondTimestamp' | 'timestamp';
-  onChange?: (value: string | Dayjs | number, dayjsValue: Dayjs) => void;
+  valueType?: T;
+  onChange?: (value: Value<T>, dayjsValue: Dayjs) => void;
   /**
    * 时间字符串格式化模版
    * @default 'HH:mm:ss'
@@ -164,7 +185,7 @@ function InnerTimePicker(props: TimePickerProps) {
   const {
     value,
     onChange,
-    valueType = 'string',
+    valueType = 'dayjs',
     format = 'HH:mm:ss',
     targetTimeZone = getTimeZone(),
     sourceTimeZone = getTimeZone(),

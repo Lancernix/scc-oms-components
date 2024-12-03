@@ -25,7 +25,7 @@ export default defineConfig({
     name: 'scc-oms-components',
     nav: [
       { title: '组件', link: '/components/table-button' },
-      { title: '工具', link: '/utils/moment-transform' },
+      { title: '工具', link: '/utils/get-time-zone' },
       { title: 'Hook', link: '/hooks/use-validated-form-values' },
     ],
     prefersColor: { default: 'auto' },

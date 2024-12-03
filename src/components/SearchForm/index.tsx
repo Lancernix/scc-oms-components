@@ -207,7 +207,7 @@ const formItemLayout = {
   wrapperCol: { span: 16 },
 };
 
-const doubleFormItemLayout = {
+const doubleSpanFormItemLayout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 20 },
 };
@@ -286,7 +286,7 @@ const renderItem = (item: FieldItem, colSpan: number, formItemMarginBottom: stri
       const { props, ...formItemProps } = rest as Omit<DateRangeItem, 'type' | 'multiCol'>;
       return (
         <Col span={colSpan} key={formItemProps.name.toString()}>
-          <FormItem {...doubleFormItemLayout} style={{ marginBottom: formItemMarginBottom }} {...formItemProps}>
+          <FormItem {...doubleSpanFormItemLayout} style={{ marginBottom: formItemMarginBottom }} {...formItemProps}>
             <FormDateRangePicker {...props} />
           </FormItem>
         </Col>
@@ -296,7 +296,7 @@ const renderItem = (item: FieldItem, colSpan: number, formItemMarginBottom: stri
       const { props, ...formItemProps } = rest as Omit<TimeRangeItem, 'type' | 'multiCol'>;
       return (
         <Col span={colSpan} key={formItemProps.name.toString()}>
-          <FormItem {...doubleFormItemLayout} style={{ marginBottom: formItemMarginBottom }} {...formItemProps}>
+          <FormItem {...doubleSpanFormItemLayout} style={{ marginBottom: formItemMarginBottom }} {...formItemProps}>
             <FormTimeRangePicker {...props} />
           </FormItem>
         </Col>

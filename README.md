@@ -11,10 +11,8 @@
 * antd ~4.22.0
 * styled-components
 * lodash-es
-* moment
-* dayjs
 
-> 项目在使用组件库的时候，moment、dayjs 选择其一就可以了。这里使用 dayjs 是替换了 Antd 中日期、时间、日历等组件默认使用的 moment，以降低打包体积。如果你不需要，那就不用安装 dayjs。
+> 组件库部分组件会用到一些特定的依赖，为了降低打包体积，这些依赖会被声明为 peerDependencies，并在 peerDependenciesMeta 中标明是可选的。**项目在使用组件库的时候，这些可选的依赖不会被自动安装，需要你手动安装**。组件和可选依赖的关系，可以参考具体组件的文档，都有标明。
 
 ## 开发构建工具
 

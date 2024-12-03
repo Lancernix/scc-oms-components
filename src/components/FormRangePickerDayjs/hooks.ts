@@ -1,11 +1,12 @@
 import type { FormInstance } from 'antd';
+import type { NamePath } from 'antd/es/form/interface';
 import type { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
 import { dayjsToValue, valueToDayjs } from 'utils/dayjsTransform';
 
 interface IOptions {
   form: FormInstance; // formInstance
-  fields: [string, string]; // 时间的两个字段
+  fields: [NamePath, NamePath]; // 时间的两个字段
   format: string; // 格式化
   valueType: 'string' | 'secondTimestamp' | 'timestamp' | 'dayjs'; // 数据类型
   timeZone?: string; // 提交时的需要的时区
@@ -44,8 +45,8 @@ function useRangePicker(initialValue: [Dayjs, Dayjs] | [string, string] | [numbe
   function onChange(dayjsValue: [Dayjs, Dayjs]) {
     const result = [];
     if (!dayjsValue || !dayjsValue.length) {
-      form.setFieldsValue({ [fields[0]]: void 0 });
-      form.setFieldsValue({ [fields[1]]: void 0 });
+      form.setFieldValue(fields[0], void 0);
+      form.setFieldValue(fields[1], void 0);
       return;
     }
     if (dayjsValue[0]) {
@@ -61,8 +62,8 @@ function useRangePicker(initialValue: [Dayjs, Dayjs] | [string, string] | [numbe
           : dayjsToValue(dayjsValue[1], valueType, format, timeZone);
     }
 
-    form.setFieldsValue({ [fields[0]]: result[0] ?? void 0 });
-    form.setFieldsValue({ [fields[1]]: result[1] ?? void 0 });
+    form.setFieldValue(fields[0], result[0] ?? void 0);
+    form.setFieldValue(fields[1], result[1] ?? void 0);
   }
 
   return [initValue, onChange] as [typeof initValue, typeof onChange];
