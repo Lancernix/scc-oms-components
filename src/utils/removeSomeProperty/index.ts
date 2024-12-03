@@ -19,7 +19,7 @@ export default function removeSomeProperty<T extends Record<string, unknown>>(
       if (typeof obj[key] === 'object' && obj[key] !== null) {
         if (Array.isArray(obj[key])) {
           // 处理数组
-          newObj[key] = obj[key].map((item: unknown) =>
+          newObj[key] = (obj[key] as unknown[]).map((item: unknown) =>
             typeof item === 'object' && item !== null
               ? removeSomeProperty(item as Record<string, unknown>, names)
               : item,
