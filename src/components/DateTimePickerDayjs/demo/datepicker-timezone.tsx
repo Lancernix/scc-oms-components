@@ -9,14 +9,15 @@ import { DatePickerDayjs, type DatePickerDayjsProps } from 'scc-oms-components';
 
 export default function Index() {
   const [value, setValue] = useState('2023-09-09 18:00:00');
-  const handleChange: DatePickerDayjsProps['onChange'] = (val, dayjsValue) => {
-    setValue(val as string);
+  const handleChange: DatePickerDayjsProps<'string'>['onChange'] = (val, dayjsValue) => {
+    setValue(val);
     console.log(dayjsValue);
   };
 
   return (
     <>
       <DatePickerDayjs
+        valueType="string"
         value={value}
         showTime
         onChange={handleChange}

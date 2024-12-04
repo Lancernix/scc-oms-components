@@ -9,14 +9,20 @@ import { TimePickerDayjs, type TimePickerDayjsProps } from 'scc-oms-components';
 
 export default function Index() {
   const [value, setValue] = useState('18:00:00');
-  const handleChange: TimePickerDayjsProps['onChange'] = (val, dayjsValue) => {
-    setValue(val as string);
+  const handleChange: TimePickerDayjsProps<'string'>['onChange'] = (val, dayjsValue) => {
+    setValue(val);
     console.log(dayjsValue);
   };
 
   return (
     <>
-      <TimePickerDayjs value={value} onChange={handleChange} targetTimeZone="Asia/Tokyo" sourceTimeZone="Asia/Tokyo" />
+      <TimePickerDayjs
+        valueType="string"
+        value={value}
+        onChange={handleChange}
+        targetTimeZone="Asia/Tokyo"
+        sourceTimeZone="Asia/Tokyo"
+      />
       <span style={{ marginLeft: '40px' }}>
         组件值为（东京时区）：
         {value}

@@ -10,8 +10,8 @@ import { momentToMillisecond } from 'utils/momentTransform';
 export default function Index() {
   const [value, setValue] = useState<number>(momentToMillisecond(moment()));
 
-  const handleChange: DatePickerDayjsProps['onChange'] = (val, dayjsValue) => {
-    setValue(val as number);
+  const handleChange: DatePickerDayjsProps<'timestamp'>['onChange'] = (val, dayjsValue) => {
+    setValue(val);
     console.log(dayjsValue);
   };
 

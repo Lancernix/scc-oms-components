@@ -9,8 +9,8 @@ import { TimePickerDayjs, type TimePickerDayjsProps } from 'scc-oms-components';
 export default function Index() {
   const [value, setValue] = useState<number>(dayjs().unix());
 
-  const handleChange: TimePickerDayjsProps['onChange'] = val => {
-    setValue(val as number);
+  const handleChange: TimePickerDayjsProps<'secondTimestamp'>['onChange'] = val => {
+    setValue(val);
   };
 
   return (

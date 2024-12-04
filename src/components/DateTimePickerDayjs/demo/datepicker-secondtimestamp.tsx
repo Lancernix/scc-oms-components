@@ -10,8 +10,8 @@ import { momentToSecond } from 'utils/momentTransform';
 export default function Index() {
   const [value, setValue] = useState<number>(momentToSecond(moment()));
 
-  const handleChange: DatePickerDayjsProps['onChange'] = (val, dayjsValue) => {
-    setValue(val as number);
+  const handleChange: DatePickerDayjsProps<'secondTimestamp'>['onChange'] = (val, dayjsValue) => {
+    setValue(val);
     console.log(dayjsValue);
   };
 

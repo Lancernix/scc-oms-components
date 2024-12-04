@@ -12,15 +12,11 @@ type AntdTimePickerProps = React.ComponentProps<typeof AntdTimePicker>;
 /** valueType类型定义 */
 type ValueType = 'string' | 'secondTimestamp' | 'timestamp' | 'dayjs';
 /** value的类型（根据valueType确定） */
-type Value<T extends ValueType> = T extends 'string'
-  ? string
-  : T extends 'secondTimestamp'
-    ? number
-    : T extends 'timestamp'
-      ? number
-      : T extends 'dayjs'
-        ? Dayjs
-        : never;
+type Value<T extends ValueType> =
+  | (T extends 'string' ? string : never)
+  | (T extends 'secondTimestamp' ? number : never)
+  | (T extends 'timestamp' ? number : never)
+  | (T extends 'dayjs' ? Dayjs : never);
 
 export type DatePickerProps<T extends ValueType = 'dayjs'> = Omit<
   AntdDatePickerProps,
@@ -84,11 +80,11 @@ export type DatePickerProps<T extends ValueType = 'dayjs'> = Omit<
 };
 
 /** 日期组件 */
-function InnerDatePicker(props: DatePickerProps) {
+function InnerDatePicker<T extends ValueType = 'dayjs'>(props: DatePickerProps<T>) {
   const {
     value,
     onChange,
-    valueType = 'dayjs',
+    valueType,
     format = 'YYYY-MM-DD',
     targetTimeZone = getTimeZone(),
     sourceTimeZone = getTimeZone(),
@@ -181,11 +177,11 @@ export type TimePickerProps<T extends ValueType = 'dayjs'> = Omit<
 };
 
 /** 时间组件 */
-function InnerTimePicker(props: TimePickerProps) {
+function InnerTimePicker<T extends ValueType = 'dayjs'>(props: TimePickerProps<T>) {
   const {
     value,
     onChange,
-    valueType = 'dayjs',
+    valueType,
     format = 'HH:mm:ss',
     targetTimeZone = getTimeZone(),
     sourceTimeZone = getTimeZone(),
