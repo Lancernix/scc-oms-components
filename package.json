@@ -54,23 +54,6 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
-  "peerDependenciesMeta": {
-    "dayjs": {
-      "optional": true
-    },
-    "moment": {
-      "optional": true
-    },
-    "moment-timezone": {
-      "optional": true
-    },
-    "@atlaskit/pragmatic-drag-and-drop": {
-      "optional": true
-    },
-    "@atlaskit/pragmatic-drag-and-drop-hitbox": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "@babel/runtime": "^7.24.8",
     "lodash-es": "^4.17.21",
