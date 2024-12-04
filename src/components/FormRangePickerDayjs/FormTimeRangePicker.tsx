@@ -1,7 +1,7 @@
 import type { FormInstance } from 'antd';
 import { Form, Input } from 'antd';
 import type { NamePath } from 'antd/es/form/interface';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { currentTimeZone, dayjsToValue } from 'utils/dayjsTransform';
 import TimerPicker from '../DateTimePickerDayjs/TimerPicker';
 
@@ -50,15 +50,15 @@ function FormTimeRangePicker(props: Props) {
     ...rest
   } = props;
 
-  // 拆分字段对应的初始值
-  const [fieldsInitValue, setFieldsInitValue] = useState([]);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: 首次加载将初始值转换并set到对应字段上
   useEffect(() => {
     if (value) {
       const initStart = dayjsToValue(value?.[0], fieldValueType, format, targetTimeZone);
       const initEnd = dayjsToValue(value?.[1], fieldValueType, format, targetTimeZone);
-      setFieldsInitValue([initStart, initEnd]);
+      // 设置form隐藏字段的值（这里的目的其实是设置初始值）
+      // form.resetFields会再次触发这个副作用，所以也能达到重置为初始值的效果
+      form?.setFieldValue(fields[0], initStart);
+      form?.setFieldValue(fields[1], initEnd);
     }
   }, []);
 
@@ -76,10 +76,10 @@ function FormTimeRangePicker(props: Props) {
   return (
     <>
       <RangePicker allowClear={allowClear} format={format} value={value} onChange={handleChange} {...rest} />
-      <Form.Item noStyle hidden name={fields[0]} initialValue={fieldsInitValue[0]}>
+      <Form.Item noStyle hidden name={fields[0]}>
         <Input />
       </Form.Item>
-      <Form.Item noStyle hidden name={fields[1]} initialValue={fieldsInitValue[1]}>
+      <Form.Item noStyle hidden name={fields[1]}>
         <Input />
       </Form.Item>
     </>

@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 import type { RangePickerDateProps } from 'antd/es/date-picker/generatePicker';
 import type { NamePath } from 'antd/es/form/interface';
 import type { Dayjs } from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { currentTimeZone, dayjsToValue } from 'utils/dayjsTransform';
 import DatePicker from '../DateTimePickerDayjs/DatePicker';
 
@@ -65,9 +65,6 @@ function FormDateRangePicker(props: Props) {
     ...rest
   } = props;
 
-  // 拆分字段对应的初始值
-  const [fieldsInitValue, setFieldsInitValue] = useState([]);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: 首次加载将初始值转换并set到对应字段上
   useEffect(() => {
     if (value) {
@@ -75,7 +72,10 @@ function FormDateRangePicker(props: Props) {
       const endValue = useStartAndEndOfDay ? value[1]?.endOf('day') : value[1];
       const initStart = dayjsToValue(startValue, fieldValueType, format, targetTimeZone);
       const initEnd = dayjsToValue(endValue, fieldValueType, format, targetTimeZone);
-      setFieldsInitValue([initStart, initEnd]);
+      // 设置form隐藏字段的值（这里的目的其实是设置初始值）
+      // form.resetFields会再次触发这个副作用，所以也能达到重置为初始值的效果
+      form?.setFieldValue(fields[0], initStart);
+      form?.setFieldValue(fields[1], initEnd);
     }
   }, []);
 
@@ -107,10 +107,10 @@ function FormDateRangePicker(props: Props) {
         onChange={handleChange}
         {...rest}
       />
-      <Form.Item noStyle hidden name={fields[0]} initialValue={fieldsInitValue[0]}>
+      <Form.Item noStyle hidden name={fields[0]}>
         <Input />
       </Form.Item>
-      <Form.Item noStyle hidden name={fields[1]} initialValue={fieldsInitValue[1]}>
+      <Form.Item noStyle hidden name={fields[1]}>
         <Input />
       </Form.Item>
     </>

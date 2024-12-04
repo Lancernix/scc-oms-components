@@ -1,6 +1,6 @@
 /**
  * title: 格式为秒级时间戳
- * description: 从 Form 中可以直接取到拆分之后的字段，默认格式为秒级时间戳
+ * description: 从 Form 中可以直接取到拆分之后的字段，格式为秒级时间戳
  */
 import { Button, Form } from 'antd';
 import dayjs from 'dayjs';
