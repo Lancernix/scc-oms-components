@@ -46,8 +46,8 @@ import { AntdDatePicker, AntdTimePicker } from 'scc-oms-components';
 | `format` | 日期字符串格式化模版 | `string` | `'YYYY-MM-DD'` |
 | `sourceTimeZone` | value 来源时区 | `string` | 当前时区 |
 | `targetTimeZone` | 目标转换时区 | `string` | 当前时区 |
-| `useStartOfDay` | 当只有日期展示时，是否将时间默认为一天的开始 00:00:00（只有在 `showTime` 为 `false` 时生效，且此时需要注意你的 `format` 格式） | `boolean` | `false` |
-| `useEndOfDay` | 当只有日期展示时，是否将时间默认为一天的结束 23:59:59（只有在 `showTime` 为 `false` 时生效，且此时需要注意你的 `format` 格式） | `boolean` | `false` |
+| `useStartOfDay` | 当只有日期展示时，是否将时间默认为一天的开始 00:00:00（只有在 `showTime` 为 `false` 时生效，此时该属性要传入带时间的 format 格式） | `false \| string` | `false` |
+| `useEndOfDay` | 当只有日期展示时，是否将时间默认为一天的结束 23:59:59（只有在 `showTime` 为 `false` 时生效，此时该属性要传入带时间的 format 格式） | `false \| string` | `false` |
 
 ## TimePicker
 

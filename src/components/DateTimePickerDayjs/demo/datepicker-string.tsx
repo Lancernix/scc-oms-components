@@ -14,7 +14,13 @@ export default function Index() {
 
   return (
     <>
-      <DatePickerDayjs valueType="string" value={value} showTime onChange={handleChange} format="YYYY-MM-DD HH:mm:ss" />
+      <DatePickerDayjs
+        valueType="string"
+        value={value}
+        useEndOfDay="YYYY-MM-DD HH:mm:ss"
+        onChange={handleChange}
+        format="YYYY-MM-DD"
+      />
       <span style={{ marginLeft: '40px' }}>
         组件值为：
         {value}

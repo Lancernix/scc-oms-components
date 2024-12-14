@@ -3,7 +3,7 @@ import { Form, Input } from 'antd';
 import type { RangePickerDateProps } from 'antd/es/date-picker/generatePicker';
 import type { NamePath } from 'antd/es/form/interface';
 import type { Dayjs } from 'dayjs';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { currentTimeZone, dayjsToValue } from 'utils/dayjsTransform';
 import DatePicker from '../DateTimePickerDayjs/DatePicker';
 
@@ -29,9 +29,10 @@ type Props = {
   targetTimeZone?: string;
   /**
    * 只展示日期时，是否格式化时间为一天的开始和结束，只有在showTime为false时生效，默认为false
+   * @description 如果需要此属性，就要设置对应的format格式，比如'YYYY-MM-DD HH:mm:ss'
    * @description 比如2023-08-01～2023-08-02传参时实际是为2023-08-01 00:00:00～2023-08-02 23:59:59
    */
-  useStartAndEndOfDay?: boolean;
+  useStartAndEndOfDay?: false | string;
   /**
    * 是否展示时间数据
    * @default false
@@ -65,13 +66,22 @@ function FormDateRangePicker(props: Props) {
     ...rest
   } = props;
 
+  // 根据不同的属性来确定不同的格式化字符串
+  // rangeFormat: 显示在组件上的格式；fieldFormat: 赋值给隐藏字段的格式
+  const [isStartAndEnd, rangeFormat, fieldFormat] = useMemo(() => {
+    if (!showTime && useStartAndEndOfDay) {
+      return [true, format, useStartAndEndOfDay];
+    }
+    return [false, format, format];
+  }, [format, showTime, useStartAndEndOfDay]);
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: 首次加载将初始值转换并set到对应字段上
   useEffect(() => {
     if (value) {
-      const startValue = useStartAndEndOfDay ? value[0]?.startOf('day') : value[0];
-      const endValue = useStartAndEndOfDay ? value[1]?.endOf('day') : value[1];
-      const initStart = dayjsToValue(startValue, fieldValueType, format, targetTimeZone);
-      const initEnd = dayjsToValue(endValue, fieldValueType, format, targetTimeZone);
+      const startValue = isStartAndEnd ? value[0]?.startOf('day') : value[0];
+      const endValue = isStartAndEnd ? value[1]?.endOf('day') : value[1];
+      const initStart = dayjsToValue(startValue, fieldValueType, fieldFormat, targetTimeZone);
+      const initEnd = dayjsToValue(endValue, fieldValueType, fieldFormat, targetTimeZone);
       // 设置form隐藏字段的值（这里的目的其实是设置初始值）
       // form.resetFields会再次触发这个副作用，所以也能达到重置为初始值的效果
       form?.setFieldValue(fields[0], initStart);
@@ -83,12 +93,12 @@ function FormDateRangePicker(props: Props) {
     let start = date?.[0];
     let end = date?.[1];
     // 如果设置了不展示时间但是需要时间信息，则需要手动修正时间
-    if (!showTime && useStartAndEndOfDay) {
+    if (isStartAndEnd) {
       start = start?.startOf('day');
       end = end?.endOf('day');
     }
-    const formatStart = dayjsToValue(start, fieldValueType, format, targetTimeZone);
-    const formatEnd = dayjsToValue(end, fieldValueType, format, targetTimeZone);
+    const formatStart = dayjsToValue(start, fieldValueType, fieldFormat, targetTimeZone);
+    const formatEnd = dayjsToValue(end, fieldValueType, fieldFormat, targetTimeZone);
     // 触发外部的change事件
     onChange?.(date, formatString);
     // 设置form隐藏字段的值
@@ -99,7 +109,7 @@ function FormDateRangePicker(props: Props) {
   return (
     <>
       <RangePicker
-        format={format}
+        format={rangeFormat}
         value={value}
         showTime={showTime}
         picker={picker}

@@ -1,6 +1,6 @@
 import type { PickerDateProps } from 'antd/es/date-picker/generatePicker';
 import type { Dayjs } from 'dayjs';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { dayjsToValue, valueToDayjs } from 'utils/dayjsTransform';
 import getTimeZone from 'utils/getTimeZone';
 import AntdDatePicker, { type InnerDateRangePickerProps } from './DatePicker';
@@ -68,15 +68,15 @@ export type DatePickerProps<T extends ValueType = 'dayjs'> = Omit<
   /**
    * 当只有日期展示时，是否将时间默认为一天的开始00:00:00
    * @default false
-   * @description 只有在showTime为false时生效，且此时需要注意你的format格式
+   * @description 只有在showTime为false时生效，此时该属性要传入带时间的format格式
    */
-  useStartOfDay?: boolean;
+  useStartOfDay?: false | string;
   /**
    * 当只有日期展示时，是否将时间默认为一天的结束23:59:59
    * @default false
-   * @description 只有在showTime为false时生效，且此时需要注意你的format格式
+   * @description 只有在showTime为false时生效，此时该属性要传入带时间的format格式
    */
-  useEndOfDay?: boolean;
+  useEndOfDay?: false | string;
 };
 
 /** 日期组件 */
@@ -101,6 +101,15 @@ function InnerDatePicker<T extends ValueType = 'dayjs'>(props: DatePickerProps<T
   // 组件用到的dayjs值
   const [dayjsValue, setDayjsValue] = useState<Dayjs>(null);
 
+  // 根据不同的属性来确定不同的格式化字符串
+  // displayFormat: 显示在组件上的格式，realFormat: 真正使用的格式
+  const [isStartOrEnd, displayFormat, realFormat] = useMemo(() => {
+    if (!showTime && (useStartOfDay || useEndOfDay)) {
+      return [true, format, (useStartOfDay || useEndOfDay) as string];
+    }
+    return [false, format, format];
+  }, [format, showTime, useStartOfDay, useEndOfDay]);
+
   // 监听外部的变动（比如form.setFieldValue这种操作），同步修改内部的dayjsValue
   useEffect(() => {
     if (internalChange.current) {
@@ -109,16 +118,14 @@ function InnerDatePicker<T extends ValueType = 'dayjs'>(props: DatePickerProps<T
       internalChange.current = false;
       return;
     }
-    setDayjsValue(valueToDayjs(value, valueType, format, sourceTimeZone));
-  }, [value, valueType, format, sourceTimeZone]);
+    setDayjsValue(valueToDayjs(value, valueType, realFormat, sourceTimeZone));
+  }, [value, valueType, realFormat, sourceTimeZone]);
 
   const handleChange: AntdDatePickerProps['onChange'] = val => {
     internalChange.current = true; // 修改标识，告知是内部的修改
     let realVal = val;
-    let realFormat = format;
-    if (!showTime && (useStartOfDay || useEndOfDay)) {
+    if (isStartOrEnd) {
       realVal = useStartOfDay ? val?.startOf('day') : val?.endOf('day');
-      realFormat = 'YYYY-MM-DD HH:mm:ss';
     }
     // 存一下用在组件中的值
     setDayjsValue(realVal);
@@ -131,7 +138,7 @@ function InnerDatePicker<T extends ValueType = 'dayjs'>(props: DatePickerProps<T
     <AntdDatePicker
       value={dayjsValue}
       onChange={handleChange}
-      format={format}
+      format={displayFormat}
       picker={picker}
       showToday={showToday}
       showTime={showTime}

@@ -47,7 +47,7 @@ order: 5
 | `form` | Form 实例 | `FormInstance` | - |
 | `fields` | 要拆分成的字段名称元组 | `[NamePath, NamePath]` | - |
 | `showTime` | 是否增加时间数据展示 | `RangePickerDateProps<Dayjs>['showTime']` | `false` |
-| `useStartAndEndOfDay` | 只展示日期时，是否格式化时间为一天的开始和结束（只有在 `showTime` 为 `false` 时生效），如2023-08-01～2023-08-02实际是为2023-08-01 00:00:00～2023-08-02 23:59:59 | `boolean` | `false` |
+| `useStartAndEndOfDay` | 只展示日期时，是否格式化时间为一天的开始和结束（只有在 `showTime` 为 `false` 时生效），如 2023-08-01～2023-08-02 实际是为 2023-08-01 00:00:00～2023-08-02 23:59:59，此时要通过这个属性传入对应的格式化字符串 | `false \| string` | `false` |
 | `targetTimeZone` | 目标转换时区 | `string` | 当前所在时区 |
 
 ## FormTimeRangePicker

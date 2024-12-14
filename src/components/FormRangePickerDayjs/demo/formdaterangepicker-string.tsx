@@ -26,8 +26,8 @@ export default function Index() {
             form={form}
             fields={['create_time_start', 'create_time_end']}
             fieldValueType="string"
-            format="YYYY-MM-DD HH:mm:ss"
-            useStartAndEndOfDay
+            format="YYYY-MM-DD"
+            useStartAndEndOfDay="YYYY-MM-DD HH:mm:ss"
           />
         </Form.Item>
       </Form>
