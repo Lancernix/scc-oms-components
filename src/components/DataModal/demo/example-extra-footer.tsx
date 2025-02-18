@@ -1,9 +1,9 @@
+import { Button, Divider } from 'antd';
 /**
  * title: 底部增加额外内容
  * description: 有的时候，底部的基本按钮无法满足需求，你可以自己添加需要的元素
  */
 import React, { useState } from 'react';
-import { Button, Divider } from 'antd';
 import { DataModal } from 'scc-oms-components';
 
 function Index() {
@@ -22,7 +22,7 @@ function Index() {
       <Button type="primary" onClick={() => setVisible(true)}>
         打开弹窗
       </Button>
-      <DataModal type="create" size="l" visible={visible} onCancel={() => setVisible(false)} extraFooter={extraFooter}>
+      <DataModal type="create" size="l" open={visible} onCancel={() => setVisible(false)} extraFooter={extraFooter}>
         <p>弹窗内容...</p>
         <p>弹窗内容...</p>
         <p>弹窗内容...</p>

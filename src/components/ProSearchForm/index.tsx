@@ -158,7 +158,7 @@ export default function ProSearchForm<FormValue = Record<string, unknown>>(props
         dataSource={sortedItems}
         targetKeys={selectedKeys}
         onTargetKeysChange={newKeys => setSelectedKeys(newKeys)}
-        visible={modalVisible}
+        open={modalVisible}
         onCancel={() => handleModalVisibleChange(false, false)}
         onOk={() => handleModalVisibleChange(false, true)}
       />

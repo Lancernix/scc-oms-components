@@ -21,7 +21,7 @@ function CustomInput({ value, onChange }: { value?: string; onChange?: (value: s
         onChange={e => handleChange(e.target.value)}
         suffix={<PlusOutlined onClick={() => setVisible(true)} />}
       />
-      <Modal title="批量输入" visible={visible} onCancel={() => setVisible(false)} footer={null}>
+      <Modal title="批量输入" open={visible} onCancel={() => setVisible(false)} footer={null}>
         <Input.TextArea value={value} onChange={e => handleChange(e.target.value)} />
       </Modal>
     </>

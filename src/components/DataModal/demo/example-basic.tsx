@@ -55,7 +55,7 @@ function Index() {
       <DataModal
         type={type}
         size={size}
-        visible={visible}
+        open={visible}
         onCancel={() => setVisible(false)}
         confirmLoading={confirmLoading}
       >

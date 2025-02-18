@@ -11,7 +11,7 @@ interface RecordType {
   description?: string;
 }
 
-type Props = Required<Pick<DataModalProps, 'visible' | 'onCancel' | 'onOk'>> & {
+type Props = Required<Pick<DataModalProps, 'open' | 'onCancel' | 'onOk'>> & {
   dataSource: RecordType[];
   targetKeys: string[];
   onTargetKeysChange: (targetKeys: string[]) => void;

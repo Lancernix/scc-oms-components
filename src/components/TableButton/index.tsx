@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
 import { Button, Popconfirm } from 'antd';
 import type { ButtonProps, PopconfirmProps } from 'antd';
 import { LocaleContext } from 'components/LocaleProvider';
+import React, { useContext, useState } from 'react';
 
 interface Props extends Omit<ButtonProps, 'type'> {
   /**
@@ -60,7 +60,7 @@ function TableButton(props: Props) {
   return (
     <Popconfirm
       title={popconfirmTitle}
-      visible={withConfirm ? visible : false}
+      open={withConfirm ? visible : false}
       onConfirm={handleConfirm}
       onCancel={() => setVisible(false)}
       okText={popconfirmOkText}
