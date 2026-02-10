@@ -64,4 +64,5 @@ export {
   valueToDayjs,
 } from 'utils/dayjsTransform';
 export { default as getTimeZone } from 'utils/getTimeZone';
+export { default as isValidTimeZone } from 'utils/isValidTimeZone';
 export { default as removeSomeProperty } from 'utils/removeSomeProperty';

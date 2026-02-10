@@ -18,10 +18,7 @@ type Value<T extends ValueType> =
   | (T extends 'timestamp' ? number : never)
   | (T extends 'dayjs' ? Dayjs : never);
 
-export type DatePickerProps<T extends ValueType = 'dayjs'> = Omit<
-  AntdDatePickerProps,
-  'value' | 'onChange' | 'format'
-> & {
+export type DatePickerProps<T extends ValueType> = Omit<AntdDatePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: Value<T> | null;
   /**
    * value类型
@@ -80,11 +77,11 @@ export type DatePickerProps<T extends ValueType = 'dayjs'> = Omit<
 };
 
 /** 日期组件 */
-function InnerDatePicker<T extends ValueType = 'dayjs'>(props: DatePickerProps<T>) {
+function InnerDatePicker<T extends ValueType>(props: DatePickerProps<T>) {
   const {
     value,
     onChange,
-    valueType,
+    valueType = 'dayjs' as T,
     format = 'YYYY-MM-DD',
     targetTimeZone = getTimeZone(),
     sourceTimeZone = getTimeZone(),
@@ -152,10 +149,7 @@ export const DatePicker = Object.assign(InnerDatePicker, {
 });
 export type DateRangePickerProps = InnerDateRangePickerProps;
 
-export type TimePickerProps<T extends ValueType = 'dayjs'> = Omit<
-  AntdTimePickerProps,
-  'value' | 'onChange' | 'format'
-> & {
+export type TimePickerProps<T extends ValueType> = Omit<AntdTimePickerProps, 'value' | 'onChange' | 'format'> & {
   value?: Value<T>;
   /**
    * value类型
@@ -184,11 +178,11 @@ export type TimePickerProps<T extends ValueType = 'dayjs'> = Omit<
 };
 
 /** 时间组件 */
-function InnerTimePicker<T extends ValueType = 'dayjs'>(props: TimePickerProps<T>) {
+function InnerTimePicker<T extends ValueType>(props: TimePickerProps<T>) {
   const {
     value,
     onChange,
-    valueType,
+    valueType = 'dayjs' as T,
     format = 'HH:mm:ss',
     targetTimeZone = getTimeZone(),
     sourceTimeZone = getTimeZone(),

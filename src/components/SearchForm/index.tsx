@@ -49,7 +49,7 @@ interface DateItem extends FormItemProps {
    * @default 1
    */
   multiCol?: number;
-  props?: DatePickerProps;
+  props?: DatePickerProps<'dayjs'>;
 }
 interface TimeItem extends FormItemProps {
   type: 'time';
@@ -58,7 +58,7 @@ interface TimeItem extends FormItemProps {
    * @default 1
    */
   multiCol?: number;
-  props?: TimePickerProps;
+  props?: TimePickerProps<'dayjs'>;
 }
 
 interface DateRangeItem extends FormItemProps {
@@ -373,7 +373,7 @@ function SearchForm<FormValue = Record<string, unknown>>(props: Props<FormValue>
         }
       }
       // windowWidth小于所有key中最小的值，返回最后一个key对应的value
-      return colSpanMap[sortedKey.at(-1)];
+      return colSpanMap[sortedKey[sortedKey.length - 1]];
     }
     return defaultBasicColSpan;
   }, [responsive, windowWidth]);
