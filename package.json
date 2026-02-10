@@ -116,6 +116,14 @@
       "config": "cz-config.cjs"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lancernix/scc-oms-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lancernix/scc-oms-components/issues"
+  },
+  "homepage": "https://github.com/Lancernix/scc-oms-components#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/",
