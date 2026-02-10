@@ -27,8 +27,14 @@
   "module": "esm/index.js",
   "unpkg": "dist/scc-oms-components.min.js",
   "types": "esm/index.d.ts",
-  "files": ["cjs", "dist", "esm"],
-  "sideEffects": ["dist/*"],
+  "files": [
+    "cjs",
+    "dist",
+    "esm"
+  ],
+  "sideEffects": [
+    "dist/*"
+  ],
   "engines": {
     "node": "^16.0.0 || ^18.0.0 || >=20.0.0"
   },
@@ -129,6 +135,11 @@
     "registry": "https://registry.npmjs.org/",
     "provenance": true
   },
-  "authors": ["lancernix@gmail.com"],
-  "maintainers": ["lancernix@gmail.com", "18829598229@163.com"]
+  "authors": [
+    "lancernix@gmail.com"
+  ],
+  "maintainers": [
+    "lancernix@gmail.com",
+    "18829598229@163.com"
+  ]
 }
